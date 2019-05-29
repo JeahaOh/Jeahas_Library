@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+
+<body>
+    <script language="Javascript">
+        function setCookie(name, value, expirehours) {
+            var todayDate = new Date();
+            todayDate.setHours(todayDate.getHours() + expirehours);
+            document.cookie = name + "=" + escape(value) + "; path=/; expires=" + todayDate.toGMTString() + ";"
+        }
+
+        function todaycloseWin() {
+            setCookie("ncookie", "done", 24);
+            document.getElementById('pop_03').style.visibility = "hidden";
+        }
+    </script>
+
+    <div id="pop_03" style="position:absolute; z-index:9999; visibility:done;">
+        <div>
+            <p>IMAGE FILE</p>
+            <a href="#" onclick="todaycloseWin()">오늘하루동안 열지않기</a>
+        </div>
+    </div>
+
+    <script language="Javascript">
+        cookiedata = document.cookie;
+        if (cookiedata.indexOf("ncookie=done") < 0) {
+            document.getElementById('pop_03').style.visibility = "visible";
+        } else {
+            document.getElementById('pop_03').style.visibility = "hidden";
+        }
+    </script>
+</body>
+
+</html>

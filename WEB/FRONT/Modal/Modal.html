@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Modal</title>
+    <style>
+        /* Modal Background */
+        .modal {
+            /* Hidden by default */
+            display: none;
+            /* position: fixed; */
+            position: absolute;
+            /* Stay in place */
+            z-index: 1;
+            /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%;
+            /* Full width */
+            height: 100%;
+            /* Full height */
+            overflow: auto;
+            /* Enable scroll if needed */
+            background-color: rgb(0, 0, 0);
+            /* Fallback color */
+            background-color: rgba(0, 0, 0, 0.4);
+            /* Black w/ opacity */
+        }
+
+        /* Modal Content/Box */
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            /* 15% from the top and centered */
+            padding: 20px;
+            border: 1px solid #888;
+            width: 50%;
+            /* Could be more or less, depending on screen size */
+        }
+
+        /* The Close Button */
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        
+        /* a tag  */
+         a:link { text-decoration: none;}
+         a:visited { color: black; text-decoration: none;}
+         a:hover { text-decoration: underline;}
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+
+<body>
+    <button onClick="openModal()">OPEN MODAL</button>
+    <button onClick="refreshCookie()">REFRESH COOKIE</button>
+    <!-- The Modal -->
+    <div id="modal" class="modal">
+
+        <!-- Modal content -->
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>MODAL</h2>
+            <a href="" onClick="todayClose()">Do not open for 24 hours</a>
+        </div>
+    </div>
+</body>
+<script>
+    let modal = document.getElementById('modal');
+
+    function openModal() {
+        modal.style.display = "block";
+    }
+    // span의 X를 눌러 모달 닫기.
+    let modalClose = document.getElementsByClassName("close")[0];
+    modalClose.onclick = function() {
+        exitModal();
+    }
+    // modal 밖 클릭시 닫기.
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            exitModal();
+        }
+    }
+
+    function exitModal() {
+//        modal.style.display = "none";
+        $('.modal').fadeOut(500, 'swing');
+    }
+    
+    function todayClose(){
+        setCookie("ncookie", "done", 24);
+        exitModal();
+    }
+    
+    /* Cookie Data */
+    function setCookie(name, value, expirehours) {
+        let todayDate = new Date();
+        todayDate.setHours(todayDate.getHours() + expirehours);
+        document.cookie = name + "=" + escape(value) + "; path=/; expires=" + todayDate.toGMTString() + ";"
+    }
+    let cookieData = document.cookie;
+    
+    window.onload = function() {
+        if(cookieData.indexOf("ncookie=done") < 0){
+        //        modal.style.display = "block";
+            openModal();
+        }   else  {
+            modal.style.display = "none";
+        }
+    }
+    
+    function refreshCookie() {
+        setCookie("ncookie", "done", -1);
+    }
+    
+    /**
+     *  디테일하게 만들지 않았음... 개선해야함.
+     */
+</script>
+
+</html>
