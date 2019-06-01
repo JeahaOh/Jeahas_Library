@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Registration Test</title>
+    <link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="http://e-navap.org/css/normalize.min.css">
+    <link rel="stylesheet" type="text/css" href="http://e-navap.org/css/common.css">
+    <link rel="stylesheet" type="text/css" href="http://e-navap.org/css/gnb.css">
+    <link rel="stylesheet" type="text/css" href="http://e-navap.org/css/reset.css">
+    <link rel="stylesheet" type="text/css" href="http://e-navap.org/css/main.css">
+    <link rel="stylesheet" type="text/css" href="http://e-navap.org/css/layout.css">
+    <link rel="stylesheet" type="text/css" href="http://e-navap.org/css/style.css">
+    <style type="text/css">
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 3;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgb(0, 0, 0);
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        .modal-layer {
+            height: inherit;
+            width: fit-content;
+            
+        }
+
+        .modal-content {
+            height: fit-content;
+            max-height: 100%;
+            overflow: scroll;            
+            z-index: 5;
+            background-color: #fefefe;
+            margin: 0% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 50%;
+        }
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+
+<body>
+    <div class="modal-tap">
+        <button class="modal-btn" id="AnR_Policy">Cancellation And Refund Policy</button>
+        <button class="modal-btn" id="privacy_plicy">Privacy Policy</button>
+    </div>
+
+    <div class="modal AnR_Policy" id="AnR_Policy">
+        <div class="modal-layer">
+            <div class="row modal-content">
+                <h2 class="tit" align="center">Cancellation and refund policy</h2>
+                <hr />
+                <div class="table-form2">
+                    <br><br>
+                    A 100% refund will be issued for cancellation of registration before 31 July 2019.
+                    <br><br>
+                    50% refund will be issued for cancellation of registration from 1-14 August 2019.
+                    <br><br>
+                    Refunds will not be given starting on 15 August 2019.
+                    <br><br>
+                    Please contact <strong>k.maritimetraining@gmail.com</strong> for further inquiries regarding cancelation
+                    and refund policy.
+                    <br><br>
+                </div>
+                <div class="btn-block btn-col-2">
+                    <button type="button" class="btn btn-lg btn-primary" onclick="exitModal()">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal privacy_plicy">
+        <div class="modal-layer">
+            <div class="row modal-content">
+                <div class="table-form">
+                    <dl>
+                        <dd>
+                            <h2 align="center">Privacy Policy</h2>
+                            <hr />
+                            Effective date: May 17, 2019<br><br>
+                            This page informs you of our policies regarding the collection, use, and disclosure of personal
+                            data when you use our Service and the choices you have associated with that data.<br><br>
+                            We use your data to the sole purpose of registration activities and payment services. By using
+                            the Service, you agree to the collection and use of information in accordance with this
+                            policy.<br><br>
+                            <span style="font-size: 30px;">Information Collection And Use</span><br>
+                            We collect several different types of information for various purposes to provide and improve
+                            our Service to you.<br><br>
+                            <span style="font-size: 25px;">Types of Data Collected</span><br>
+                            <span style="font-size: 25px;">Personal Data</span><br><br>
+                            While using our Service, we may ask you to provide us with certain personally identifiable
+                            information that can be used to contact or identify you ("Personal Data"). Personally,
+                            identifiable information may include, but is not limited to:<br><br>
+                            • Email address<br>
+                            • First name and last name<br>
+                            • Phone number<br>
+                            • Address, State, Province, ZIP/Postal code, City<br>
+                            • Cookies and Usage Data<br><br>
+                            <span style="font-size: 25px;">Usage Data</span><br>
+                            We may also collect information how the Service is accessed and used ("Usage Data"). This Usage
+                            Data may include information such as your computer's Internet Protocol address (e.g. IP
+                            address), browser type, browser version, the pages of our Service that you visit, the time and
+                            date of your visit, the time spent on those pages, unique device identifiers and other
+                            diagnostic data.<br><br>
+                            <span style="font-size: 25px;">Tracking &amp; Cookies Data</span><br>
+                            We use cookies and similar tracking technologies to track the activity on our Service and hold
+                            certain information.<br><br>
+                            Cookies are files with small amount of data which may include an anonymous unique identifier.
+                            Cookies are sent to your browser from a website and stored on your device. Tracking technologies
+                            also used are beacons, tags, and scripts to collect and track information and to improve and
+                            analyze our Service.<br>
+                            You can instruct your browser to refuse all cookies or to indicate when a cookie is being sent.
+                            However, if you do not accept cookies, you may not be able to use some portions of our
+                            Service.<br>
+                            Examples of Cookies we use:<br><br>
+                            <b>• Session Cookies.</b> We use Session Cookies to operate our Service.<br>
+                            <b>• Preference Cookies.</b> We use Preference Cookies to remember your preferences and various
+                            settings.<br>
+                            <b>• Security Cookies.</b> We use Security Cookies for security purposes.<br><br>
+                            <span style="font-size: 25px;">Use of Data</span><br>
+                            Services may be used from collected data for various purposes:<br><br>
+                            • To provide and maintain the Service<br>
+                            • To notify you about changes to our Service<br>
+                            • To provide customer care and support<br>
+                            • To provide analysis or valuable information so that we can improve the Service<br>
+                            • To monitor the usage of the Service<br>
+                            • To detect, prevent and address technical issues<br><br>
+                            <span style="font-size: 25px;">Transfer of Data</span><br>
+                            Your information, including Personal Data, may be transferred to — and maintained on — computers
+                            located outside of your state, province, country or other governmental jurisdiction where the
+                            data protection laws may differ than those from your jurisdiction.<br><br>
+                            Your consent to this Privacy Policy followed by your submission of such information represents
+                            your agreement to that transfer.<br><br>
+                            Our site will take all steps reasonably necessary to ensure that your data is treated securely
+                            and in accordance with this Privacy Policy and no transfer of your Personal Data will take place
+                            to an organization or a country unless there are adequate controls in place including the
+                            security of your data and other personal information.<br><br>
+                            <span style="font-size: 30px;">Disclosure of Data</span><br>
+                            <span style="font-size: 25px;">Security Of Data</span><br>
+                            The security of your data is important to us but remember that no method of transmission over
+                            the Internet, or method of electronic storage is 100% secure. While we strive to use
+                            commercially acceptable means to protect your Personal Data, we cannot guarantee its absolute
+                            security.<br><br>
+                            <span style="font-size: 25px;">Service Providers</span><br>
+                            We may employ third party companies and individuals to facilitate our Service ("Service
+                            Providers"), to provide the Service on our behalf, to perform Service-related services or to
+                            assist us in analyzing how our Service is used.<br><br>
+                            These third parties have access to your Personal Data only to perform these tasks on our behalf
+                            and are obligated not to disclose or use it for any other purpose.<br><br>
+                            <span style="font-size: 25px;">Links To Other Sites</span><br>
+                            Our Service may contain links to other sites that are not operated by us. If you click on a
+                            third party link, you will be directed to that third party's site. We strongly advise you to
+                            review the Privacy Policy of every site you visit.<br><br>
+                            We have no control over and assume no responsibility for the content, privacy policies or
+                            practices of any third party sites or services.<br><br>
+                            <span style="font-size: 25px;">Children's Privacy</span><br><br>
+                            Our Service does not address anyone under the age of 18 ("Children").<br>
+                            We do not knowingly collect personally identifiable information from anyone under the age of 18.
+                            If you are a parent or guardian and you are aware that your Children has provided us with
+                            Personal Data, please contact us. If we become aware that we have collected Personal Data from
+                            children without verification of parental consent, we take steps to remove that information from
+                            our servers.<br><br>
+                            <span style="font-size: 25px;">Changes To This Privacy Policy</span><br>
+                            We may update our Privacy Policy from time to time. We will notify you of any changes by posting
+                            the new Privacy Policy on this page.<br><br>
+                            We will let you know via email and/or a prominent notice on our Service, prior to the change
+                            becoming effective and update the "effective date" at the top of this Privacy Policy.<br><br>
+                            You are advised to review this Privacy Policy periodically for any changes. Changes to this
+                            Privacy Policy are effective when they are posted on this page.<br><br>
+                            <span style="font-size: 25px;">Contact Us</span><br>
+                            If you have any questions about this Privacy Policy, please contact us:<br>
+                            • By email: www.k.maritimetraining@gmail.com<br>
+                        </dd>
+                    </dl>
+                    <div class="btn-block btn-col-2">
+                        <button type="button" class="btn btn-lg btn-primary" onclick="exitModal()">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" charset="utf-8">
+        //  버튼에 맞는 모달창 열기
+        $(`.modal-btn`).click(function () {
+            $('.' + this.id).css('display', 'block');
+        });
+
+        // 모달 영역 밖 클릭시 닫기.
+        $('.modal-layer').click(function( event ){
+            // console.log(event.target);
+            event.stopPropagation();
+            if(event.target.className != 'modal-layer'){
+                return;
+            }
+            exitModal();
+        });
+
+        // 모달 닫는 메소드
+        function exitModal() {
+            $('.modal').fadeOut(500, 'swing');
+        }
+        /**
+         * console 창에 $('modal-layer')을 보면 modal-layer는 배열임을 알수 있음.
+         * class는 DOM에서 여러개 일 수 있고,
+         * jQuery의 selector는 시간이 오래 걸리는 편임.
+         * 따라서, DOM을 통째로 확인 하는 것 보다
+         * .className으로 string 값만 확인하면 자원이 절약 됨.
+         */
+    </script>
+</body>
+<!-- 모달 레이어를 만들어 cont 밖을 싼다.=== 레이어만 스크롤 하도록 -->
+</html>
