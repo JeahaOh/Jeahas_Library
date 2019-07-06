@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="kr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Submit Event</title>
+</head>
+<body>
+  <h1>Submit Event</h1>
+  <p>
+    
+  </p>
+</body>
+<script type="text/javascript" src="../jquery-3.3.1.min.js"></script>
+<script type="text/javascript">
+/*
+inipay mobile brower를 위해
+submit 버튼 클릭시, 결제상태를 다시 한번 확인 한 뒤에 결제를 진행 하도록 하자.
+*/
+$.ajax({
+  // url:"/RegistCheck.do",
+  // data: {email : $('#email').val() },
+  url:"https://e-navap.org/RegistCheck.do",
+  data: {email : 'jeaha1217@gmail.com' },
+  type: "POST",
+  async: false,
+  success : function(data){
+      switch( data ){
+        case '0':
+        case '1':
+          console.log('submit');
+          break;
+        case '2':
+          console.log('/com/gmtc/inipay/checkRegisterEmail.do?email=jeaha1217%40gmail.com');
+          window.location.replace('/com/gmtc/inipay/checkRegisterEmail.do?email=' + $('#email').val());
+          break;
+        case '3':
+          alert('Refund is not apply yet');
+          break;
+      }
+  },
+  error: function(data){
+    console.log('Communicate Fail..');
+  }
+});
+
+
+
+</script>
+</html>

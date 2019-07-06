@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="kr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Focus</title>
+</head>
+<body>
+  
+</body>
+<script type="text/javascript" src="../jquery-3.3.1.min.js"></script>
+<script type="text/javascript">
+// 브라우저 알아내기.
+var notIE = (document.documentMode === undefined),
+    isChromium = window.chrome;
+      
+if (notIE && !isChromium) {  // IE나 Chromium이 아니라면.
+  $(window).on("focusin", function () {   //  FOCUS IN
+    console.log('NOT IE OR CHROMIUM BROWSER HAS FOCUS IN');
+  }).on("focusout", function () {         //  FOCUS OUT
+    console.log('NOT IE OR CHROMIUM BROWSER HAS FOCUS OUT');
+  });
+} else {    // IE나 Chromium 이라면.
+  if (window.addEventListener) {
+    window.addEventListener("focus", function (event) {        //  FOCUS IN
+      console.log('IE OR CHROMIUM BROWSER HAS FOCUS IN');
+    }, false);
+    window.addEventListener("blur", function (event) {
+      console.log('IE OR CHROMIUM BROWSER HAS FOCUS OUT'); //  FOCUS OUT
+    }, false);
+  } else {  //  그 외 브라우져
+    window.attachEvent("focus", function (event) {      //  FOCUS IN
+      console.log('OTHER BROWSER HAS FOCUS IN');
+    });
+    window.attachEvent("blur", function (event) {        //  FOCUS OUT
+      console.log('OTHER BROWSER HAS FOCUS OUT');
+    });
+  }
+}
+</script>
+</html>

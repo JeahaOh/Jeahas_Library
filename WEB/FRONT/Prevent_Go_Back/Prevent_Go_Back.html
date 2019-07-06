@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="kr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Prevent Go Back</title>
+</head>
+<body>
+  <div>이전 페이지가 아닌 전전 페이지로 보내기.</div>
+</body>
+<script>
+  history.pushState(null, null, location.href);
+  window.onpopstate = function(event) {
+      history.go(1);
+  };
+</script>
+</html>

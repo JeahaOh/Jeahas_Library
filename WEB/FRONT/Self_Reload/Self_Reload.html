@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="kr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Self Reloading Page</title>
+</head>
+<body>
+  <div id="datetime"></div>
+</body>
+<script type="text/javascript" src="../jquery-3.3.1.min.js"></script>
+<script type="text/javascript">
+  //  $( window ).on("load", timming());
+  $( window ).load("load", function(){
+    $('#datetime').text( new Date() );
+  });
+
+  function timming(){
+    setTimeout(explode, 3000);
+  }
+
+  function explode(){
+    location.reload(false);
+    /*  window.reload();
+     *  true  : 서버에 재요청을 보냄.
+     *  flase : 캐시에서 재구성함.
+     */
+  }
+</script>
+</html>

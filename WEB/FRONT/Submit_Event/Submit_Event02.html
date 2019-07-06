@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="kr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Submit Event</title>
+</head>
+<body>
+  <h1>Submit Event</h1>
+  <input type="button" onclick="click()">
+</body>
+<script type="text/javascript" src="../jquery-3.3.1.min.js"></script>
+<script type="text/javascript">
+
+const setCookie = function( name, value, exp ) {
+  var date = new Date();
+  date.setTime(date.getTime() + exp*24*60*60*1000);
+  document.cookie = name + '=' + value + ';expires=' + date.toUTCString() + ';path=/';
+};
+
+const getCookie = function( name ) {
+  var value = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
+  return value? value[2] : null;
+};
+
+const getTimeStamp = function() {
+  var d = new Date();
+  var s =
+    leadingZeros(d.getFullYear(), 4) +
+    leadingZeros(d.getMonth() + 1, 2) +
+    leadingZeros(d.getDate(), 2) +
+
+    leadingZeros(d.getHours(), 2) +
+    leadingZeros(d.getMinutes(), 2) +
+    leadingZeros(d.getSeconds(), 2);
+
+  return s;
+};
+
+const leadingZeros = function(n, digits) {
+  var zero = '';
+  n = n.toString();
+
+  if (n.length < digits) {
+    for (i = 0; i < digits - n.length; i++)
+      zero += '0';
+  }
+  return zero + n;
+}
+
+
+
+function click(){
+  setCookie( 'ini_submit', getTimeStamp(), 1 );
+}
+
+$( window ).on('focusin', function(){
+  if( getTimeStamp() - getCookie('ini_submit') > 500) {
+    alert('The payment is not confirmed for 5 minutes and moves to the previous page.');
+    history.go(-1);
+  }
+});
+
+//$( window ).on('load', function(){});
+//$( window ).on('focusout', function(){});
+</script>
+</html>
+<!-- 
+버튼을 누르면 쿠키에 현재 시간을 저장한다.
+사용자가 화면에서 포커스를 뺐다 돌아 왔을 때,
+5분이 지난다면 뒤로가기를 시킨다.
+
+이니시스 섭밋을 하면 로딩을 띄워서 화면을 막는다
+-> 결제 창이 뜸
+-> 결제를 함
+-> 결제 확인 페이지가 뜸.
+-> 셀프 클로즈 해줌
+-> 페이지에 포커스가 온다
+-> 아작스로 결제 상태를 두번 확인 한다.
+-> 결제 완료 : 결제 확인 페이지를 띄워 준다.
+  결제 미확인 : 로딩창을 내리고 버튼을 다시 보여줌.
+
+
+ -->
