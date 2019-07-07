@@ -38,5 +38,10 @@ if (notIE && !isChromium) {  // IE나 Chromium이 아니라면.
     });
   }
 }
+window.onerror = function (msg, url, line) {
+  alert("Message : " + msg );
+  alert("url : " + url );
+  alert("Line number : " + line );
+}
 </script>
 </html>
