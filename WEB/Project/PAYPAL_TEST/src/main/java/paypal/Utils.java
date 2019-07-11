@@ -24,4 +24,7 @@ public class Utils {
     return Double.parseDouble(values[0].substring(1));
   }
   
+  public static void main(String[] args){
+    System.out.println(getExchangeRate());
+  }
 }

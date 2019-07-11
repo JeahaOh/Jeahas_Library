@@ -11,5 +11,6 @@
 </h1>
 
 <P>  The time on the server is ${serverTime}. </P>
+<button type="button" onclick="location.href='/paypal'">PAYPAL_TEST</button>
 </body>
 </html>
