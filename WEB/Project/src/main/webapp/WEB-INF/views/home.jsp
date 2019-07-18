@@ -3,15 +3,15 @@
 <%@ page session="false" %>
 <html>
 <head lang="kr">
-	<title>Home</title>
+	<title>Paypal TEST</title>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Document</title>
+  <title>Paypal TEST</title>
 </head>
 <body>
 <h1>
-	Hello world!
+	Pyapal!!
 </h1>
 <P>  The time on the server is ${serverTime}. </P>
 </body>

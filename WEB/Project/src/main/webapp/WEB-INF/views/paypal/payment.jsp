@@ -27,9 +27,9 @@
          * - 구매자가 결제후, 페이팔 창을 닫아버려도 페이팔 서버는 상점 서버에서 수신확인을 해 줄때까지 결제 결과를 알려주므로,
          */  결제 결과를 무조건 알기 위해서는 필수 값이다.
        --%>
-    <input type="text" name="notify_url"     value="<%=siteDomain%>/paypal/ipn_return" size="50" /></br>
-    <!-- 결제 취소 URL :  -->
-    <input type="text" name="cancel_return" value="<%=siteDomain%>/paypal/cncl_return" size="50" />
+    <input type="text" name="notify_url"     value="<%=siteDomain%>/paypal/ipn_return.do" size="50" /></br>
+    <!-- 결제 도중에 취소를 한다면 돌아오는 URL :  -->
+    <input type="text" name="cancel_return" value="<%=siteDomain%>/paypal/payment.do" size="50" />
     <input type="submit"/>
   </form>
   <%-- paypal form end --%>
