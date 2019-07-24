@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="kp">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>HandleBars - lookup을 이용한 변수 참조.</title>
+    <script src="../jquery-3.3.1.min.js"></script>
+    <script src="handlebars-v4.1.2.js"></script>
+    <!--
+        lookup 헬퍼를 활용하면 특정 상대 경로에 있는 변수 값을 참조할 수 있다.
+        lookup 헬퍼로 참조할 수 있는 변수 값은 with와 as를 활용하는 방법으로 거의 대부분 참조 가능하다.
+        개인적으로는 with와 as를 활용하는 것이 더 명시적이기 때문에 선호한다.
+    -->
+    <!-- 핸들바 템플릿 -->
+    <script id="entry-template" type="text/x-handlebars-template">
+        <table>
+            <thead> 
+                <th>이름</th> 
+                <th>아이디</th> 
+                <th>취미</th>
+            </thead> 
+            <tbody> 
+                {{!-- {{#each users}} 는 {{#users}} 로도 대체 가능하다 --}}
+                {{#each users as |user userId|}} 
+                    <tr> 
+                        <td>{{name}}</td> 
+                        <td>{{id}}</td> 
+                        <td>
+                        {{#each hobbys as |hobby hobbyId|}}
+                            {{!-- 
+                                                        상대경로를 참조해서 상위 이터레이션의 name 값을 가져오는 것은
+                            with 헬퍼를 사용해서 {{#with ../this.name as |myName|}}
+                            와 같이 처리해줄 수도 있고 아래와 같이
+                                                        lookup을 활용해서 처리해줄 수도 있다.
+                                                    --}}
+                            {{lookup ../this "name"}} 의 {{hobbyId}}번 취미 {{hobby}}
+                        {{/each}}
+                        </td>
+                    </tr> 
+                {{/each}}
+            </tbody> 
+        </table>
+    </script>
+    <script>
+        // 실제 템플릿과의 바인딩은 js코드에서 이루어 짐.
+        $(function(){
+            //핸들바 템플릿 가져오기
+            var source = $("#entry-template").html();
+
+            //핸들바 템플릿 컴파일
+            var template = Handlebars.compile(source); 
+            
+            //핸들바 템플릿에 바인딩할 데이터
+            var data = {
+                    users: [
+                        { name: "홍길동", id: "aaa", hobbys: ['축구', '야구', '농구'] },
+                        { name: "이순신", id: "bbb", hobbys: ['족구', '피구', '탁구'] },
+                        { name: "이성계", id: "ccc", hobbys: ['수구', '배구', '농구'] },
+                        { name: "장영실", id: "ddd", hobbys: ['축구', '피구', '농구'] },
+                        { name: "장보고", id: "eee", hobbys: ['배구', '야구', '족구'] }
+                    ]
+            }; 
+
+            //핸들바 템플릿에 데이터를 바인딩해서 HTML 생성
+            var html = template(data);
+
+            //생성된 HTML을 DOM에 주입
+            $('body').append(html);
+        });
+    </script>
+</head>
+<body>
+    
+</body>
+</html>

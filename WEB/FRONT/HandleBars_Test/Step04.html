@@ -4,10 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>HandleBars - 기본 제공 헬퍼</title>
+    <title>HandleBars - partial template 등록 및 사용</title>
     <script src="../jquery-3.3.1.min.js"></script>
     <script src="handlebars-v4.1.2.js"></script>
+    <!--
+        다른 템플릿 엔진과 마찬가지로 핸들바도 핸들바 템플릿을 다른 핸들바 템플릿의 일부로 포함시킬 수 있음.
+        이를 통해서 템플릿의 재 사용성을 높이고 템플릿의 가독성을 향상시킬 수 있다.
+        가장 단순한 형태의 partial template 등록 및 사용 예를 알아보자.
+    -->
+    <!-- template 1 -->
+    <script id="partial-template" type="text/x-handlebars-template">
+        {{!-- #unless 헬퍼는 #if 의 정반대 기능을 한다. --}}
+        <h1>리스트 {{#unless users}}<small>사용자 리스트가 없습니다.</small>{{/unless}}</h1>
+    </script>
+    
+    <!-- template 2 -->
     <script id="entry-template" type="text/x-handlebars-template">
+        {{!-- 조각 템플릿은 #> 를 사용해서 포함시킬 수 있다. --}}
+        {{#> commonHeader}} {{/commonHeader}}
+
         <table>
             <thead> 
                 <th>Index</th>
@@ -23,7 +38,7 @@
                     array와 object 모두 잡을 수 있는 key가 더 나아보인다 --}}
                     
                     {{#if @first}}
-                        <td>첫 번째</td>
+                        <td>첫번째</td>
                     {{else if @last}}
                         <td>마지막</td>
                     {{else}}
@@ -33,25 +48,18 @@
                     {{!-- {{name}} 은 {{this.name}} 과 같고 {{.}} 은 현재 name과 id를 포함하고 있는 오브젝트를 가리킨다 --}}
                     <td>{{name}}</td> 
                     <td>{{id}}</td> 
-                    
                     {{!-- 사용자 정의 헬퍼인 email에 id를 인자로 넘긴다 --}}
                     <td><a href="mailto:{{email id}}">{{email id}}</a></td> 
-                    
-                </tr> 
+                </tr>
                 {{/each}}
-            </tbody> 
+            </tbody>
         </table>
         {{!--
-            each 헬퍼는 배열등을 반복해서 표시할 수 있도록 해주고, `#배열명` 으로 대체 가능하다.
-            handlebars에서 if는 아주 단순한 true / false 만 구분 가능함.
-            if를 지원하며, unless는 if의 반대되는 헬퍼임.
-            헬퍼 내부에 헬퍼를 사용하는 것도 가능함.
-
-            each 헬퍼의 경우 @와 함께 몇 번째 요소인지 판별 가능함.
-                - @first로 첫번째를, @last로 마지막요소 여부를 알 수 있음.
-
-            템플릿에서 처리할 수 있는 로직은 단순한 조건만 처리 가능하기 때문에,
-            템플릿에 복잡하게 녹아 있는 로직과 스크립트 로직을 비교 분석하는 시간을 줄일 수 있다.
+            템플릿을 담고 있는 script 태그가 한 개 더 있다.
+            이해하기 쉽도록 id도 partial-template로 주었다.
+            entry-template 안을 살펴보면 #> 기호와 함께 partial-template을 삽입해주는 부분을 볼수 있다.
+            간단하게 #> 와 함께 partial-template의 이름을 넣어주면 해당 위치에 partial-template이 삽입 되게 된다.
+            partial-template의 이름은 자바스크립트 영역에서 등록한다.
         --}}
     </script>
     <script>
@@ -60,11 +68,15 @@
             // 1. 핸들바 템플릿 가져오기.
             var source = $("#entry-template").html(); 
 
+            // 1'. 조각 템플릿 가져오기.
+            var partial = $('#partial-template').html();
+
             // 2. 핸들바 템플릿 컴파일.
             var template = Handlebars.compile(source); 
 
             // 3. 핸들바 템플릿에 바인딩할 데이터 준비.
             var data = {
+                /**/
                     users: [
                         { name: "홍길동1", id: "aaa1"},
                         { name: "홍길동2", id: "aaa2"},
@@ -72,18 +84,16 @@
                         { name: "홍길동4", id: "aaa4"},
                         { name: "홍길동5", id: "aaa5"}
                     ]
+                /**/
             };
+
+            // 4. 조각 템플릿을 'commonHeader' 라는 이름으로 등록
+            Handlebars.registerPartial('commonHeader', partial);
 
             // 4. 커스텀 헬퍼 등록 (id를 인자로 받아서 전체 이메일 주소를 반환)
             Handlebars.registerHelper('email', function (id) {
                 return id + "@daum.net";
             });
-            /* email이라는 이름의 사용자 정의 헬퍼를 호출하면서 파라메터로 id 값을 전달 한다는 의미.
-             * Handlebars.registerHelper 라는 메소드로 사용자 정의 헬퍼를 등록할 수 있음.
-             * 첫번째 파라미터로 헬퍼의 이름을 넣음.
-             * 두번째 파라미터로 헬퍼의 동작을 정의함.
-             *  - id 를 인자로 받아서 '@daum.net'이라는 문자열을 더해서 리턴해 줌.
-             */
 
             // 5. 핸들바 템플릿에 데이터를 바인딩해서 HTML 생성.
             var html = template(data);
@@ -91,6 +101,12 @@
             // 6. 생성된 HTML을 DOM에 주입.
             $('body').append(html);
         });
+        /**
+         * entry-template와 마찬가지로 partial-template를 가져온 뒤,
+         * Handlebars.registerPartial 메소드를 사용해서 가져온 템플릿을 commonHeader 라는 이름으로 등록해주고 있다.
+         * 이렇게 등록만 해 주면 데이터를 바인딩 해 주는 시점에서 partial template를 삽입해 주게 되고,
+         * partial template에도 주어딘 데이터와 바인딩될 부분이 있다면 데이터 바인딩 역시 처리되게 된다.
+         */
     </script>
 </head>
 <body>

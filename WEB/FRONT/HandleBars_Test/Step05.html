@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="kp">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>HandleBars - with 와 as 그리고 상대 경로 참조.</title>
+    <script src="../jquery-3.3.1.min.js"></script>
+    <script src="handlebars-v4.1.2.js"></script>
+    <!--
+        지금 까지알아본 내용들은 다소 기본적인 핸들바의 문법이였고, 이런 문법을 조합한, 더 복잡한 구조를 알아보자.
+        이중, 삼중의 이터레이션을 돌리는 상황에서 상위 이터레이션의 값을 하위 이터레이션에서 참조해야 하는 상황을 예로 만들어 보자.
+        ../ 를 사용해서 상위 경로를 참조할 수 있고,
+        with와 as를 활용해서 이렇게 참조한 상위의 값을 다른 이름으로 할당해서 사용하고 있다.
+    -->
+    <!-- 핸들바 템플릿 -->
+    <script id="entry-template" type="text/x-handlebars-template">
+        <table>
+            <thead> 
+                <th>이름</th> 
+                <th>아이디</th> 
+                <th>취미</th>
+            </thead> 
+            <tbody> 
+                {{!-- {{#each users}} 는 {{#users}} 로도 대체 가능하다 --}}
+                {{#each users as |user userId|}} 
+                    <tr> 
+                        <td>{{name}}</td> 
+                        <td>{{id}}</td> 
+                        <td>
+                        {{#each hobbys as |hobby hobbyId|}}
+                            {{!-- 처음이 아닌 경우에는 쉼표(,) 넣기 --}}
+                            {{#unless @first}}, {{/unless}}
+
+                            {{!-- 상위 이터레이션의 인덱스 넘버를 가져올 때 --}}
+                            {{@../index}} ==
+                            {{!-- 상위 이터레이션의 인덱스 넘버는 아래와 같은 방식도 가능하다 --}}
+                            {{userId}}
+
+                            {{!-- 상대경로로 참조한 name 을 myName 이라는 변수로 할당 --}}
+                            {{#with ../this.name as |myName|}}
+                            {{!-- 상대경로를 참조해서 #hobby의 현재값 출력 --}}
+                            {{myName}} 의 {{hobbyId}}번 취미 {{hobby}}
+                            {{/with}}
+                        {{/each}}
+                        </td>
+                    </tr> 
+                {{/each}}
+            </tbody> 
+        </table>
+    </script>
+    <script>
+        // 실제 템플릿과의 바인딩은 js코드에서 이루어 짐.
+        $(function(){
+            //핸들바 템플릿 가져오기
+            var source = $("#entry-template").html();
+
+            //핸들바 템플릿 컴파일
+            var template = Handlebars.compile(source); 
+
+            //핸들바 템플릿에 바인딩할 데이터
+            var data = {
+                    users: [
+                        { name: "홍길동", id: "aaa", hobbys: ['축구', '야구', '농구'] },
+                        { name: "이순신", id: "bbb", hobbys: ['족구', '피구', '탁구'] },
+                        { name: "이성계", id: "ccc", hobbys: ['수구', '배구', '농구'] },
+                        { name: "장영실", id: "ddd", hobbys: ['축구', '피구', '농구'] },
+                        { name: "장보고", id: "eee", hobbys: ['배구', '야구', '족구'] }
+                    ]
+            }; 
+
+            //핸들바 템플릿에 데이터를 바인딩해서 HTML 생성
+            var html = template(data);
+
+            //생성된 HTML을 DOM에 주입
+            $('body').append(html);
+        });
+    </script>
+</head>
+<body>
+    
+</body>
+</html>
