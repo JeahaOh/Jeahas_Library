@@ -116,13 +116,25 @@ public class TimeStamp {
       DF.setTimeZone(TimeZone.getTimeZone("UTC"));
       try {
         unixTime = DF.parse(target).getTime();
-        unixTime = unixTime / 1000;
       } catch (ParseException e) {
         System.out.println("\n\t!! Unix Time Convert ERR !!\n" + e.getMessage());
         System.out.printf("target : %s\n\n", target);
       }
       return unixTime;
     }
+
+  /**
+   * 인자 값으로 주는 시간만큼 시간 delay.
+   * 
+   * @param delayTime
+   */
+  private static void matrixTime(int delayTime) {
+    long startTime = System.currentTimeMillis();
+    long endTime = 0;
+    while (endTime - startTime < delayTime) {
+      endTime = System.currentTimeMillis();
+    }
+  }
   
   
     public static void main(String[] args) {
