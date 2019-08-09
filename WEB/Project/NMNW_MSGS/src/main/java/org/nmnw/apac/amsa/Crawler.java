@@ -344,7 +344,7 @@ public class Crawler {
     call.enqueue(new Callback() {
       @Override
       public void onResponse(Call call, Response response) {
-        logger.info("CONNECTION SUCCESS");
+        logger.info("CONNECTION SUCCESS ->");
         logger.info("RESPONSE        : {}", response);
         logger.info("RESPONSE CODE   : {}", response.code());
         logger.info("RESPONSE MSG    : {}", response.message());
