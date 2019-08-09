@@ -10,7 +10,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 
-public class CoastalWarning {
+public class Message {
   /**
    * H: (area) SECURITE FM JRCC AUSTRALIA 172259Z JUN 19 (경보를 준 기관명 + 시간, 날짜) AUSCOAST WARNING
    * 194/19 (뭘까) DARWIN DGPS STATION ALRS VOL 2 IN POSITION 12-26.72S 130-57.51E (이유 위경도)
@@ -31,7 +31,7 @@ public class CoastalWarning {
   String country;
   @Expose
   @SerializedName("shortId")
-  String shortId; // 회차 정보 부분 임의 값
+  String shortId;
   @Expose
   @SerializedName("messageId")
   String messageId;
@@ -43,10 +43,10 @@ public class CoastalWarning {
   String title;
   @Expose
   @SerializedName("type")
-  String type; // shortId에 영향을 받는 종속 임의 값
+  String type;
   @Expose
   @SerializedName("mainType")
-  String mainType; // shortId에 영향을 받는 종속 임의 값
+  String mainType;
   @Expose
   @SerializedName("region")
   String region;
@@ -74,12 +74,13 @@ public class CoastalWarning {
   @SerializedName("detail")
   String detail;
 
-
+  private static String[] NM_KEYWORDS =
+      {"RACON"/* 레이더 */, "BUOY" /* 부표 */, "LIGHTHOUSE"/* 등대 */, "SAFETY MESSAGE", "BEACON"};
 
   /* Constructor */
-  public CoastalWarning() {}
+  public Message() {}
 
-  public CoastalWarning(String detail, String timeForm) {
+  public Message(String detail, String timeForm) {
     super();
     detail = detail.replaceAll("` ", "");
     this.detail = detail;
@@ -93,24 +94,7 @@ public class CoastalWarning {
     }
     // <- fromDate
 
-    // -> shortId
-    // 임의 값임.
-    ptn = Pattern.compile("\\d{1,3}(\\/)\\d{2}");
-    mtchr = ptn.matcher(detail);
-    if (mtchr.find()) {
-      this.shortId = "NW " + mtchr.group();
-    }
-    // <- shortId
 
-    // -> type
-    if (shortId.contains("NM")) {
-      this.type = "NM";
-      this.mainType = "NM";
-    } else if (shortId.contains("NW")) {
-      this.type = "NW";
-      this.mainType = "NW";
-    }
-    // <- type
 
     // -> subject
     subject = detail.split("\n")[2];
@@ -141,6 +125,29 @@ public class CoastalWarning {
       }
     }
     // <- position south east
+
+
+    // -> type
+    for (String keyword : NM_KEYWORDS) {
+      if (detail.toUpperCase().contains(keyword)) {
+        this.setType("NM");
+        this.setMainType("NM");
+        System.out.println(keyword + this.type);
+      } else {
+        this.setType("NW");
+        this.setMainType("NW");
+      }
+    }
+    // <- type
+
+    // -> shortId
+    ptn = Pattern.compile("\\d{1,3}(\\/)\\d{2}");
+    mtchr = ptn.matcher(detail);
+    if (mtchr.find()) {
+      this.shortId = this.type + " " + mtchr.group();
+    }
+    // <- shortId
+    System.out.println("THIS : " + this.toString());
   }
 
   /* getter & setter */

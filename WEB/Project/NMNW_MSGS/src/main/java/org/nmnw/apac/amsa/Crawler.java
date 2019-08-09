@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.regex.Matcher;
@@ -13,7 +14,7 @@ import java.util.regex.Pattern;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.nmnw.apac.message.CoastalWarning;
+import org.nmnw.apac.message.Message;
 import org.nmnw.apac.request.Request;
 import org.nmnw.apac.request.RetrofitClient;
 import org.nmnw.apac.util.TimeHandleUtil;
@@ -32,20 +33,20 @@ public class Crawler {
   private static final String TARGET_URL =
       "https://www.operations.amsa.gov.au/AMSA.Web.MSIPublication/";
 
-  private static Pattern ptn = null;
-  private static Matcher mtchr = null;
+  private static Pattern PTN = null;
+  private static Matcher MTCHR = null;
 
-  private static Boolean progress = false;
+  private static Boolean PROGRESS = false;
 
   private static Document DOC = null;
   private static String NAVAREAxWARNINGS = "";
 
   private static String COASTAL_WARNINGS = "";
-  private static String SAFTY_MSGS = "";
+  private static String SAFETY_MSGS = "";
 
   private static String START_TIME = "";
-  private static String scrapDate = "";
-  private static String timeFormat = "";
+  private static String SCRAPE_DATE = "";
+  private static String TIME_FORMAT = "";
 
 
   private static int CRAWL_CNT = 0;
@@ -53,7 +54,11 @@ public class Crawler {
 
   private static int SEND_CNT = 0;
 
-  private static List<CoastalWarning> list = null;
+
+
+  private static List<Message> SFT_MSG_LIST = null;
+  private static List<Message> NAVxW_LIST = null;
+  private static List<Message> CW_LIST = null;
 
   // 파일로 저장하기 위해 사용하는 변수들.
   private static BufferedOutputStream bs = null;
@@ -70,28 +75,33 @@ public class Crawler {
 
 
     // -> URL에서 HTML 파일 긁어오기
-    while (!progress) {
+    while (!PROGRESS) {
       DOC = getDoc();
+      // // logger.info(doc.toString());
       if (CRAWL_CNT == CRAWL_MAX)
         return;
     }
-    // logger.info(doc.toString());
 
     // -> Part x. 별로 다시 나눔
     splitParts(DOC);
     // scrapDate
 
+    // deleteRequest();
     // Part 1. Safety Messages: 처리?
-    progressPart1(SAFTY_MSGS);
+    // progressPart1(SAFETY_MSGS);
 
     // Part 2. NAVAREA X warnings: 처리
-    progressPart2(NAVAREAxWARNINGS);
+    // progressPart2(NAVAREAxWARNINGS);
 
-    // Part 3. Coastal warnings: 처리
+    // // Part 3. Coastal warnings: 처리
     progressPart3(COASTAL_WARNINGS);
-    //
-    sendListAsObject();
 
+
+    // sendListAsObject(SFT_MSG_LIST);
+    // sendListAsObject(NAVxW_LIST);
+    // sendListAsObject(CW_LIST);
+
+    // System.out.println(CW_LIST.toString());
     initVals();
 
 
@@ -111,7 +121,7 @@ public class Crawler {
     CRAWL_CNT++;
     try {
       DOC = Jsoup.connect(TARGET_URL).timeout(600000).get();
-      progress = true;
+      PROGRESS = true;
       logger.info("Getting documennt Success \t"
           + new SimpleDateFormat("HH.mm.ss", Locale.KOREA).format(new Date()));
       // -> 긁어온 HTML파일 원본 저장.
@@ -122,7 +132,7 @@ public class Crawler {
       logger.info("Getting document Failed \t"
           + new SimpleDateFormat("HH.mm.ss", Locale.KOREA).format(new Date()));
       logger.info(e.getMessage());
-      progress = false;
+      PROGRESS = false;
       return null;
     }
   }
@@ -136,7 +146,7 @@ public class Crawler {
    * @return
    */
   private static List<String> getTrimedList(Document doc) {
-    if (!progress)
+    if (!PROGRESS)
       return null;
     // -> 불 필요한 태그 지우기
     doc.select("fieldset").remove();
@@ -162,7 +172,7 @@ public class Crawler {
    * @param doc
    */
   private static void splitParts(Document doc) {
-    if (!progress)
+    if (!PROGRESS)
       return;
     for (String part : getTrimedList(doc)) {
       part = part.replaceAll(" <[^>]*>", "").replaceAll("<[^>]*>", "").trim();
@@ -171,23 +181,22 @@ public class Crawler {
       if (part.contains("current at")) {
         // Maritime Safety Information current at 070444 UTC Aug 19
         // 시간 정규 표현식 210205 UTC Jun 19
-        ptn = Pattern.compile("\\d{2}\\d{2}\\d{2}\\s(UTC)\\s\\S{3}\\s\\d{2}");
-        mtchr = ptn.matcher(part);
-        while (mtchr.find()) {
-          scrapDate = mtchr.group().replace("UTC", "").replace("  ", " ").trim();
+        PTN = Pattern.compile("\\d{2}\\d{2}\\d{2}\\s(UTC)\\s\\S{3}\\s\\d{2}");
+        MTCHR = PTN.matcher(part);
+        while (MTCHR.find()) {
+          SCRAPE_DATE = MTCHR.group().replace("UTC", "").replace("  ", " ").trim();
         }
       } else if (part.contains("Part 1.")) {
         if (part.contains("SECURITE") && part.contains("NNNN"))
-          SAFTY_MSGS = part;
+          SAFETY_MSGS = part;
       } else if (part.contains("Part 2.")) {
-        NAVAREAxWARNINGS = part.replace("Part 2. NAVAREA X warnings:", "").replace("NNNN", "")
-            .replace("\n\n\n\n", "\n").trim();
+        NAVAREAxWARNINGS = part;
       } else if (part.contains("Part 3.")) {
         COASTAL_WARNINGS = part.replaceFirst("Part 3. Coastal warnings:", "").trim();
       } else if (part.contains("date-time format")) {
-        timeFormat = getTimeFormat(part);
-        scrapDate = TimeHandleUtil.unixTimeConvert(TimeHandleUtil.dateFormatConvert(scrapDate,
-            timeFormat, TimeHandleUtil.getDATETIME_form())) + "";
+        TIME_FORMAT = getTimeFormat(part);
+        SCRAPE_DATE = TimeHandleUtil.unixTimeConvert(TimeHandleUtil.dateFormatConvert(SCRAPE_DATE,
+            TIME_FORMAT, TimeHandleUtil.getDATETIME_form())) + "";
       }
     }
   }
@@ -200,31 +209,44 @@ public class Crawler {
    * @return
    */
   private static String getTimeFormat(String target) {
-    if (!progress)
+    if (!PROGRESS)
       return null;
     for (String a : target.trim().split("</p>")) {
       if (a.contains("date-time format")) {
         target = a;
       }
     }
-    ptn = Pattern.compile("(\")\\w+\\s\\w+\\s\\w+(\")");
-    mtchr = ptn.matcher(target);
-    if (mtchr.find()) {
-      target = mtchr.group().replaceAll("\"", "").replace("Z", "").replace("mon", "MM").trim();
+    PTN = Pattern.compile("(\")\\w+\\s\\w+\\s\\w+(\")");
+    MTCHR = PTN.matcher(target);
+    if (MTCHR.find()) {
+      target = MTCHR.group().replaceAll("\"", "").replace("Z", "").replace("mon", "MM").trim();
     }
     logger.info("Time Format : " + target);
     return target;
   }
 
   /**
-   * Safty Message를 처리하게 된다면 사용할 메소드.
+   * Safty Message를 처리.
    * 
    * @param target
    */
   private static void progressPart1(String target) {
-    if (!progress)
+    if (!PROGRESS)
       return;
-    logger.info("\n\n\t:: progressPart1 ::\n" + target + "\t:: progressPart1 ::\n\n");
+    if (!target.contains("SECURITE") && !target.contains("NNNN"))
+      return;
+
+    SFT_MSG_LIST = new ArrayList<Message>();
+    Message sm;
+    for (String msg : (target.replace("Part 1. Safety Messages:", "").trim().split("NNNN"))) {
+      if (msg.trim().length() >= 10) {
+        sm = new Message(msg.trim(), TIME_FORMAT);
+        sm.setScrapDate(SCRAPE_DATE);
+        SFT_MSG_LIST.add(sm);
+      }
+
+    }
+    logger.info("");
   }
 
   /**
@@ -233,48 +255,50 @@ public class Crawler {
    * @param target
    */
   private static void progressPart2(String target) {
-    if (!progress)
+    if (!PROGRESS)
       return;
     if (target.length() < 10) {
       logger.info("\n\t!! SOMETHING IS WRONG AT PROGRESS NAVAREA X WARNINGS !!");
       return;
+    } else {
+      logger.info("\t:: progressPart2 ::");
     }
 
-    logger.info("\t:: progressPart2 ::");
-    // ptn을 바꿔 줘야 할거 같은데..
-    Pattern UTCDatePtn = Pattern.compile("\\d{2}.\\d{2}\\d{2}\\s(UTC)\\s\\S{3}\\s\\d{2}");
+    target = target.replace("Part 2. NAVAREA X warnings:", "").trim();
+
+    // 안필요한 값??
+    // Pattern UTCDatePtn = Pattern.compile("\\d{2}.\\d{2}\\d{2}\\s(UTC)\\s\\S{3}\\s\\d{2}");
+
     // -> navarea X warning
     List<String> navareaXwarningList = new ArrayList<String>();
-    String[] tempArr = target.trim().split("\\d{1}(\\.)");
 
-    int idx = 0;
-    for (String temp : tempArr) {
-      logger.info(temp);
-      navareaXwarningList.add(idx + " : " + temp.trim());
-      if (temp.contains("AUSCOAST WARNINGS")) {
-        // FORCE DATE?
-        mtchr = UTCDatePtn.matcher(temp);
-        if (mtchr.find()) {
-          logger.info("AUSCOAST WARNINGS IN FORCE AT : " + mtchr.group());
-        }
-        for (String area : temp.split("AREA ")) {
-          if (!area.contains("NIL")) {
-            area = area.replace("AUSCOAST WARNINGS IN FORCE AT", "").replace(" AND", ",").trim();
-            // logger.info(area);
-          }
-        }
-      } else if (temp.contains("CANCEL THIS MESSAGE ")) {
-        // Message Cancel Date
-        mtchr = UTCDatePtn.matcher(temp);
-        while (mtchr.find()) {
-          // END DATE?
-          logger.info("CANCEL THIS MESSAGE : " + mtchr.group());
-        }
+    for (String str : target.trim().split("NNNN")) {
+      // logger.info("\ntemp : [\n" + temp.trim() + "\n]\n\n");
+      if (str.toUpperCase().contains("WWW.AMSA.GOV.AU.")) {
+        logger.info("no list : [{}]", str);
+
+      } else {
+        // Message nvaxW;
+        // if (str.trim().length() >= 10) {
+        // nvaxW = new Message(str.trim(), TIME_FORMAT);
+        // nvaxW.setScrapDate(SCRAPE_DATE);
+        // NAVxW_LIST.add(nvaxW);
+        // }
+        logger.info(str);
       }
-      idx++;
+
+
+
     }
+    // area 당 msg no
+    /*
+     * for (String area : temp.split("AREA ")) { if (!area.contains("NIL")) { area =
+     * area.replace("AUSCOAST WARNINGS IN FORCE AT", "").replace(" AND", ",").trim();
+     * logger.info(area); } }
+     */
     // <- navarea X warning
     logger.info("\t:: progressPart2 ::\n\n");
+
   }
 
   /**
@@ -282,60 +306,60 @@ public class Crawler {
    * 
    * @param target
    */
-  private static List<CoastalWarning> progressPart3(String target) {
-    list = new ArrayList<>();
-    if (!progress)
+  private static List<Message> progressPart3(String target) {
+    if (!PROGRESS)
       return null;
     if (target.length() < 10) {
       logger.info("\t!! SOMETHING IS WRONG AT PROGRESS COASTAL WARNINGS !!");
-      progress = false;
+      PROGRESS = false;
       return null;
     }
     logger.info("\t:: progressPart3 ::");
-    // logger.info(target);
     // -> coastalWarnings part를 구역을 나눈 뒤, 구역별 NMNW를 가져옴.
+    CW_LIST = new ArrayList<>();
     String[] coastalWarnArr = target.split("AUSCOAST coastal warning - area ");
     logger.info("Count of CW AREA : " + coastalWarnArr.length);
 
     String region;
-    CoastalWarning cw;
+    Message cw;
     for (String warnArea : coastalWarnArr) { // 데이터가 없다면 작업.
       if (warnArea.length() >= 1 && !warnArea.contains("nil")) { // 첫번째 문자는 AREA임.
         region = warnArea.substring(0, 1);
-        // logger.info("\nAREA : " + region);
         warnArea = warnArea.substring(warnArea.indexOf(":") + 1);
 
         // AREA별로 다시 warning 들을 쪼갬.
         String[] warnArr = warnArea.split("NNNN");
         for (String coastalWarn : warnArr) {
           if (coastalWarn.trim().length() >= 10) {
-            cw = new CoastalWarning(coastalWarn.trim(), timeFormat);
+            cw = new Message(coastalWarn.trim(), TIME_FORMAT);
             cw.setRegion(region);
-            cw.setScrapDate(scrapDate);
+            cw.setScrapDate(SCRAPE_DATE);
             logger.info(cw.toString());
-            list.add(cw);
+            CW_LIST.add(cw);
           }
         }
       }
     } // <- coastalWarnings
     logger.info("\t:: progressPart3 ::\n\n");
-    return list;
+    return CW_LIST;
   }
 
-  private static void sendListAsObject() {
-    if (!progress && list.size() < 0)
+  private static void sendListAsObject(List<Message> list) {
+    if (!PROGRESS && list.size() < 0)
       return;
-    for (CoastalWarning cw : list) {
-      sender(cw);
+    for (Message msg : list) {
+      sender(msg);
       matrixTime(1000);
     }
     matrixTime(5000);
-    logger.info("::::\tNMNW_MSGS SEND END {}/{}\t\t::::", SEND_CNT, list.size());
+    logger.info(":::: MSG SEND END {}/{} ::::", SEND_CNT, list.size());
+    SEND_CNT = 0;
   }
 
   @SuppressWarnings({"rawtypes", "unchecked"})
-  private static void sender(CoastalWarning cw) {
-    logger.info("\t:: Send Coastal Warning ::\n{}\n", cw.toString());
+  private static void sender(Message cw) {
+    logger.info("\t:: Send Message ::\n{}\n", cw.toString());
+    // logger.info("\t:: Send Message ::");
 
     Retrofit retrofit = RetrofitClient.getClient(false);
     Request request = retrofit.create(Request.class);
@@ -345,12 +369,11 @@ public class Crawler {
       @Override
       public void onResponse(Call call, Response response) {
         logger.info("CONNECTION SUCCESS ->");
+        logger.info("STATUS COUNT    : {}", SEND_CNT);
         logger.info("RESPONSE        : {}", response);
         logger.info("RESPONSE CODE   : {}", response.code());
         logger.info("RESPONSE MSG    : {}", response.message());
-        logger.info("RESPONSE BODY   : {}", response.body());
-        logger.info("RESPONSE HEADER : [\n" + response.headers() + "]\n\n");
-        logger.info("STATUS COUNT    : {}/{}", SEND_CNT, list.size());
+        logger.info("RESPONSE HEADER : [\n" + response.headers() + "] <-\n\n");
         if (response.code() == 200 && !(response.body() + "").contains("ERROR"))
           SEND_CNT++;
       }
@@ -371,7 +394,7 @@ public class Crawler {
    * @return
    */
   private static Boolean fileSave(String title, String cont) {
-    if (!progress)
+    if (!PROGRESS)
       return false;
     title = SAVE_DIR + HEAD + title + TAG;
     try {
@@ -405,21 +428,52 @@ public class Crawler {
     }
   }
 
+  @SuppressWarnings({"rawtypes", "unchecked"})
+  private static void deleteRequest() {
+    logger.info("\t:: Send Delete Request ::");
+    HashMap<String, String> country = new HashMap<String, String>();
+    country.put("country", "AUS");
+
+    Retrofit retrofit = RetrofitClient.getClient(true);
+    Request request = retrofit.create(Request.class);
+
+    Call<?> call = request.deleteMsg(country);
+    call.enqueue(new Callback() {
+      @Override
+      public void onResponse(Call call, Response response) {
+        logger.info("CONNECTION SUCCESS ->");
+        logger.info("RESPONSE        : {}", response);
+        logger.info("RESPONSE CODE   : {}", response.code());
+        logger.info("RESPONSE MSG    : {}", response.message());
+        logger.info("RESPONSE BODY   : {}", response.body());
+        logger.info("RESPONSE HEADER : [\n" + response.headers() + "] <-\n\n");
+        if (response.code() != 200 && !(response.body() + "").contains("ERROR"))
+          logger.error("\t!! DELETE REQUEST IS ON ERROR !!");
+      }
+
+      @Override
+      public void onFailure(Call call, Throwable t) {
+        logger.info("Connection FAIL");
+        logger.info("FAIL CAUSE : {}", t.getMessage());
+      }
+    });
+  }
+
   private static void initVals() {
-    ptn = null;
-    mtchr = null;
-    progress = false;
+    PTN = null;
+    MTCHR = null;
+    PROGRESS = false;
     // connection = true;
     DOC = null;
     NAVAREAxWARNINGS = "";
     COASTAL_WARNINGS = "";
-    SAFTY_MSGS = "";
+    SAFETY_MSGS = "";
     START_TIME = "";
-    scrapDate = "";
-    timeFormat = "";
+    SCRAPE_DATE = "";
+    TIME_FORMAT = "";
     CRAWL_CNT = 0;
     SEND_CNT = 0;
-    list = null;
+    CW_LIST = null;
     logger.info("");
   }
 

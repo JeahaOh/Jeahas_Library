@@ -12,8 +12,8 @@ public class Scheduler {
 
   private static final Logger logger = LoggerFactory.getLogger(Scheduler.class);
 
-  private static final String EARLY_TIME = "0 10 09 * * *";
-  private static final String LATE_TIME = "0 0 20 * * *";
+  private static final String EARLY_TIME = "0 0 08 * * *";
+  private static final String LATE_TIME = "0 40 18 * * *";
 
 
   @Scheduled(fixedDelay = 1000 * 60 * 60)
