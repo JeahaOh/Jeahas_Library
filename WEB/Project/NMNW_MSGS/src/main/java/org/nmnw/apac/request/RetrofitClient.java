@@ -14,14 +14,27 @@ public class RetrofitClient {
   private static final HttpLoggingInterceptor interceptor =
       new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY);
 
-  private static final OkHttpClient client = new OkHttpClient.Builder()
+  private static final OkHttpClient loggingClient = new OkHttpClient.Builder()
       .connectTimeout(30, TimeUnit.SECONDS).readTimeout(30, TimeUnit.SECONDS)
       .writeTimeout(30, TimeUnit.SECONDS).addInterceptor(interceptor).build();
 
-  private static final Retrofit retrofit = new Retrofit.Builder().baseUrl(TO_URL).client(client)
+  private static final Retrofit loggingRetrofit = new Retrofit.Builder().baseUrl(SELF_URL)
+      .client(loggingClient).addConverterFactory(GsonConverterFactory.create()).build();
+
+  private static final OkHttpClient client =
+      new OkHttpClient.Builder().connectTimeout(30, TimeUnit.SECONDS)
+          .readTimeout(30, TimeUnit.SECONDS).writeTimeout(30, TimeUnit.SECONDS).build();
+
+  private static final Retrofit retrofit = new Retrofit.Builder().baseUrl(SELF_URL).client(client)
       .addConverterFactory(GsonConverterFactory.create()).build();
 
-  public static Retrofit getClient() {
-    return retrofit;
+
+
+  public static Retrofit getClient(Boolean log) {
+    if (log) {
+      return loggingRetrofit;
+    } else {
+      return retrofit;
+    }
   }
 }

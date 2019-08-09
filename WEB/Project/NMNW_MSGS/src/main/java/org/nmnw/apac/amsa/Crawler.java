@@ -90,7 +90,7 @@ public class Crawler {
     // Part 3. Coastal warnings: 처리
     progressPart3(COASTAL_WARNINGS);
     //
-    // sendListAsObject();
+    sendListAsObject();
 
     initVals();
 
@@ -337,7 +337,7 @@ public class Crawler {
   private static void sender(CoastalWarning cw) {
     logger.info("\t:: Send Coastal Warning ::\n{}\n", cw.toString());
 
-    Retrofit retrofit = RetrofitClient.getClient();
+    Retrofit retrofit = RetrofitClient.getClient(false);
     Request request = retrofit.create(Request.class);
     Call<?> call = request.postMsg(cw);
 
@@ -350,7 +350,7 @@ public class Crawler {
         logger.info("RESPONSE MSG    : {}", response.message());
         logger.info("RESPONSE BODY   : {}", response.body());
         logger.info("RESPONSE HEADER : [\n" + response.headers() + "]\n\n");
-        logger.info("STATUS COUNT    : {}/{}", SEND_CNT + 1, list.size());
+        logger.info("STATUS COUNT    : {}/{}", SEND_CNT, list.size());
         if (response.code() == 200 && !(response.body() + "").contains("ERROR"))
           SEND_CNT++;
       }
