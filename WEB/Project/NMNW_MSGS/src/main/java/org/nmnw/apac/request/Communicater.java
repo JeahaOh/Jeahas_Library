@@ -17,7 +17,7 @@ public class Communicater {
   private static final Logger logger = LoggerFactory.getLogger(Communicater.class);
   public static int SEND_CNT = 0;
 
-  public void sendListAsObject(List<Message> list) {
+  public static void sendListAsObject(List<Message> list) {
     if (!Crawler.PROGRESS && list.size() < 0)
       return;
     for (Message msg : list) {
@@ -30,9 +30,9 @@ public class Communicater {
   }
 
   @SuppressWarnings({"rawtypes", "unchecked"})
-  private void sender(Message cw) {
-    logger.info("\t:: Send Message ::\n{}\n", cw.toString());
-    // logger.info("\t:: Send Message ::");
+  private static void sender(Message cw) {
+    // logger.info("\t:: Send Message ::\n{}\n", cw.toString());
+    logger.info("\t:: Send Message ::");
 
     Retrofit retrofit = RetrofitClient.getClient(false);
     Request request = retrofit.create(Request.class);
@@ -60,7 +60,7 @@ public class Communicater {
   }
 
   @SuppressWarnings({"rawtypes", "unchecked"})
-  public void deleteRequest() {
+  public static void deleteRequest() {
     logger.info("\t:: Send Delete Request ::");
     HashMap<String, String> country = new HashMap<String, String>();
     country.put("country", "AUS");

@@ -18,10 +18,10 @@ import org.nmnw.apac.request.Communicater;
 import org.nmnw.apac.util.TimeHandle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 
 @SuppressWarnings("unused")
 public class Crawler {
+
 
   private static final Logger logger = LoggerFactory.getLogger(Crawler.class);
   // Crawling 할 URL
@@ -40,19 +40,17 @@ public class Crawler {
   private static String SAFETY_MSGS = "";
 
   private static String START_TIME = "";
-  private static String SCRAPE_DATE = "";
-  private static String TIME_FORMAT = "";
+  public static String SCRAPE_DATE = "";
+  public static String TIME_FORMAT = "";
+  public static String TIME_FORMAT_DESC = "";
 
 
   private static int CRAWL_CNT = 0;
   private static final int CRAWL_MAX = 5;
 
-  @Autowired
-  private static Communicater cmmnctr;
-
-  private static List<Message> SFT_MSG_LIST = null;
-  private static List<Message> NAVxW_LIST = null;
-  private static List<Message> CW_LIST = null;
+  public static List<Message> SFT_MSG_LIST = null;
+  public static List<Message> NAVxW_LIST = null;
+  public static List<Message> CW_LIST = null;
 
   // 파일로 저장하기 위해 사용하는 변수들.
   private static BufferedOutputStream bs = null;
@@ -71,7 +69,7 @@ public class Crawler {
     // -> URL에서 HTML 파일 긁어오기
     while (!PROGRESS) {
       DOC = getDoc();
-      // // logger.info(doc.toString());
+      // logger.info(DOC.toString());
       if (CRAWL_CNT == CRAWL_MAX)
         return;
     }
@@ -81,19 +79,32 @@ public class Crawler {
     // scrapDate
 
     // Part 1. Safety Messages: 처리?
-    // progressPart1(SAFETY_MSGS);
+    SFT_MSG_LIST = FragmentPaser.progressPart1(SAFETY_MSGS);
 
     // Part 2. NAVAREA X warnings: 처리
-    // progressPart2(NAVAREAxWARNINGS);
+    NAVxW_LIST = FragmentPaser.progressPart2(NAVAREAxWARNINGS);
+    //
+    // // // Part 3. Coastal warnings: 처리
+    CW_LIST = FragmentPaser.progressPart3(COASTAL_WARNINGS);
 
-    // // Part 3. Coastal warnings: 처리
-    progressPart3(COASTAL_WARNINGS);
+    // logger.info("\nSFT_MSG_LIST\n");
+    // for (Message msg : SFT_MSG_LIST) {
+    // logger.info(msg.toString());
+    // }
+    // logger.info("\nNAVxW_LIST\n");
+    // for (Message msg : NAVxW_LIST) {
+    // logger.info(msg.toString());
+    // }
+    // logger.info("\nCW_LIST\n");
+    // for (Message msg : CW_LIST) {
+    // logger.info(msg.toString());
+    // }
 
 
-    cmmnctr.deleteRequest();
-    cmmnctr.sendListAsObject(SFT_MSG_LIST);
-    cmmnctr.sendListAsObject(NAVxW_LIST);
-    cmmnctr.sendListAsObject(CW_LIST);
+    Communicater.deleteRequest();
+    Communicater.sendListAsObject(SFT_MSG_LIST);
+    Communicater.sendListAsObject(NAVxW_LIST);
+    Communicater.sendListAsObject(CW_LIST);
 
     // System.out.println(CW_LIST.toString());
     initVals();
@@ -110,7 +121,7 @@ public class Crawler {
   private static Document getDoc() {
     logger.info("TARGET URL : " + TARGET_URL);
     // Crawler를 실행하는 시점의 시간을 얻어옴.
-    START_TIME = new SimpleDateFormat("yyy.MM.dd_HHmmss", Locale.KOREA).format(new Date());
+    START_TIME = new SimpleDateFormat("yyyy.MM.dd_HH.mm.ss", Locale.KOREA).format(new Date());
     logger.info("========== " + START_TIME + " ========== cnt : " + CRAWL_CNT);
     CRAWL_CNT++;
     try {
@@ -189,6 +200,10 @@ public class Crawler {
         COASTAL_WARNINGS = part.replaceFirst("Part 3. Coastal warnings:", "").trim();
       } else if (part.contains("date-time format")) {
         TIME_FORMAT = getTimeFormat(part);
+        part = part.split("\n")[1].trim();
+
+        TIME_FORMAT_DESC = "\n\n" + part;
+        System.out.println(part);
         SCRAPE_DATE = TimeHandle.unixTimeConvert(
             TimeHandle.dateFormatConvert(SCRAPE_DATE, TIME_FORMAT, TimeHandle.getDATETIME_form()))
             + "";
@@ -218,125 +233,6 @@ public class Crawler {
     }
     logger.info("Time Format : " + target);
     return target;
-  }
-
-  /**
-   * Safty Message를 처리.
-   * 
-   * @param target
-   */
-  private static void progressPart1(String target) {
-    if (!PROGRESS)
-      return;
-    if (!target.contains("SECURITE") && !target.contains("NNNN"))
-      return;
-
-    SFT_MSG_LIST = new ArrayList<Message>();
-    Message sm;
-    for (String msg : (target.replace("Part 1. Safety Messages:", "").trim().split("NNNN"))) {
-      if (msg.trim().length() >= 10) {
-        sm = new Message(msg.trim(), TIME_FORMAT);
-        sm.setScrapDate(SCRAPE_DATE);
-        SFT_MSG_LIST.add(sm);
-      }
-
-    }
-    logger.info("");
-  }
-
-  /**
-   * navarea X warnings 를 처리하기 위한 method. 형식이 일정치 않음으로 예외처리를 더 해줘야 함.
-   * 
-   * @param target
-   */
-  private static void progressPart2(String target) {
-    if (!PROGRESS)
-      return;
-    if (target.length() < 10) {
-      logger.info("\n\t!! SOMETHING IS WRONG AT PROGRESS NAVAREA X WARNINGS !!");
-      return;
-    } else {
-      logger.info("\t:: progressPart2 ::");
-    }
-
-    target = target.replace("Part 2. NAVAREA X warnings:", "").trim();
-
-    // 안필요한 값??
-    // Pattern UTCDatePtn = Pattern.compile("\\d{2}.\\d{2}\\d{2}\\s(UTC)\\s\\S{3}\\s\\d{2}");
-
-    // -> navarea X warning
-    List<String> navareaXwarningList = new ArrayList<String>();
-
-    for (String str : target.trim().split("NNNN")) {
-      // logger.info("\ntemp : [\n" + temp.trim() + "\n]\n\n");
-      if (str.toUpperCase().contains("WWW.AMSA.GOV.AU.")) {
-        logger.info("no list : [{}]", str);
-
-      } else {
-        // Message nvaxW;
-        // if (str.trim().length() >= 10) {
-        // nvaxW = new Message(str.trim(), TIME_FORMAT);
-        // nvaxW.setScrapDate(SCRAPE_DATE);
-        // NAVxW_LIST.add(nvaxW);
-        // }
-        logger.info(str);
-      }
-
-
-
-    }
-    // area 당 msg no
-    /*
-     * for (String area : temp.split("AREA ")) { if (!area.contains("NIL")) { area =
-     * area.replace("AUSCOAST WARNINGS IN FORCE AT", "").replace(" AND", ",").trim();
-     * logger.info(area); } }
-     */
-    // <- navarea X warning
-    logger.info("\t:: progressPart2 ::\n\n");
-
-  }
-
-  /**
-   * Part 3 Coastal Warnings 를 처리하기 위한 method.
-   * 
-   * @param target
-   */
-  private static List<Message> progressPart3(String target) {
-    if (!PROGRESS)
-      return null;
-    if (target.length() < 10) {
-      logger.info("\t!! SOMETHING IS WRONG AT PROGRESS COASTAL WARNINGS !!");
-      PROGRESS = false;
-      return null;
-    }
-    logger.info("\t:: progressPart3 ::");
-    // -> coastalWarnings part를 구역을 나눈 뒤, 구역별 NMNW를 가져옴.
-    CW_LIST = new ArrayList<>();
-    String[] coastalWarnArr = target.split("AUSCOAST coastal warning - area ");
-    logger.info("Count of CW AREA : " + coastalWarnArr.length);
-
-    String region;
-    Message cw;
-    for (String warnArea : coastalWarnArr) { // 데이터가 없다면 작업.
-      if (warnArea.length() >= 1 && !warnArea.contains("nil")) { // 첫번째 문자는 AREA임.
-        region = warnArea.substring(0, 1);
-        warnArea = warnArea.substring(warnArea.indexOf(":") + 1);
-
-        // AREA별로 다시 warning 들을 쪼갬.
-        String[] warnArr = warnArea.split("NNNN");
-        for (String coastalWarn : warnArr) {
-          if (coastalWarn.trim().length() >= 10) {
-            cw = new Message(coastalWarn.trim(), TIME_FORMAT);
-            cw.setRegion(region);
-            cw.setScrapDate(SCRAPE_DATE);
-            logger.info(cw.toString());
-            CW_LIST.add(cw);
-          }
-        }
-      }
-    } // <- coastalWarnings
-    logger.info("\t:: progressPart3 ::\n\n");
-    return CW_LIST;
   }
 
 

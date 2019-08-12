@@ -1,11 +1,7 @@
 package org.nmnw.apac.message;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import org.nmnw.apac.util.MsgParser;
-import org.nmnw.apac.util.TimeHandle;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -74,89 +70,11 @@ public class Message {
   @SerializedName("detail")
   String detail;
 
-  private static final String[] NM_KEYWORDS =
-      {"RACON"/* 레이더 */, "BUOY" /* 부표 */, "LIGHTHOUSE"/* 등대 */, "SAFETY MESSAGE", "BEACON"};
 
   /* Constructor */
   public Message() {}
 
-  public Message(String detail, String timeForm) {
-    super();
-    detail = detail.replaceAll("` ", "");
-    this.detail = detail;
-
-    // -> msg를 parse해서 fromDate를 가져옴.
-    Pattern ptn = Pattern.compile("\\d{6}(Z) \\w{3} \\d{2}");
-    Matcher mtchr = ptn.matcher(detail);
-    if (mtchr.find()) {
-      this.fromDate = TimeHandle.unixTimeConvert(TimeHandle.dateFormatConvert(
-          mtchr.group().replace("Z", ""), timeForm, TimeHandle.getDATETIME_form())) + "";
-    }
-    // <- fromDate
-
-
-
-    // -> subject
-    subject = detail.split("\n")[2];
-    messageId = subject;
-    title = subject;
-    // <- subject
-    this.country = "AUS";
-
-
-    // -> position south east
-    ptn = Pattern.compile(
-        "\\d{0,3}\\W\\d{0,3}\\W\\d{0,3}.\\d{0,3}(.|)(!?S|!?N)\\d{0,3}\\W\\d{0,3}\\W\\d{0,3}.\\d{0,3}(.|)(!?E|!?W)");
-    mtchr = ptn.matcher(detail);
-    if (mtchr.find()) {
-      this.position = mtchr.group().trim();
-    }
-    // 만약 position이 점이 아니라 면이라면?? 면적이 된다면 부분은 점일때 사용하는 것으로...
-    if (this.getPosition() != null && this.getPosition().length() > 5) {
-      ptn = Pattern.compile("\\d{0,3}\\W\\d{0,3}\\W\\d{0,3}.\\d{0,3}(.|)(!?S|!?N)");
-      mtchr = ptn.matcher(this.getPosition());
-      if (mtchr.find()) {
-        this.lat = MsgParser.PosiConvert(mtchr.group().trim());
-      }
-      ptn = Pattern.compile("\\d{0,3}\\W\\d{0,3}\\W\\d{0,3}.\\d{0,3}(.|)(!?E|!?W)");
-      mtchr = ptn.matcher(this.getPosition());
-      if (mtchr.find()) {
-        this.lon = MsgParser.PosiConvert(mtchr.group().trim());
-      }
-    }
-    // <- position south east
-
-
-    // -> type
-    for (String keyword : NM_KEYWORDS) {
-      if (detail.toUpperCase().contains(keyword)) {
-        this.setType("NM");
-        this.setMainType("NM");
-        System.out.println(keyword + this.type);
-      } else if (!detail.toUpperCase().contains(keyword)) {
-        this.setType("NW");
-        this.setMainType("NW");
-      }
-    }
-    // <- type
-
-    // -> shortId
-    ptn = Pattern.compile("\\d{1,3}(\\/)\\d{2}");
-    mtchr = ptn.matcher(detail);
-    if (mtchr.find()) {
-      this.shortId = this.type + " " + mtchr.group();
-    }
-    // <- shortId
-    System.out.println("THIS : " + this.toString());
-  }
-
   /* getter & setter */
-  public void setScrapDate(String scrapDate) {
-    this.scrapDate = scrapDate;
-    // 12시간 뒤.
-    this.toDate = (Long.parseLong(scrapDate) + (12 * 60 * 60 * 1000)) + "";
-  }
-
   public String getId() {
     return id;
   }
@@ -211,8 +129,6 @@ public class Message {
 
   public void setType(String type) {
     this.type = type;
-    System.out.println("where is my mind");
-    System.out.println("\n" + this.type + "\n");
   }
 
   public String getMainType() {
@@ -237,6 +153,14 @@ public class Message {
 
   public void setFromDate(String fromDate) {
     this.fromDate = fromDate;
+  }
+
+  public String getScrapDate() {
+    return scrapDate;
+  }
+
+  public void setScrapDate(String scrapDate) {
+    this.scrapDate = scrapDate;
   }
 
   public String getToDate() {
@@ -279,9 +203,6 @@ public class Message {
     this.detail = detail;
   }
 
-  public String getScrapDate() {
-    return scrapDate;
-  }
 
   @Override
   public String toString() {

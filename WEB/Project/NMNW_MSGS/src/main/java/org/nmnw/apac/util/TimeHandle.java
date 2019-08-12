@@ -5,8 +5,13 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class TimeHandle {
+
+  private static final Logger logger = LoggerFactory.getLogger(TimeHandle.class);
+
   /* DATE와 TIME 정수 */
   private static final String DATE_TIME = "yyyy.MM.dd_HH:mm:ss";
   private static final String DATETIME = "yyyyMMddHHmmss";
@@ -93,11 +98,11 @@ public class TimeHandle {
     try {
       fromDate = fromFormat.parse(strMonthToInt(target));
     } catch (ParseException e) {
-      System.out.println("\n\t!! Date Format Convert ERR !!\n" + e.getMessage());
-      System.out.println("target : " + target);
-      System.out.println("fromFormatString : " + fromFormatString);
-      System.out.println("toFormatString : " + toFormatString);
-      System.out.println("\n\n");
+      logger.warn("\n\t!! Date Format Convert ERR !!\n" + e.getMessage());
+      logger.warn("target : " + target);
+      logger.warn("fromFormatString : " + fromFormatString);
+      logger.warn("toFormatString : " + toFormatString);
+      logger.warn("\n\n");
       return null;
     }
 
@@ -119,12 +124,11 @@ public class TimeHandle {
       unixTime = DF.parse(target).getTime();
       // unixTime = unixTime / 1000;
     } catch (ParseException e) {
-      System.out.println("\n\t!! Unix Time Convert ERR !!\n" + e.getMessage());
-      System.out.printf("target : %s\n\n", target);
+      logger.warn("\n\t!! Unix Time Convert ERR !!\n" + e.getMessage());
+      logger.warn("target : {}\n\n", target);
     }
     return unixTime;
   }
-
 
   /**
    * 인자 값으로 주는 시간만큼 시간 delay.
