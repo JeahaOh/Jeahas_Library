@@ -1,6 +1,6 @@
 package org.nmnw.apac.util;
 
-public class MsgConvertUtil {
+public class MsgParser {
   private static String[] vals;
 
   public static void main(String[] args) {

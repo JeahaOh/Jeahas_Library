@@ -1,7 +1,7 @@
 package org.nmnw.apac;
 
 import org.nmnw.apac.amsa.Crawler;
-import org.nmnw.apac.util.TimeHandleUtil;
+import org.nmnw.apac.util.TimeHandle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -18,7 +18,7 @@ public class Scheduler {
 
   @Scheduled(fixedDelay = 1000 * 60 * 60)
   public void HourScheduler() {
-    logger.info("\t:: SERVER ALIVE {} ::", TimeHandleUtil.getTime());
+    logger.info("\t:: SERVER ALIVE {} ::", TimeHandle.getTime());
   }
 
   @Scheduled(cron = EARLY_TIME)

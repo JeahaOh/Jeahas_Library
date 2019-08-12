@@ -6,7 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
 
-public class TimeHandleUtil {
+public class TimeHandle {
   /* DATE와 TIME 정수 */
   private static final String DATE_TIME = "yyyy.MM.dd_HH:mm:ss";
   private static final String DATETIME = "yyyyMMddHHmmss";
@@ -124,6 +124,21 @@ public class TimeHandleUtil {
     }
     return unixTime;
   }
+
+
+  /**
+   * 인자 값으로 주는 시간만큼 시간 delay.
+   * 
+   * @param delayTime
+   */
+  public static final void interceptor(int delayTime) {
+    long startTime = System.currentTimeMillis();
+    long endTime = 0;
+    while (endTime - startTime < delayTime) {
+      endTime = System.currentTimeMillis();
+    }
+  }
+
 
 
   public static void main(String[] args) {

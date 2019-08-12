@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.regex.Matcher;
@@ -15,15 +14,11 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.nmnw.apac.message.Message;
-import org.nmnw.apac.request.Request;
-import org.nmnw.apac.request.RetrofitClient;
-import org.nmnw.apac.util.TimeHandleUtil;
+import org.nmnw.apac.request.Communicater;
+import org.nmnw.apac.util.TimeHandle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @SuppressWarnings("unused")
 public class Crawler {
@@ -36,7 +31,7 @@ public class Crawler {
   private static Pattern PTN = null;
   private static Matcher MTCHR = null;
 
-  private static Boolean PROGRESS = false;
+  public static Boolean PROGRESS = false;
 
   private static Document DOC = null;
   private static String NAVAREAxWARNINGS = "";
@@ -52,9 +47,8 @@ public class Crawler {
   private static int CRAWL_CNT = 0;
   private static final int CRAWL_MAX = 5;
 
-  private static int SEND_CNT = 0;
-
-
+  @Autowired
+  private static Communicater cmmnctr;
 
   private static List<Message> SFT_MSG_LIST = null;
   private static List<Message> NAVxW_LIST = null;
@@ -86,7 +80,6 @@ public class Crawler {
     splitParts(DOC);
     // scrapDate
 
-    // deleteRequest();
     // Part 1. Safety Messages: 처리?
     // progressPart1(SAFETY_MSGS);
 
@@ -97,9 +90,10 @@ public class Crawler {
     progressPart3(COASTAL_WARNINGS);
 
 
-    // sendListAsObject(SFT_MSG_LIST);
-    // sendListAsObject(NAVxW_LIST);
-    // sendListAsObject(CW_LIST);
+    cmmnctr.deleteRequest();
+    cmmnctr.sendListAsObject(SFT_MSG_LIST);
+    cmmnctr.sendListAsObject(NAVxW_LIST);
+    cmmnctr.sendListAsObject(CW_LIST);
 
     // System.out.println(CW_LIST.toString());
     initVals();
@@ -125,7 +119,7 @@ public class Crawler {
       logger.info("Getting documennt Success \t"
           + new SimpleDateFormat("HH.mm.ss", Locale.KOREA).format(new Date()));
       // -> 긁어온 HTML파일 원본 저장.
-      fileSave(START_TIME, DOC.toString());
+      // fileSave(START_TIME, DOC.toString());
       // <- 긁어온 HTML파일 원본 저장.
       return DOC;
     } catch (IOException e) {
@@ -195,8 +189,9 @@ public class Crawler {
         COASTAL_WARNINGS = part.replaceFirst("Part 3. Coastal warnings:", "").trim();
       } else if (part.contains("date-time format")) {
         TIME_FORMAT = getTimeFormat(part);
-        SCRAPE_DATE = TimeHandleUtil.unixTimeConvert(TimeHandleUtil.dateFormatConvert(SCRAPE_DATE,
-            TIME_FORMAT, TimeHandleUtil.getDATETIME_form())) + "";
+        SCRAPE_DATE = TimeHandle.unixTimeConvert(
+            TimeHandle.dateFormatConvert(SCRAPE_DATE, TIME_FORMAT, TimeHandle.getDATETIME_form()))
+            + "";
       }
     }
   }
@@ -344,47 +339,6 @@ public class Crawler {
     return CW_LIST;
   }
 
-  private static void sendListAsObject(List<Message> list) {
-    if (!PROGRESS && list.size() < 0)
-      return;
-    for (Message msg : list) {
-      sender(msg);
-      matrixTime(1000);
-    }
-    matrixTime(5000);
-    logger.info(":::: MSG SEND END {}/{} ::::", SEND_CNT, list.size());
-    SEND_CNT = 0;
-  }
-
-  @SuppressWarnings({"rawtypes", "unchecked"})
-  private static void sender(Message cw) {
-    logger.info("\t:: Send Message ::\n{}\n", cw.toString());
-    // logger.info("\t:: Send Message ::");
-
-    Retrofit retrofit = RetrofitClient.getClient(false);
-    Request request = retrofit.create(Request.class);
-    Call<?> call = request.postMsg(cw);
-
-    call.enqueue(new Callback() {
-      @Override
-      public void onResponse(Call call, Response response) {
-        logger.info("CONNECTION SUCCESS ->");
-        logger.info("STATUS COUNT    : {}", SEND_CNT);
-        logger.info("RESPONSE        : {}", response);
-        logger.info("RESPONSE CODE   : {}", response.code());
-        logger.info("RESPONSE MSG    : {}", response.message());
-        logger.info("RESPONSE HEADER : [\n" + response.headers() + "] <-\n\n");
-        if (response.code() == 200 && !(response.body() + "").contains("ERROR"))
-          SEND_CNT++;
-      }
-
-      @Override
-      public void onFailure(Call call, Throwable t) {
-        logger.info("Connection FAIL");
-        logger.info("FAIL CAUSE : {}", t.getMessage());
-      }
-    });
-  }
 
   /**
    * 제목과 내용을 받아서 정수로 선언한 위치에 저장한다.
@@ -415,49 +369,6 @@ public class Crawler {
     } // finally
   }
 
-  /**
-   * 인자 값으로 주는 시간만큼 시간 delay.
-   * 
-   * @param delayTime
-   */
-  private static void matrixTime(int delayTime) {
-    long startTime = System.currentTimeMillis();
-    long endTime = 0;
-    while (endTime - startTime < delayTime) {
-      endTime = System.currentTimeMillis();
-    }
-  }
-
-  @SuppressWarnings({"rawtypes", "unchecked"})
-  private static void deleteRequest() {
-    logger.info("\t:: Send Delete Request ::");
-    HashMap<String, String> country = new HashMap<String, String>();
-    country.put("country", "AUS");
-
-    Retrofit retrofit = RetrofitClient.getClient(true);
-    Request request = retrofit.create(Request.class);
-
-    Call<?> call = request.deleteMsg(country);
-    call.enqueue(new Callback() {
-      @Override
-      public void onResponse(Call call, Response response) {
-        logger.info("CONNECTION SUCCESS ->");
-        logger.info("RESPONSE        : {}", response);
-        logger.info("RESPONSE CODE   : {}", response.code());
-        logger.info("RESPONSE MSG    : {}", response.message());
-        logger.info("RESPONSE BODY   : {}", response.body());
-        logger.info("RESPONSE HEADER : [\n" + response.headers() + "] <-\n\n");
-        if (response.code() != 200 && !(response.body() + "").contains("ERROR"))
-          logger.error("\t!! DELETE REQUEST IS ON ERROR !!");
-      }
-
-      @Override
-      public void onFailure(Call call, Throwable t) {
-        logger.info("Connection FAIL");
-        logger.info("FAIL CAUSE : {}", t.getMessage());
-      }
-    });
-  }
 
   private static void initVals() {
     PTN = null;
@@ -472,7 +383,7 @@ public class Crawler {
     SCRAPE_DATE = "";
     TIME_FORMAT = "";
     CRAWL_CNT = 0;
-    SEND_CNT = 0;
+    Communicater.SEND_CNT = 0;
     CW_LIST = null;
     logger.info("");
   }

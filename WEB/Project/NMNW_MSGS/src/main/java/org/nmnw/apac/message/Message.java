@@ -4,8 +4,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import org.nmnw.apac.util.MsgConvertUtil;
-import org.nmnw.apac.util.TimeHandleUtil;
+import org.nmnw.apac.util.MsgParser;
+import org.nmnw.apac.util.TimeHandle;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -74,7 +74,7 @@ public class Message {
   @SerializedName("detail")
   String detail;
 
-  private static String[] NM_KEYWORDS =
+  private static final String[] NM_KEYWORDS =
       {"RACON"/* 레이더 */, "BUOY" /* 부표 */, "LIGHTHOUSE"/* 등대 */, "SAFETY MESSAGE", "BEACON"};
 
   /* Constructor */
@@ -89,8 +89,8 @@ public class Message {
     Pattern ptn = Pattern.compile("\\d{6}(Z) \\w{3} \\d{2}");
     Matcher mtchr = ptn.matcher(detail);
     if (mtchr.find()) {
-      this.fromDate = TimeHandleUtil.unixTimeConvert(TimeHandleUtil.dateFormatConvert(
-          mtchr.group().replace("Z", ""), timeForm, TimeHandleUtil.getDATETIME_form())) + "";
+      this.fromDate = TimeHandle.unixTimeConvert(TimeHandle.dateFormatConvert(
+          mtchr.group().replace("Z", ""), timeForm, TimeHandle.getDATETIME_form())) + "";
     }
     // <- fromDate
 
@@ -116,12 +116,12 @@ public class Message {
       ptn = Pattern.compile("\\d{0,3}\\W\\d{0,3}\\W\\d{0,3}.\\d{0,3}(.|)(!?S|!?N)");
       mtchr = ptn.matcher(this.getPosition());
       if (mtchr.find()) {
-        this.lat = MsgConvertUtil.PosiConvert(mtchr.group().trim());
+        this.lat = MsgParser.PosiConvert(mtchr.group().trim());
       }
       ptn = Pattern.compile("\\d{0,3}\\W\\d{0,3}\\W\\d{0,3}.\\d{0,3}(.|)(!?E|!?W)");
       mtchr = ptn.matcher(this.getPosition());
       if (mtchr.find()) {
-        this.lon = MsgConvertUtil.PosiConvert(mtchr.group().trim());
+        this.lon = MsgParser.PosiConvert(mtchr.group().trim());
       }
     }
     // <- position south east
@@ -133,7 +133,7 @@ public class Message {
         this.setType("NM");
         this.setMainType("NM");
         System.out.println(keyword + this.type);
-      } else {
+      } else if (!detail.toUpperCase().contains(keyword)) {
         this.setType("NW");
         this.setMainType("NW");
       }
@@ -211,6 +211,8 @@ public class Message {
 
   public void setType(String type) {
     this.type = type;
+    System.out.println("where is my mind");
+    System.out.println("\n" + this.type + "\n");
   }
 
   public String getMainType() {
