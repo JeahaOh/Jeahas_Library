@@ -8,7 +8,14 @@
     - [Run] - [Run Configurations] (- [Apache Tomcat] - [Server가 돌아가는 Project]) - [Common tab]
     - Standard Input and Output 창의 `Output File`에서 설정
 
+
+## fomatter 설정 import
+- fomat 설정 xml 파일 준비
+- [Java | JavaScript] - [Code Style] - [Fomatter]
+- import
+
 ## 한 라인 최대 문자 입력 가이드라인 보이기.
 - [Window] - [Preference] - [General] - [Editor] - [Text Editors tab]
     - Show print margin
     - print margin column : 원하는 글자수.
+
