@@ -22,7 +22,8 @@ public class MsgParser {
   public static Message MsgParse(String detail, String region) {
     detail = detail.replaceAll("` ", "");
     msg = new Message();
-    msg.setDetail(detail.concat(Crawler.TIME_FORMAT_DESC).replace("\n", "</br>"));
+    // msg.setDetail(detail.concat(Crawler.TIME_FORMAT_DESC).replace("\n", "</br>"));
+    msg.setDetail(detail);
 
     // -> msg를 parse해서 fromDate를 가져옴.
     ptn = Pattern.compile("\\d{6}(Z) \\w{3} \\d{2}");

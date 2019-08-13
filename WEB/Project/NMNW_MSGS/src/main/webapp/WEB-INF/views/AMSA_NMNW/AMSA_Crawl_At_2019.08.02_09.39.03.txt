@@ -1,0 +1,508 @@
+<!doctype html>
+<html>
+ <head> 
+  <title></title> 
+  <link href="/AMSA.Web.MSIPublication/Content/Site.css" rel="stylesheet" type="text/css"> 
+  <script src="/AMSA.Web.MSIPublication/Scripts/jquery-1.7.1.min.js" type="text/javascript"></script> 
+  <script src="/AMSA.Web.MSIPublication/Scripts/jquery.validate.js" type="text/javascript"></script> 
+ </head> 
+ <body> 
+  <style>
+    input.error{
+        border-color: #F78181;
+    }
+    label.error{
+        border-color: #F78181;
+        color:red;
+        display: inline;
+    }
+</style> 
+  <form action="/AMSA.Web.MSIPublication/" id="theForm" method="post"> 
+   <span>Select All Valid Australian MSI</span>
+   <input checked data-val="true" data-val-required="The SelectAll field is required." id="SelectAll" name="SelectAll" type="checkbox" value="true">
+   <input name="SelectAll" type="hidden" value="false"> 
+   <br> 
+   <fieldset style="margin-bottom: 0"> 
+    <legend>Search Filter</legend> 
+    <span>Include Drill Rigs</span>
+    <input checked data-val="true" data-val-required="The ShowDrillRigs field is required." id="ShowDrillRigs" name="ShowDrillRigs" type="checkbox" value="true">
+    <input name="ShowDrillRigs" type="hidden" value="false"> 
+    <br> 
+    <span>Include Special Vessels</span>
+    <input checked data-val="true" data-val-required="The ShowSpecialVessels field is required." id="ShowSpecialVessels" name="ShowSpecialVessels" type="checkbox" value="true">
+    <input name="ShowSpecialVessels" type="hidden" value="false"> 
+    <br> 
+    <span>Include Auscoast Warnings</span>
+    <input checked data-val="true" data-val-required="The ShowAuscoast field is required." id="ShowAuscoast" name="ShowAuscoast" type="checkbox" value="true">
+    <input name="ShowAuscoast" type="hidden" value="false"> 
+    <br> 
+    <span id="areas"> 
+     <div style="border: solid 1px grey; width: 300px; padding: 5px;"> 
+      <div>
+       Include Auscoast Warnings for these areas:
+      </div> A 
+      <input checked data-val="true" data-val-required="The RegionA field is required." id="RegionA" name="RegionA" type="checkbox" value="true">
+      <input name="RegionA" type="hidden" value="false"> B 
+      <input checked data-val="true" data-val-required="The RegionB field is required." id="RegionB" name="RegionB" type="checkbox" value="true">
+      <input name="RegionB" type="hidden" value="false"> C 
+      <input checked data-val="true" data-val-required="The RegionC field is required." id="RegionC" name="RegionC" type="checkbox" value="true">
+      <input name="RegionC" type="hidden" value="false"> D 
+      <input checked data-val="true" data-val-required="The RegionD field is required." id="RegionD" name="RegionD" type="checkbox" value="true">
+      <input name="RegionD" type="hidden" value="false"> E 
+      <input checked data-val="true" data-val-required="The RegionE field is required." id="RegionE" name="RegionE" type="checkbox" value="true">
+      <input name="RegionE" type="hidden" value="false"> F 
+      <input checked data-val="true" data-val-required="The RegionF field is required." id="RegionF" name="RegionF" type="checkbox" value="true">
+      <input name="RegionF" type="hidden" value="false"> G 
+      <input checked data-val="true" data-val-required="The RegionG field is required." id="RegionG" name="RegionG" type="checkbox" value="true">
+      <input name="RegionG" type="hidden" value="false"> H 
+      <input checked data-val="true" data-val-required="The RegionH field is required." id="RegionH" name="RegionH" type="checkbox" value="true">
+      <input name="RegionH" type="hidden" value="false"> 
+     </div> </span> 
+   </fieldset> 
+   <input type="submit" value="Search" id="Search" name="Command"> 
+   <br> 
+   <br> 
+   <p>Search Results:</p> 
+   <input type="submit" value="Send results to my email address" id="SendEmail" name="Command">
+   <input class="text-box single-line" id="Email" name="Email" type="text" value=""> 
+   <br> 
+   <input type="hidden" value="" id="LinkCommand" name="Command"> 
+   <br> 
+   <hr> 
+   <p>Maritime Safety Information current at 020039 UTC Aug 19</p> 
+   <p>Issued by the Australian Maritime Safety Authority<br>Rescue Coordination Centre (RCC Australia)</p> 
+   <hr> 
+   <p>Part 1. Safety Messages:</p> 
+   <br>SECURITE
+   <br>FM JRCC AUSTRALIA 010526Z AUG 19
+   <br>SEA SAFETY MESSAGE 086/19
+   <br>CHART AUS 309 DARWIN TO PENGUIN SHOAL
+   <br>5M WOODEN PONTOON REPORTED ADRIFT IN POSITION 12-00.53S 129-03.92E AT 010448 UTC.
+   <br>NNNN 
+   <br> 
+   <hr> 
+   <p>Part 2. NAVAREA X warnings:</p> 
+   <br>SECURITE
+   <br>FM JRCC AUSTRALIA 281317Z JUL 19
+   <br>NAVAREA X 052/19
+   <br>SPECIAL PURPOSE VESSEL TENEO CONDUCTING UNDERWATER OPERATIONS IN POSITION 05-41.95 S 147-09.46 E
+   <br>2.5NM CLEARANCE REQUESTED.
+   <br>NNNN 
+   <br> 
+   <br>SECURITE
+   <br>FM JRCC AUSTRALIA 301242Z JUL 19
+   <br>NAVAREA X 054/19
+   <br>CHART AUS 4635 CAPE BYRON TO MACKAY
+   <br>YELLOW CYLINDRICAL BUOY FL.W WITH RADAR REFLECTOR ESTABLISHED 25-32.00S 155-58.00E
+   <br>NNNN 
+   <br> 
+   <br>SECURITE
+   <br>FM JRCC AUSTRALIA 312333Z JUL 19
+   <br>NAVAREA X 055/19
+   <br>1. NAVAREA X WARNINGS IN FORCE AT 010000 UTC AUG 19
+   <br>NAVAREA X - 052/19, 054/19, 055/19
+   <br>2. AUSCOAST WARNINGS IN FORCE AT 010000 UTC AUG 19
+   <br>AREA A 197/19, 209/19, 210/19, 213/19, 217/19, 223/19.
+   <br>AREA B NIL
+   <br>AREA C NIL
+   <br>AREA D 224/19
+   <br>AREA E NIL
+   <br>AREA F 191/19
+   <br>AREA G 122/19, 132/19, 135/19, 136/19, 137/19, 140/19, 141/19, 142/19, 149/19, 150/19, 161/19, 183/19, 185/19, 212/19, 219/19, 222/19.
+   <br>AREA H NIL
+   <br>3. COMPLETE TEXTS OF ALL WARNINGS IN FORCE ARE AVAILABLE FROM WEBSITE WWW.AMSA.GOV.AU.
+   <br>4. CANCEL THIS MESSAGE 080000 UTC AUG 19
+   <br>NNNN 
+   <br> 
+   <hr> 
+   <p>Part 3. Coastal warnings:</p> 
+   <p>AUSCOAST coastal warning - area A: </p> 
+   <br>SECURITE
+   <br>FM RCC AUSTRALIA 200541Z JUN 19
+   <br>AUSCOAST WARNING 197/19
+   <br>PIPON SHOALS BUOY LIGHT IN POSITION 14 06.14` S 144 32.36` E
+   <br>ESTABLISHED IN POSITION
+   <br>NNNN 
+   <br> 
+   <br>SECURITE
+   <br>FM RCC AUSTRALIA 100218Z JUL 19
+   <br>AUSCOAST WARNING 209/19
+   <br>COWLISHAW REEF LIGHT K1890 IN POSITION 15-32.03S 145-21.28E UPGRADED TO AN EAST CARDINAL MARK FLASHING WHITE Q(3) RANGE 8NM.
+   <br>NNNN 
+   <br> 
+   <br>SECURITE
+   <br>FM JRCC AUSTRALIA 100401Z JUL 19
+   <br>AUSCOAST WARNING 210/19
+   <br>THREE ISLES DAYMARK IN POSITION 15-06.63S 145-25.08E
+   <br>CHARACTERISTICS ALTERED TO WHITE GRP HEXAGONAL TOWER 13.6 METRES TALL, ELEVATION 15.9 METRES.
+   <br>NNNN 
+   <br> 
+   <br>SECURITE
+   <br>FM RCC AUSTRALIA 130037Z JUL 19
+   <br>AUSCOAST WARNING 213/19
+   <br>YOUNG REEF LIGHT K 1890 IN POSITION 12-07.50` S 143-12.99` E UPGRADED TO AN EAST CARDINAL MARK FLASHING WHITE Q(3) RANGE 8NM
+   <br>NNNN 
+   <br> 
+   <br>SECURITE
+   <br>FM JRCC AUSTRALIA 170655Z JUL 19
+   <br>AUSCOAST WARNING 217/19
+   <br>VIRTUAL AIS AID TO NAVIGATION BEACON, CARDINAL W MMSI NO 995036165 ESTABLISHED AT MELANIE ROCK 14-05.95 S 144-34.20 E
+   <br>NNNN 
+   <br> 
+   <br>SECURITE
+   <br>FM JRCC AUSTRALIA 300240Z JUL 19
+   <br>AUSCOAST WARNING 223/19
+   <br>PEARN ROCK VIRTUAL AIS AID TO NAVIGATION MMSI 995036058 IN POSITION 11-25.35S 142-56.25E INTERMITTENT.
+   <br>NNNN 
+   <br> 
+   <br> 
+   <p>AUSCOAST coastal warning - area B: nil</p> 
+   <p>AUSCOAST coastal warning - area C: nil</p> 
+   <p>AUSCOAST coastal warning - area D: </p> 
+   <br>SECURITE
+   <br>FM JRCC AUSTRALIA 311316Z JUL 19
+   <br>AUSCOAST WARNING 224/19
+   <br>DRILL RIG OCEAN MONARCH IN POSITION 38-40.93` S 142-49.65` E
+   <br>2.5 NM CLEARANCE REQUESTED.
+   <br>NNNN 
+   <br> 
+   <br> 
+   <p>AUSCOAST coastal warning - area E: nil</p> 
+   <p>AUSCOAST coastal warning - area F: </p> 
+   <br>SECURITE
+   <br>FM JRCC AUSTRALIA 170629Z JUN 19
+   <br>AUSCOAST WARNING 191/19
+   <br>DIRECTION BANK
+   <br>CHART AUS 754, LANCELIN TO CAPE PERON
+   <br>SUBSEA SCIENTIFIC INSTRUMENT ESTABLISHED 31-39.5S 114-11.0E. MINUMUM DEPTH 30 METERS BELOW THE SURFACE.
+   <br>NNNN 
+   <br> 
+   <br> 
+   <p>AUSCOAST coastal warning - area G: </p> 
+   <br>SECURITE
+   <br>FM JRCC AUSTRALIA 042322Z APR 19
+   <br>AUSCOAST WARNING 122/19
+   <br>16 BUOYS FL3 ESTABLISHED WITHIN 1.6NM OF POSITION 20-24.49` S 114-50.95` E
+   <br>2NM CLEARANCE REQUESTED.
+   <br>NNNN 
+   <br> 
+   <br>SECURITE
+   <br>FM RCC AUSTRALIA 180804Z APR 19
+   <br>AUSCOAST WARNING 132/19
+   <br>PORT WALCOTT C13 BUOY LIGHT K K 1890 IN POSITION 20 28.44` S 117 18.43` E
+   <br>REDUCE POWER
+   <br>NNNN 
+   <br> 
+   <br>SECURITE
+   <br>FM RCC AUSTRALIA 190902Z APR 19
+   <br>AUSCOAST WARNING 135/19
+   <br>PORT WALCOTT C5 BUOY LIGHT IN POSITION 20-25.84S 117-22.84E
+   <br>REDUCED POWER.
+   <br>NNNN 
+   <br> 
+   <br>SECURITE
+   <br>FM RCC AUSTRALIA 190904Z APR 19
+   <br>AUSCOAST WARNING 136/19
+   <br>PORT WALCOTT C9 BUOY LIGHT IN POSITION 20-27.89S 117-22.19E
+   <br>REDUCED POWER
+   <br>NNNN 
+   <br> 
+   <br>SECURITE
+   <br>FM RCC AUSTRALIA 190905Z APR 19
+   <br>AUSCOAST WARNING 137/19
+   <br>PORT WALCOTT C11 BUOY LIGHT IN POSITION 20-28.23S 117-20.28E
+   <br>REDUCED POWER.
+   <br>NNNN 
+   <br> 
+   <br>SECURITE
+   <br>FM RCC AUSTRALIA 232202Z APR 19
+   <br>AUSCOAST WARNING 140/19
+   <br>PORT WALCOTT C3A BUOY LIGHT K IN POSITION 20-25.69` S 117-23.11` E
+   <br>REDUCED POWER
+   <br>NNNN 
+   <br> 
+   <br>SECURITE
+   <br>FM RCC AUSTRALIA 232200Z APR 19
+   <br>AUSCOAST WARNING 142/19
+   <br>PORT WALCOTT C7 BUOY LIGHT K IN POSITION 20-27.20` S 117-22.58` E
+   <br>REDUCED POWER
+   <br>NNNN 
+   <br> 
+   <br>SECURITE
+   <br>FM RCC AUSTRALIA 232201Z APR 19
+   <br>AUSCOAST WARNING 141/19
+   <br>PORT WALCOTT C3 BUOY LIGHT K IN POSITION 20-25.19` S 117-24.13` E
+   <br>REDUCED POWER
+   <br>NNNN 
+   <br> 
+   <br>SECURITE
+   <br>FM RCC AUSTRALIA 020039Z MAY 19
+   <br>AUSCOAST WARNING 149/19
+   <br>PORT WALCOTT C6 BUOY LIGHT K IN POSITION 20-27.49 S 117-22.93 E
+   <br>REDUCED POWER
+   <br>NNNN 
+   <br> 
+   <br>SECURITE
+   <br>FM RCC AUSTRALIA 020037Z MAY 19
+   <br>AUSCOAST WARNING 150/19
+   <br>PORT WALCOTT C2 BUOY LIGHT K IN POSITION 20-25.89 S 117-23.31 E
+   <br>REDUCED POWER
+   <br>NNNN 
+   <br> 
+   <br>SECURITE
+   <br>FM RCC AUSTRALIA 121018Z JUN 19
+   <br>AUSCOAST WARNING 185/19
+   <br>PORT WALCOTT C10 BUOY LIGHT IN POSITION 20-28.65` S 117-18.46` E
+   <br>REDUCED POWER
+   <br>NNNN 
+   <br> 
+   <br>SECURITE
+   <br>FM JRCC AUSTRALIA 110204Z JUL 19
+   <br>AUSCOAST WARNING 212/19
+   <br>NAVAID LIGHTS OF ANGEL PLATFORM/VMI360 IN POSITION 19-29.93S 116-35.88E INOPERATIVE.
+   <br>NNNN 
+   <br> 
+   <br>SECURITE
+   <br>FM JRCC AUSTRALIA 260006Z JUL 19
+   <br>AUSCOAST WARNING 219/19
+   <br>DRILL RIG NOBLE TOM PROSSER IN POSITION 19-01.82` S 118-43.57` E
+   <br>2.5 NM CLEARANCE REQUESTED.
+   <br>NNNN 
+   <br> 
+   <br>SECURITE
+   <br>FM JRCC AUSTRALIA 281532Z JUL 19
+   <br>AUSCOAST WARNING 222/19
+   <br>DRILL RIG ENSCO DPS-1 IN POSITION 21-26.68 S 113-57.02 E
+   <br>2.5 NM CLEARANCE REQUESTED.
+   <br>NNNN 
+   <br> 
+   <br> 
+   <p>AUSCOAST coastal warning - area H: nil</p> 
+   <hr> 
+   <p>Part 4. Summary of Mobile Drilling Rigs:</p> 
+   <br> 
+   <table> 
+    <tbody>
+     <tr> 
+      <td>Drill Rig Name</td> 
+      <td>Callsign</td> 
+      <td>Position</td> 
+     </tr> 
+     <tr> 
+      <td>DEVELOPMENT DRILLER I</td> 
+      <td>V7BG6</td> 
+      <td>20 24.4S 114 50.8E</td> 
+     </tr> 
+     <tr> 
+      <td>ENSCO 107</td> 
+      <td>A8GS5</td> 
+      <td>20 30.7S 116 28.8E</td> 
+     </tr> 
+     <tr> 
+      <td>ENSCO 5006</td> 
+      <td>D5GH4</td> 
+      <td>13 51.7S 123 16.4E</td> 
+     </tr> 
+     <tr> 
+      <td>NGANHURRA</td> 
+      <td>VHLM</td> 
+      <td>21 28.9S 114 00.5E</td> 
+     </tr> 
+     <tr> 
+      <td>NINGALOO VISION</td> 
+      <td>3ENN9</td> 
+      <td>21 24.1S 114 05.3E</td> 
+     </tr> 
+     <tr> 
+      <td>NOBLE TOM PROSSER</td> 
+      <td>D5AJ3</td> 
+      <td>19 01.8S 118 43.6E</td> 
+     </tr> 
+     <tr> 
+      <td>OCEAN APEX</td> 
+      <td>V7DZ7</td> 
+      <td>19 54.8S 115 07.9E</td> 
+     </tr> 
+     <tr> 
+      <td>OCEAN MONARCH</td> 
+      <td>V7IY3</td> 
+      <td>38 40.9S 142 49.6E</td> 
+     </tr> 
+    </tbody>
+   </table> 
+   <hr> 
+   <p>Part 5. Special Purpose Vessels:</p> 
+   <br> 
+   <table> 
+    <tbody>
+     <tr> 
+      <td>Vessel Name</td> 
+      <td>Callsign</td> 
+      <td>Operating</td> 
+     </tr> 
+     <tr> 
+      <td>MAERSK MASTER</td> 
+      <td>OWGW2</td> 
+      <td>AROUND POSITION 20 24.5S 114 51.0E</td> 
+     </tr> 
+     <tr> 
+      <td>TENEO</td> 
+      <td>YCQE2</td> 
+      <td>AROUND POSITION 05 42.0S 147 09.5E</td> 
+     </tr> 
+     <tr> 
+      <td>FUGRO MARINER</td> 
+      <td>C6DS9</td> 
+      <td>AROUND POSITION 38 15.0S 147 29.0E</td> 
+     </tr> 
+    </tbody>
+   </table> 
+   <hr> 
+   <p>For information on coastal areas please refer to the ANNUAL<br>AUSTRALIAN NOTICES TO MARINERS or the AUSTRALIAN GMDSS HANDBOOK.</p> 
+   <p>The date-time format used is "ddhhmmZ mon yy", where "Z" indicates UTC.</p> 
+  </form> 
+  <script type="text/javascript">
+
+    $(document).ready(function ()
+    {
+        setSelectAll($("#SelectAll").prop('checked'));
+        showAuscoastAreas();
+       
+        $("#ShowAuscoast").change(function() {
+            showAuscoastAreas();
+            //$("#areas").hide();
+            //if (this.checked) {
+            //    $("#areas").show();
+            //}
+        });
+
+        $("#SelectAll").change(function ()
+        {
+            setSelectAll(this.checked);
+        });
+        
+        $("#DownloadAuscoastCsv").click(function (event)
+        {
+            downloadCSV('Download auscoast warning information as a csv file');
+        });
+       
+        $("#DownloadDrillRigCsv").click(function (event) {
+            downloadCSV('Download drill rig information as a csv file');
+        });
+
+        $("#DownloadSpecialVesselsCsv").click(function (event) {
+            downloadCSV('Download special vessel information as a csv file');
+        });
+        
+
+        $("#Search").click(function (event)
+        {
+            $("#theForm").validate();
+            $("#Email").rules("remove");
+        });
+        
+        $("#SendEmail").click(function (event)
+        {
+            $("#theForm").validate();
+            $("#Email").rules("add",
+                {
+                    required: true, email: true
+                });
+        });
+        
+
+        $("form").submit(function ()
+        {
+            enableAllFilters(true);
+        });
+        
+    });
+
+
+    function downloadCSV(commandText)
+    {
+        $("#theForm").validate();
+        $("#Email").rules("remove");
+
+        $("#LinkCommand").val(commandText);
+            $("#theForm").submit();
+    }
+    
+
+
+    function showAuscoastAreas() {
+        $("#areas").hide();
+        if ($("#ShowAuscoast").is(':checked')) {
+            $("#areas").show();
+        }
+    }
+
+
+    function setSelectAll(checked)
+    {
+        if (checked)
+        {
+            checkAllFilters(true);
+            enableAllFilters(false);
+        } else {
+            enableAllFilters(true);
+        }
+        showAuscoastAreas();
+    }
+
+
+    function enableAllFilters(enable)
+    {
+        if (enable)
+        {
+            //$("#ShowCq").prop('disabled', '');
+            $("#ShowDrillRigs").prop('disabled', '');
+            $("#ShowSpecialVessels").prop('disabled', '');
+            $("#ShowAuscoast").prop('disabled', '');
+            $("#RegionA").prop('disabled', '');
+            $("#RegionB").prop('disabled', '');
+            $("#RegionC").prop('disabled', '');
+            $("#RegionD").prop('disabled', '');
+            $("#RegionE").prop('disabled', '');
+            $("#RegionF").prop('disabled', '');
+            $("#RegionG").prop('disabled', '');
+            $("#RegionH").prop('disabled', '');
+
+        } else
+        {
+            //$("#ShowCq").prop('disabled', 'disabled');
+            $("#ShowDrillRigs").prop('disabled', 'disabled');
+            $("#ShowSpecialVessels").prop('disabled', 'disabled');
+            $("#ShowAuscoast").prop('disabled', 'disabled');
+            $("#RegionA").prop('disabled', 'disabled');
+            $("#RegionB").prop('disabled', 'disabled');
+            $("#RegionC").prop('disabled', 'disabled');
+            $("#RegionD").prop('disabled', 'disabled');
+            $("#RegionE").prop('disabled', 'disabled');
+            $("#RegionF").prop('disabled', 'disabled');
+            $("#RegionG").prop('disabled', 'disabled');
+            $("#RegionH").prop('disabled', 'disabled');
+        }
+    }
+
+
+    function checkAllFilters(check)
+    {
+        //$("#ShowCq").prop('checked', check);
+        $("#ShowDrillRigs").prop('checked', check);
+        $("#ShowSpecialVessels").prop('checked', check);
+        $("#ShowAuscoast").prop('checked', check);
+        $("#RegionA").prop('checked', check);
+        $("#RegionB").prop('checked', check);
+        $("#RegionC").prop('checked', check);
+        $("#RegionD").prop('checked', check);
+        $("#RegionE").prop('checked', check);
+        $("#RegionF").prop('checked', check);
+        $("#RegionG").prop('checked', check);
+        $("#RegionH").prop('checked', check);
+    }
+
+    
+</script>   
+ </body>
+</html>

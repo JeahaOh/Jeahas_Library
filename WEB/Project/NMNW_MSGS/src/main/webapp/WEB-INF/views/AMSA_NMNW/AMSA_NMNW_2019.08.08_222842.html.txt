@@ -69,24 +69,15 @@
    <input type="hidden" value="" id="LinkCommand" name="Command"> 
    <br> 
    <hr> 
-   <p>Maritime Safety Information current at 060611 UTC Aug 19</p> 
+   <p>Maritime Safety Information current at 081328 UTC Aug 19</p> 
    <p>Issued by the Australian Maritime Safety Authority<br>Rescue Coordination Centre (RCC Australia)</p> 
    <hr> 
    <p>Part 1. Safety Messages:</p> 
    <br>SECURITE
-   <br>FM JRCC AUSTRALIA 060414Z AUG 19
-   <br>SEA SAFETY MESSAGE 092/19
-   <br>CHART AUS 311 CALDER SHOAL TO MEATIJ MIARANG
-   <br>5M WOODEN PONTOON ADRIFT IN POSITION 11-17 S 128-13 E AT 060240UTC
-   <br>.
-   <br>NNNN 
-   <br> 
-   <br>SECURITE
-   <br>FM JRCC AUSTRALIA 060423Z AUG 19
-   <br>SEA SAFETY MESSAGE 093/19
-   <br>CHART AUS 310 CAPE VAN DIEMEN TO PULAU MASELA
-   <br>5M WOODEN PONTOON ADRIFT IN POSITION 09-51 S 129-12 E AT 060330UTC
-   <br>.
+   <br>FM JRCC AUSTRALIA 080335Z AUG 19
+   <br>SEA SAFETY MESSAGE 095/19
+   <br>CHART AUS 310 - CAPE VAN DIEMEN TO PULAU MASELA
+   <br>5 METRE UNLIT WOODEN PONTOON MOORED IN POSITION 09-51S 129-12E AT 080230UTC.
    <br>NNNN 
    <br> 
    <hr> 
@@ -99,28 +90,28 @@
    <br>NNNN 
    <br> 
    <br>SECURITE
-   <br>FM JRCC AUSTRALIA 312333Z JUL 19
-   <br>NAVAREA X 055/19
-   <br>1. NAVAREA X WARNINGS IN FORCE AT 010000 UTC AUG 19
-   <br>NAVAREA X - 052/19, 054/19, 055/19
-   <br>2. AUSCOAST WARNINGS IN FORCE AT 010000 UTC AUG 19
-   <br>AREA A 197/19, 209/19, 210/19, 213/19, 217/19, 223/19.
+   <br>FM JRCC AUSTRALIA 070549Z AUG 19
+   <br>NAVAREA X 057/19
+   <br>SPECIAL PURPOSE VESSEL ILE DE BREHAT/FOUC CONDUCTING CABLE LAYING OPERATIONS FROM 31-30` S 156-40` E TO 34-30` S 153-00` E
+   <br>2.0NM CLEARANCE REQUESTED.
+   <br>NNNN 
+   <br> 
+   <br>SECURITE
+   <br>FM JRCC AUSTRALIA 072353Z AUG 19
+   <br>NAVAREA X 058/19
+   <br>1. NAVAREA X WARNINGS IN FORCE AT 080000 UTC AUG 19
+   <br>052/19, 057/19, 058/19
+   <br>2. AUSCOAST WARNINGS IN FORCE AT 080000 UTC AUG 19
+   <br>AREA A 197/19, 209/19, 210/19, 213/19, 217/19
    <br>AREA B NIL
    <br>AREA C NIL
    <br>AREA D 224/19
    <br>AREA E NIL
    <br>AREA F 191/19
-   <br>AREA G 122/19, 132/19, 135/19, 136/19, 137/19, 140/19, 141/19, 142/19, 149/19, 150/19, 161/19, 183/19, 185/19, 212/19, 219/19, 222/19.
+   <br>AREA G 122/19, 132/19, 135/19, 136/19, 137/19, 140/19, 141/19, 142/19, 149/19, 150/19, 185/19, 212/19, 219/19, 222/19, 226/19
    <br>AREA H NIL
    <br>3. COMPLETE TEXTS OF ALL WARNINGS IN FORCE ARE AVAILABLE FROM WEBSITE WWW.AMSA.GOV.AU.
-   <br>4. CANCEL THIS MESSAGE 080000 UTC AUG 19
-   <br>NNNN 
-   <br> 
-   <br>SECURITE
-   <br>FM JRCC AUSTRALIA 030729Z AUG 19
-   <br>NAVAREA X 056/19
-   <br>SPECIAL PURPOSE VESSEL ILE DE BREHAT CONDUCTING CABLE LAYING OPERATIONS FROM 25-32.00` S 155-58.00` E TO 31-30.00` S 156-40.00` E
-   <br>2.5NM CLEARANCE REQUESTED.
+   <br>4. CANCEL THIS MESSAGE 150000 UTC AUG 19
    <br>NNNN 
    <br> 
    <hr> 
@@ -344,11 +335,6 @@
       <td>Operating</td> 
      </tr> 
      <tr> 
-      <td>ILE DE BREHAT</td> 
-      <td>FOUC</td> 
-      <td>ALONG THE LINE 25 32.0S 155 58.0E TO 31 30.0S 156 40.0E</td> 
-     </tr> 
-     <tr> 
       <td>MAERSK MASTER</td> 
       <td>OWGW2</td> 
       <td>AROUND POSITION 20 24.5S 114 51.0E</td> 
@@ -362,6 +348,11 @@
       <td>FUGRO MARINER</td> 
       <td>C6DS9</td> 
       <td>AROUND POSITION 38 15.0S 147 29.0E</td> 
+     </tr> 
+     <tr> 
+      <td>ILE DE BREHAT</td> 
+      <td>FOUC</td> 
+      <td>ALONG THE LINE 31 30.0S 156 40.0E TO 34 30.0S 153 00.0E</td> 
      </tr> 
     </tbody>
    </table> 

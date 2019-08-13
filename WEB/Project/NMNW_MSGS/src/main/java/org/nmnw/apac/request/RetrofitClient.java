@@ -10,6 +10,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RetrofitClient {
   // public static final String TO_URL = "http://192.168.0.79:8080";
   public static final String TO_URL = "http://211.43.202.190:3000";
+  // public static final String TO_URL = "http://118.220.143.158:3000/";
+  // public static final String TO_URL = "http://54.180.100.232:80/";
 
   // 로그를 위한 Interceptor
   private static final HttpLoggingInterceptor interceptor =

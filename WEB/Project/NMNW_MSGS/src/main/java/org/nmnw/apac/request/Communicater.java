@@ -22,21 +22,30 @@ public class Communicater {
       return;
     for (Message msg : list) {
       sender(msg);
-      TimeHandle.interceptor(1000);
+      TimeHandle.interceptor(5000);
     }
-    TimeHandle.interceptor(5000);
-    logger.info(":::: MSG SEND END {}/{} ::::", SEND_CNT, list.size());
+    TimeHandle.interceptor(8000);
+    logger.info(":::: MSG SEND END {}/{} ::::\n\n", SEND_CNT, list.size());
     SEND_CNT = 0;
   }
 
   @SuppressWarnings({"rawtypes", "unchecked"})
-  private static void sender(Message cw) {
+  private static void sender(Message msg) {
     // logger.info("\t:: Send Message ::\n{}\n", cw.toString());
     logger.info("\t:: Send Message ::");
 
     Retrofit retrofit = RetrofitClient.getClient(false);
     Request request = retrofit.create(Request.class);
-    Call<?> call = request.postMsg(cw);
+
+    // 테스트용 코드
+    // msg.setDetail("ASDF");
+
+    // 선 면 처리가 안됬으므로, 점이 아니라면 리턴
+    if (msg.getLon() == null || msg.getLon().length() < 0)
+      return;
+
+
+    Call<?> call = request.postMsg(msg);
 
     call.enqueue(new Callback() {
       @Override
@@ -46,6 +55,7 @@ public class Communicater {
         logger.info("RESPONSE        : {}", response);
         logger.info("RESPONSE CODE   : {}", response.code());
         logger.info("RESPONSE MSG    : {}", response.message());
+        logger.info("RESPONSE BODY   : " + response.body());
         logger.info("RESPONSE HEADER : [\n" + response.headers() + "] <-\n\n");
         if (response.code() == 200 && !(response.body() + "").contains("ERROR"))
           SEND_CNT++;

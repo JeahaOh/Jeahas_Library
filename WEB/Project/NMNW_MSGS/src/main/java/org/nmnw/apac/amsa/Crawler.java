@@ -1,6 +1,7 @@
 package org.nmnw.apac.amsa;
 
 import java.io.BufferedOutputStream;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -54,12 +55,15 @@ public class Crawler {
 
   // 파일로 저장하기 위해 사용하는 변수들.
   private static BufferedOutputStream bs = null;
-  private static final String HEAD = "AMSA_NMNW_";
+  private static final String HEAD = "AMSA_NMNW";
   private static final String TAG = ".html.txt";
-  private static final String SAVE_DIR = "C:/Users/GMTC_JH/eGov/workspace/Scrap.test/";
+  private static final File path = new File("");
+  private static final String SAVE_DIR =
+      path.getAbsolutePath() + "\\src\\main\\webapp\\WEB-INF\\views\\";
 
   public static void main(String[] args) {
 
+    System.out.println(SAVE_DIR);
     crawl();
   } // main
 
@@ -84,7 +88,7 @@ public class Crawler {
     // Part 2. NAVAREA X warnings: 처리
     NAVxW_LIST = FragmentPaser.progressPart2(NAVAREAxWARNINGS);
     //
-    // // // Part 3. Coastal warnings: 처리
+    // Part 3. Coastal warnings: 처리
     CW_LIST = FragmentPaser.progressPart3(COASTAL_WARNINGS);
 
     // logger.info("\nSFT_MSG_LIST\n");
@@ -106,7 +110,6 @@ public class Crawler {
     Communicater.sendListAsObject(NAVxW_LIST);
     Communicater.sendListAsObject(CW_LIST);
 
-    // System.out.println(CW_LIST.toString());
     initVals();
 
 
@@ -121,7 +124,7 @@ public class Crawler {
   private static Document getDoc() {
     logger.info("TARGET URL : " + TARGET_URL);
     // Crawler를 실행하는 시점의 시간을 얻어옴.
-    START_TIME = new SimpleDateFormat("yyyy.MM.dd_HH.mm.ss", Locale.KOREA).format(new Date());
+    START_TIME = new SimpleDateFormat("yyyyMMddHHmmss", Locale.KOREA).format(new Date());
     logger.info("========== " + START_TIME + " ========== cnt : " + CRAWL_CNT);
     CRAWL_CNT++;
     try {
@@ -130,7 +133,7 @@ public class Crawler {
       logger.info("Getting documennt Success \t"
           + new SimpleDateFormat("HH.mm.ss", Locale.KOREA).format(new Date()));
       // -> 긁어온 HTML파일 원본 저장.
-      // fileSave(START_TIME, DOC.toString());
+      fileSave(START_TIME, DOC.toString());
       // <- 긁어온 HTML파일 원본 저장.
       return DOC;
     } catch (IOException e) {
@@ -199,11 +202,9 @@ public class Crawler {
       } else if (part.contains("Part 3.")) {
         COASTAL_WARNINGS = part.replaceFirst("Part 3. Coastal warnings:", "").trim();
       } else if (part.contains("date-time format")) {
-        TIME_FORMAT = getTimeFormat(part);
         part = part.split("\n")[1].trim();
-
+        TIME_FORMAT = getTimeFormat(part);
         TIME_FORMAT_DESC = "\n\n" + part;
-        System.out.println(part);
         SCRAPE_DATE = TimeHandle.unixTimeConvert(
             TimeHandle.dateFormatConvert(SCRAPE_DATE, TIME_FORMAT, TimeHandle.getDATETIME_form()))
             + "";
@@ -235,7 +236,6 @@ public class Crawler {
     return target;
   }
 
-
   /**
    * 제목과 내용을 받아서 정수로 선언한 위치에 저장한다.
    * 
@@ -246,7 +246,7 @@ public class Crawler {
   private static Boolean fileSave(String title, String cont) {
     if (!PROGRESS)
       return false;
-    title = SAVE_DIR + HEAD + title + TAG;
+    title = SAVE_DIR + HEAD + "\\" + title + TAG;
     try {
       bs = new BufferedOutputStream(new FileOutputStream(title)); // 경로를 포함한 파일 이름.
       bs.write(cont.getBytes());

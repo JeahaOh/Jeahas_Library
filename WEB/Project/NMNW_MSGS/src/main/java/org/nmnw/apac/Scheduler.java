@@ -13,10 +13,10 @@ public class Scheduler {
   private static final Logger logger = LoggerFactory.getLogger(Scheduler.class);
 
   private static final String EARLY_TIME = "0 0 08 * * *";
-  private static final String LATE_TIME = "0 42 17 * * *";
+  private static final String LATE_TIME = "0 0 20 * * *";
 
 
-  @Scheduled(fixedDelay = 1000 * 60 * 60)
+  @Scheduled(fixedDelay = 1000 * 60 * 10)
   public void HourScheduler() {
     logger.info("\t:: SERVER ALIVE {} ::", TimeHandle.getTime());
   }
