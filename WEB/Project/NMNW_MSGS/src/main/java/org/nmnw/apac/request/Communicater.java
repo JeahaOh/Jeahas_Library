@@ -22,9 +22,9 @@ public class Communicater {
       return;
     for (Message msg : list) {
       sender(msg);
-      TimeHandle.interceptor(5000);
+      TimeHandle.interceptor(3000);
     }
-    TimeHandle.interceptor(8000);
+    TimeHandle.interceptor(5000);
     logger.info(":::: MSG SEND END {}/{} ::::\n\n", SEND_CNT, list.size());
     SEND_CNT = 0;
   }

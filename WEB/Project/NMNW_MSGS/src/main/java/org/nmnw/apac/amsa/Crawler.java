@@ -62,8 +62,6 @@ public class Crawler {
       path.getAbsolutePath() + "\\src\\main\\webapp\\WEB-INF\\views\\";
 
   public static void main(String[] args) {
-
-    System.out.println(SAVE_DIR);
     crawl();
   } // main
 
@@ -91,24 +89,47 @@ public class Crawler {
     // Part 3. Coastal warnings: 처리
     CW_LIST = FragmentPaser.progressPart3(COASTAL_WARNINGS);
 
-    // logger.info("\nSFT_MSG_LIST\n");
-    // for (Message msg : SFT_MSG_LIST) {
-    // logger.info(msg.toString());
-    // }
-    // logger.info("\nNAVxW_LIST\n");
-    // for (Message msg : NAVxW_LIST) {
-    // logger.info(msg.toString());
-    // }
-    // logger.info("\nCW_LIST\n");
-    // for (Message msg : CW_LIST) {
-    // logger.info(msg.toString());
-    // }
+//    logger.info("SFT_MSG_LIST");
+//    if (SFT_MSG_LIST != null && SFT_MSG_LIST.size() > 0) {
+//      for (Message msg : SFT_MSG_LIST) {
+//        logger.info(msg.toString());
+//      }
+//    } else
+//      logger.info("NULL");
+//
+//    logger.info("NAVxW_LIST");
+//    if (NAVxW_LIST != null && NAVxW_LIST.size() > 0) {
+//      for (Message msg : NAVxW_LIST) {
+//        logger.info(msg.toString());
+//      }
+//    } else
+//      logger.info("NULL");
+//
+//    logger.info("CW_LIST");
+//    if (CW_LIST != null && CW_LIST.size() > 0) {
+//      for (Message msg : CW_LIST) {
+//        logger.info(msg.toString());
+//      }
+//    } else
+//      logger.info("NULL");
 
+    List<Message> sendList = new ArrayList<>();
+    if (SFT_MSG_LIST != null && SFT_MSG_LIST.size() > 0)
+      sendList.addAll(SFT_MSG_LIST);
+    if (NAVxW_LIST != null && NAVxW_LIST.size() > 0)
+      sendList.addAll(NAVxW_LIST);
+    if (CW_LIST != null && CW_LIST.size() > 0)
+      sendList.addAll(CW_LIST);
 
-    Communicater.deleteRequest();
-    Communicater.sendListAsObject(SFT_MSG_LIST);
-    Communicater.sendListAsObject(NAVxW_LIST);
-    Communicater.sendListAsObject(CW_LIST);
+    for (Message msg : sendList) {
+      logger.info(msg.toString());
+    }
+
+    if (sendList != null && sendList.size() > 0) {
+      Communicater.deleteRequest();
+      TimeHandle.interceptor(5000);
+      Communicater.sendListAsObject(sendList);
+    }
 
     initVals();
 
@@ -118,7 +139,7 @@ public class Crawler {
 
   /**
    * Target URL 에서 HTML 파일을 통째로 반환.
-   * 
+   *
    * @return HTML document
    */
   private static Document getDoc() {
@@ -133,7 +154,9 @@ public class Crawler {
       logger.info("Getting documennt Success \t"
           + new SimpleDateFormat("HH.mm.ss", Locale.KOREA).format(new Date()));
       // -> 긁어온 HTML파일 원본 저장.
+      try {
       fileSave(START_TIME, DOC.toString());
+      } catch (Exception e) { }
       // <- 긁어온 HTML파일 원본 저장.
       return DOC;
     } catch (IOException e) {
@@ -149,7 +172,7 @@ public class Crawler {
    * HTML 파일에서 불필요한 태그들을 제거 한 뒤,
    * <hr>
    * tag를 기준으로 part별로 분할한 List 를 반환
-   * 
+   *
    * @param doc
    * @return
    */
@@ -176,7 +199,7 @@ public class Crawler {
 
   /**
    * HTML 파일을 getTrimedList로 List로 반환 받은 뒤, 필요한 전역 변수를 설정, Part 별로 전역 변수 할당.
-   * 
+   *
    * @param doc
    */
   private static void splitParts(Document doc) {
@@ -215,7 +238,7 @@ public class Crawler {
   /**
    * HTML 문서의 제일 마지막에 `The date-time format used is "ddhhmmZ mon yy", where "Z" indicates UTC.` 으로
    * 선언한 시간 포멧을 가져온다.
-   * 
+   *
    * @param target
    * @return
    */
@@ -238,12 +261,12 @@ public class Crawler {
 
   /**
    * 제목과 내용을 받아서 정수로 선언한 위치에 저장한다.
-   * 
+   *
    * @param title
    * @param cont
    * @return
    */
-  private static Boolean fileSave(String title, String cont) {
+  private static Boolean fileSave(String title, String cont) throws Exception {
     if (!PROGRESS)
       return false;
     title = SAVE_DIR + HEAD + "\\" + title + TAG;

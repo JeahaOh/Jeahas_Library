@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<class-diagram version="1.1.14" icons="true" automaticImage="PNG" always-add-relationships="false" 
+  generalizations="true" realizations="true" associations="true" dependencies="false" nesting-relationships="true" 
+  router="FAN">  
+  <interface id="1" language="java" name="org.nmnw.apac.request.Request" project="NMNW_MSGS" 
+    file="/NMNW_MSGS/src/main/java/org/nmnw/apac/request/Request.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="142" width="217" x="800" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </interface>  
+  <class id="2" language="java" name="org.nmnw.apac.amsa.FragmentPaser" project="NMNW_MSGS" 
+    file="/NMNW_MSGS/src/main/java/org/nmnw/apac/amsa/FragmentPaser.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="160" width="243" x="307" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="3" language="java" name="org.nmnw.apac.message.Message" project="NMNW_MSGS" 
+    file="/NMNW_MSGS/src/main/java/org/nmnw/apac/message/Message.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="970" width="175" x="590" y="1175"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="4" language="java" name="org.nmnw.apac.request.RetrofitClient" project="NMNW_MSGS" 
+    file="/NMNW_MSGS/src/main/java/org/nmnw/apac/request/RetrofitClient.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="232" width="225" x="1057" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="5" language="java" name="org.nmnw.apac.amsa.Crawler" project="NMNW_MSGS" 
+    file="/NMNW_MSGS/src/main/java/org/nmnw/apac/amsa/Crawler.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="592" width="246" x="590" y="543"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="6" language="java" name="org.nmnw.apac.util.TimeHandle" project="NMNW_MSGS" 
+    file="/NMNW_MSGS/src/main/java/org/nmnw/apac/util/TimeHandle.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="466" width="291" x="1322" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="7" language="java" name="org.nmnw.apac.util.MsgParser" project="NMNW_MSGS" 
+    file="/NMNW_MSGS/src/main/java/org/nmnw/apac/util/MsgParser.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="268" width="222" x="876" y="543"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="8" language="java" name="org.nmnw.apac.Scheduler" project="NMNW_MSGS" 
+    file="/NMNW_MSGS/src/main/java/org/nmnw/apac/Scheduler.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="196" width="170" x="590" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="9" language="java" name="org.nmnw.apac.util.Const" project="NMNW_MSGS" 
+    file="/NMNW_MSGS/src/main/java/org/nmnw/apac/util/Const.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="268" width="380" x="876" y="1175"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <association id="10">    
+    <end type="SOURCE" refId="5" navigable="false">      
+      <attribute id="11" name="SFT_MSG_LIST"/>      
+      <multiplicity id="12" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="3" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="13">    
+    <end type="SOURCE" refId="5" navigable="false">      
+      <attribute id="14" name="CW_LIST"/>      
+      <multiplicity id="15" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="3" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="16">    
+    <end type="SOURCE" refId="7" navigable="false">      
+      <attribute id="17" name="msg"/>      
+      <multiplicity id="18" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="3" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="19">    
+    <end type="SOURCE" refId="5" navigable="false">      
+      <attribute id="20" name="NAVxW_LIST"/>      
+      <multiplicity id="21" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="3" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="22">    
+    <end type="SOURCE" refId="7" navigable="false">      
+      <attribute id="23" name="consts"/>      
+      <multiplicity id="24" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="9" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="25">    
+    <end type="SOURCE" refId="8" navigable="false">      
+      <attribute id="26" name="crawler"/>      
+      <multiplicity id="27" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="5" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+    sort-features="false" accessors="true" visibility="true">    
+    <attributes public="true" package="true" protected="true" private="true" static="true"/>    
+    <operations public="true" package="true" protected="true" private="true" static="true"/>  
+  </classifier-display>  
+  <association-display labels="true" multiplicity="true"/>
+</class-diagram>

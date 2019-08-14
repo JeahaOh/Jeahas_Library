@@ -16,6 +16,8 @@ public class MsgParser {
   private static Matcher mtchr;
   private static final String CNTRY = "AUS";
 
+  private static final Const consts = new Const();
+
   private static final String[] NM_KEYWORDS =
       {"RACON"/* 레이더 */, "BUOY" /* 부표 */, "LIGHTHOUSE"/* 등대 */, "SAFETY MESSAGE", "BEACON"};
 
@@ -47,7 +49,7 @@ public class MsgParser {
 
     // -> position south east
     String position = "";
-    ptn = Pattern.compile(Const.REG_EXP_POINT_COORDINATE);
+    ptn = Pattern.compile(consts.getRegExpPointCoordinate());
     mtchr = ptn.matcher(detail);
     if (mtchr.find()) {
       position = mtchr.group().trim();
@@ -56,13 +58,13 @@ public class MsgParser {
 
     // 만약 position이 점이 아니라 면이라면?? 면적이 된다면 부분은 점일때 사용하는 것으로...
     if (position != null && position.length() > 5) {
-      ptn = Pattern.compile(Const.REG_EXP_LAT);
+      ptn = Pattern.compile(consts.getRegExpLat());
       mtchr = ptn.matcher(position);
       if (mtchr.find()) {
         String lat = PosiConvert(mtchr.group().trim());
         msg.setLat(lat);
       }
-      ptn = Pattern.compile(Const.REG_EXP_LON);
+      ptn = Pattern.compile(consts.getRegExpLon());
       mtchr = ptn.matcher(position);
       if (mtchr.find()) {
         String lon = PosiConvert(mtchr.group().trim());
@@ -71,7 +73,7 @@ public class MsgParser {
     }
 
     if (position.equals("")) {
-      ptn = Pattern.compile(Const.REG_EXP_LINE_WITHOUT_DEGREE_COORDINATE);
+      ptn = Pattern.compile(consts.getRegExpLineWithoutDegreeCoordinate());
       mtchr = ptn.matcher(detail);
       if (mtchr.find()) {
         position = mtchr.group().trim();
