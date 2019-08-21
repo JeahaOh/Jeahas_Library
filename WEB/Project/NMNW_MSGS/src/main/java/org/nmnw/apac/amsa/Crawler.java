@@ -89,47 +89,47 @@ public class Crawler {
     // Part 3. Coastal warnings: 처리
     CW_LIST = FragmentPaser.progressPart3(COASTAL_WARNINGS);
 
-//    logger.info("SFT_MSG_LIST");
-//    if (SFT_MSG_LIST != null && SFT_MSG_LIST.size() > 0) {
-//      for (Message msg : SFT_MSG_LIST) {
-//        logger.info(msg.toString());
-//      }
-//    } else
-//      logger.info("NULL");
+    logger.info("SFT_MSG_LIST");
+    if (SFT_MSG_LIST != null && SFT_MSG_LIST.size() > 0) {
+      for (Message msg : SFT_MSG_LIST) {
+        logger.info(msg.toString());
+      }
+    } else
+      logger.info("NULL");
+
+    logger.info("NAVxW_LIST");
+    if (NAVxW_LIST != null && NAVxW_LIST.size() > 0) {
+      for (Message msg : NAVxW_LIST) {
+        logger.info(msg.toString());
+      }
+    } else
+      logger.info("NULL");
+
+    logger.info("CW_LIST");
+    if (CW_LIST != null && CW_LIST.size() > 0) {
+      for (Message msg : CW_LIST) {
+        logger.info(msg.toString());
+      }
+    } else
+      logger.info("NULL");
+
+//    List<Message> sendList = new ArrayList<>();
+//    if (SFT_MSG_LIST != null && SFT_MSG_LIST.size() > 0)
+//      sendList.addAll(SFT_MSG_LIST);
+//    if (NAVxW_LIST != null && NAVxW_LIST.size() > 0)
+//      sendList.addAll(NAVxW_LIST);
+//    if (CW_LIST != null && CW_LIST.size() > 0)
+//      sendList.addAll(CW_LIST);
 //
-//    logger.info("NAVxW_LIST");
-//    if (NAVxW_LIST != null && NAVxW_LIST.size() > 0) {
-//      for (Message msg : NAVxW_LIST) {
-//        logger.info(msg.toString());
-//      }
-//    } else
-//      logger.info("NULL");
+//    for (Message msg : sendList) {
+//      logger.info(msg.toString());
+//    }
 //
-//    logger.info("CW_LIST");
-//    if (CW_LIST != null && CW_LIST.size() > 0) {
-//      for (Message msg : CW_LIST) {
-//        logger.info(msg.toString());
-//      }
-//    } else
-//      logger.info("NULL");
-
-    List<Message> sendList = new ArrayList<>();
-    if (SFT_MSG_LIST != null && SFT_MSG_LIST.size() > 0)
-      sendList.addAll(SFT_MSG_LIST);
-    if (NAVxW_LIST != null && NAVxW_LIST.size() > 0)
-      sendList.addAll(NAVxW_LIST);
-    if (CW_LIST != null && CW_LIST.size() > 0)
-      sendList.addAll(CW_LIST);
-
-    for (Message msg : sendList) {
-      logger.info(msg.toString());
-    }
-
-    if (sendList != null && sendList.size() > 0) {
-      Communicater.deleteRequest();
-      TimeHandle.interceptor(5000);
-      Communicater.sendListAsObject(sendList);
-    }
+//    if (sendList != null && sendList.size() > 0) {
+//      Communicater.deleteRequest();
+//      TimeHandle.interceptor(5000);
+//      Communicater.sendListAsObject(sendList);
+//    }
 
     initVals();
 

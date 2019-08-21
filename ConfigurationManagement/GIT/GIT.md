@@ -8,3 +8,7 @@
 
 ## git tracking list 확인하기
 - git ls-files
+
+## .gitignore 만들어 주는 툴
+- `https://www.gitignore.io/`
+  - 필요한 파일들 까지 ignore 시켜버리니 확인 잘 해야함.
