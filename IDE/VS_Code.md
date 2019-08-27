@@ -9,3 +9,8 @@
 
 # ShortCut
 - 정렬 : `ctrl + k + f'
+
+
+## Python Extension For VSCode
+- Python
+- ?
