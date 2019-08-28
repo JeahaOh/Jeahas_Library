@@ -71,5 +71,13 @@ const TimeStamp = {
       + this.ZeroLeader(d.getUTCMinutes(), 2)
       + this.ZeroLeader(d.getUTCSeconds(), 2);
     return s;
+  },
+  getMiliTime : function() {
+    return Math.floor(new Date().getTime())
+  },
+  //  UNIXTIME을 리턴
+  //  Unix time : 1970 -> 지금까지의 초 10자리의 숫자임.
+  getUnixTime : function() {
+    return Math.floor(new Date().getTime() / 1000)
   }
 }

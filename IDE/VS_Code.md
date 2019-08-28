@@ -8,7 +8,9 @@
   - tab 시 tab이 아닌 space로 설정.
 
 # ShortCut
-- 정렬 : `ctrl + k + f'
+- 정렬 : `ctrl + k + f`
+- 프로젝트에서 파일 찾기 : `ctrl + e`
+
 
 
 ## Python Extension For VSCode
