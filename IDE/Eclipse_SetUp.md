@@ -8,6 +8,9 @@
   - [Run] - [Run Configurations] (- [Apache Tomcat] - [Server가 돌아가는 Project]) - [Common tab]
   - Standard Input and Output 창의 `Output File`에서 설정
 
+## Console 창 로그 한줄 길이 제한
+- [Console 우클릭] - [Preference] - Fixed width console 체크, 원하는 글자수 지정.
+
 
 ## fomatter 설정 import
 - fomat 설정 xml 파일 준비
