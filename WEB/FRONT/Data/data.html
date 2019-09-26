@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    article::before {
+      content: attr(data-parent);
+    }
+  </style>
+</head>
+<body>
+  <article id="datatest" data-columns="3" data-index-number="1234" data-parent="Var"></article>
+
+  <script>
+    const article = document.querySelector("#datatest");
+    console.log( article );
+    console.log( article.dataset.columns );
+    console.log( article.dataset.indexNumber );
+    console.log( article.dataset.parent );
+  </script>
+</body>
+</html>
