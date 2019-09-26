@@ -11,6 +11,9 @@
 ## Console 창 로그 한줄 길이 제한
 - [Console 우클릭] - [Preference] - Fixed width console 체크, 원하는 글자수 지정.
 
+## Perspective
+Perspective 저장하기
+[화면 구성] - [Window] - [Perspective] - [Save Perspective As]
 
 ## fomatter 설정 import
 - fomat 설정 xml 파일 준비

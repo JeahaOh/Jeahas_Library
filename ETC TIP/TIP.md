@@ -14,3 +14,10 @@
   - `mkbitmap [파일 이름 ex) ASDF.png] [파일이 많을 경우 *.확장자]`
 - svg 이미지로 변환.
   - `potrace -s [파일 이름 ex) ASDF.pbm] [파일이 많을 경우 *.pbm]`
+  - **이 단계에서 흑백으로만 가능함**.
+
+## console.log로 그림 그리기
+- `https://heeya7.tistory.com/7`
+
+## Gzip??
+`https://www.playnexacro.com/#show:techtip:182`
