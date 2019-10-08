@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="kr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Form Reset</title>
+</head>
+<body>
+  <H1>Form Reset Test</H1>
+  <P>JS reset() 으로 form을 리셋할 수 있다.<br/>jQuery로도 사용 가능하다.</P>
+  <form id="testForm" action="#" method="POST">
+    <label for="name">TEXT : </label>
+    <input type='text' name="name" id="name" />
+    <br/>
+    <label for="radio1">RADIO 1 : </label>
+    <input type="radio" name="radio" id="radio1" />
+    <label for="radio2">RADIO 2 : </label>
+    <input type="radio" name="radio" id="radio2" />
+    <br/>
+    <lavel for="check1">CHECK 1 : </lavel>
+    <input type="checkbox" name="check1" id="check1" />
+    <lavel for="check2">CHECK 2 : </lavel>
+    <input type="checkbox" name="check2" id="check2" />
+    <br/>
+    <label for="select">SELECT : </label>
+    <select name="select" id="select">
+      <option value="1000000" label="1000000" >
+      <option value="2000000" label="2000000" >
+      <option value="3000000" label="3000000" >
+    </select>
+    <br/>
+    <label for="num">NUM : </label>
+    <input type="number" name="num" id="num" />
+    <br/>
+    <label for="txtarea">TEXT AREA : </label>
+    <textarea name="txtarea" id="txtarea" placeholder="TEXT AREA" rows="1" cols="14" ></textarea>
+    <br/>
+    <input type="submit" value="submit"/>
+    <input type="reset"  value="reset by html"/>
+    <input type="button" value="reset by js" onclick="document.getElementById('testForm').reset();"/>
+  </form>
+</body>
+</html>
