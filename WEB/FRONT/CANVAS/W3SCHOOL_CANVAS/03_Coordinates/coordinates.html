@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="kr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Coordinates</title>
+  <style>
+    body { margin : 20px; }
+    .x { width : 230px; height : 20px; text-align : center; clear : both; }
+    .y { width : 20px; padding-top : 40px; float : left; }
+    #coordiv { float : left; width : 199px; height : 99px; border : 1px solid #c3c3c3; }
+  </style>
+</head>
+<body>
+  <h2>Coordinates Example</h2>
+  <p>Mouse over the rectangle below to see its x and y coordinates:</p>
+  <div class="x">X</div>
+  <div class="y">Y</div>
+  <div id="coordiv" onmousemove="cnvs_getCoordinates(event)" onmouseout="cnvs_clearCoordinates()"></div>
+  <br>
+  <br>
+  <br>
+  <div id="xycoordinates"></div>
+</body>
+<script>
+  function cnvs_getCoordinates(e) {
+    x=e.clientX;
+    y=e.clientY;
+    document.getElementById("xycoordinates").innerHTML="Coordinates: (" + x + "," + y + ")";
+  }
+
+  function cnvs_clearCoordinates() {
+    document.getElementById("xycoordinates").innerHTML="";
+  }
+</script>
+</html>

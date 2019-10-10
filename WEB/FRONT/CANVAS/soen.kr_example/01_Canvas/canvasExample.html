@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>CANVAS EXAMPLE</title>
+  <style>
+    canvas { border: 5px solid dimgrey; }
+  </style>
+</head>
+<body>
+  <h1>canvas에 직접 그린다.</h1>
+  <canvas id="canvas" width="400" heigth="200">
+    이 브라우져는 캔버스를 지원하지 않습니다.
+  </canvas>
+</body>
+<script>
+  let canvas;
+  let ctx;
+
+  window.onload = function() {
+    canvas = document.getElementById("canvas");
+    if( canvas == null || canvas.getContext == null ) return;
+    ctx = canvas.getContext("2d");
+    draw();
+  }
+
+  function draw() {
+    ctx.strokeRect(10, 10, 100, 100);
+  }
+</script>
+</html>
