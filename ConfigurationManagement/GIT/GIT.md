@@ -15,3 +15,6 @@
 
 ## git branch 생성후 바로 checkout
 - git checkout -d `<branchName>`
+
+## 참조
+- `https://gmlwjd9405.github.io/2018/05/25/git-add-cancle.html`
