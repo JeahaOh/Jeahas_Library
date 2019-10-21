@@ -14,3 +14,9 @@
 
 # Web Audio API
   - https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API
+
+# PostgreSQL
+  - PostgreSQL & PostGIS 설치
+    - `http://m.blog.daum.net/geoscience/1237?np_nil_b=2`
+    - `http://postgis.net/install/`
+  - http://www.gurubee.net/postgresql/basic
