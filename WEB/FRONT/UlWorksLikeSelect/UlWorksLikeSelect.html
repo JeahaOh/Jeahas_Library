@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>  UL Works Like Select Box  </title>
+    <Style>
+      #obj_mng_li li {
+        cursor: pointer;
+      }
+      .selectedType {
+        color: slategrey;
+      }
+    </Style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+</head>
+<body style="background-color: black; color: whitesmoke;">
+  <ul id="obj_mng_li">
+    <li data-val="01" onclick="objMng(this);" >TEST 01</li>
+    <li data-val="02" onclick="objMng(this);" >TEST 02</li>
+    <li data-val="03" onclick="objMng(this);" >TEST 03</li>
+    <li data-val="04" onclick="objMng(this);" >TEST 04</li>
+    <li data-val="05" onclick="objMng(this);" >TEST 05</li>
+    <li data-val="06" onclick="objMng(this);" >TEST 06</li>
+    <li data-val="07" onclick="objMng(this);" >TEST 07</li>
+    <li data-val="08" onclick="objMng(this);" >TEST 08</li>
+    <li data-val="09" onclick="objMng(this);" >TEST 09</li>
+    <li data-val="10" onclick="objMng(this);" >TEST 10</li>
+  </ul>
+</body>
+<script>
+  const objMng = function( evt ) {
+    let className = 'selectedType';
+    if( evt.classList.contains( className) ) {
+      $('.' + className ).removeClass( className);
+      return false;
+    }
+
+    let menuList = $('#obj_mng_li li');
+    $.each(menuList, function( idx ){
+      if( menuList.eq( idx ).hasClass( className )) {
+        menuList.eq( idx ).removeClass( className );
+      }
+    });
+    console.log( evt );
+    evt.classList.add( className );
+    console.log( evt.dataset.val );
+  }
+</script>
+</html>
