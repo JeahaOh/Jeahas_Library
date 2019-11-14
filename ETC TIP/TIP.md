@@ -21,3 +21,6 @@
 
 ## Gzip??
 `https://www.playnexacro.com/#show:techtip:182`
+
+## 수학 공부
+`http://www.soogong.com/mv00/main/main004.php`
