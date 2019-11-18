@@ -20,7 +20,30 @@
     var db = low(adapter)
     
     // Set some defaults (required if your JSON file is empty)
-    db.defaults({ posts: [], user: {}, count: 0 }).write()
+    db.defaults({ posts: [], user: [], count: 0 }).write();
+
+    // Create
+    //  white()를 해주지 않으면 데이터가 들어가지 않음.
+    // db.get('user').push({
+    //   id: 1,
+    //   name: 'Jeaha',
+    //   profile: 'dev'
+    // }).write();
+    
+    // db.get('posts').push({
+    //   id: 1,
+    //   title: 'lowDB is...',
+    //   description: 'lowDB is awsome',
+    //   user: 1
+    // }).write();
+
+    // db.get('posts').push({
+    //   id: 2,
+    //   title: 'js...',
+    //   description: 'js is wierd..',
+    //   user: 1
+    // }).write();
+    
   </script>
 </head>
 <body>

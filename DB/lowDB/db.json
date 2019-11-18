@@ -1,5 +1,24 @@
 {
-  "posts": [],
-  "user": {},
+  "posts": [
+    {
+      "id": 1,
+      "title": "lowDB is...",
+      "description": "lowDB is awsome",
+      "user": 1
+    },
+    {
+      "id": 2,
+      "title": "js...",
+      "description": "js is wierd..",
+      "user": 1
+    }
+  ],
+  "user": [
+    {
+      "id": 1,
+      "name": "Jeaha",
+      "profile": "dev"
+    }
+  ],
   "count": 0
 }
