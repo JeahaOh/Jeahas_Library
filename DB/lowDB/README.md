@@ -12,3 +12,7 @@ found 0 vulnerabilities
   
 main.js를 작성 한 뒤 실행을 해 주면 db.json 파일이 생성 된다.  
 db.json은 {} 비어있는 객체가 생성된다.
+
+## browser에서 lowDB 설치
+lowDB.html  
+페이지를 크롬에서 실행, LocalStorage 확인해 보면 node에서와 같은 빈 객체가 생성 됨.
