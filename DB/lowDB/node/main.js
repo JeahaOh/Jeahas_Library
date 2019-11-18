@@ -35,9 +35,21 @@ db.defaults({ posts: [], user: [], count: 0 }).write()
 
 //  READ
 // console.log( db.get('posts').value() );
-console.log(
-  db.get('posts')
-  //  원하는 데이터만 가져오고 싶을 때
-  .find({title: 'lowDB is...'})
-  .value()
-);
+// console.log(
+//   db.get('posts')
+//   //  원하는 데이터만 가져오고 싶을 때
+//   .find({title: 'lowDB is...'})
+//   .value()
+// );
+
+//  Update
+db.get('posts')
+// .find( {id: 2} )
+// .assign( {title: 'Javascript is'} )
+// .write();
+
+// console.log(
+//   db.get('posts')
+//   .find({id: 2})
+//   .value()
+// );
