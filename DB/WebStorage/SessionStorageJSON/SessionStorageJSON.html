@@ -7,11 +7,33 @@
   <title>  Session Storage JSON</title>
 
   <script>
+    /*
     let testObj = { 'one': 1, 'two': 2 };
-    localStorage.setItem('testObj', JSON.stringify( testObj ));
+    sessionStorage.setItem('testObj', JSON.stringify( testObj ));
 
-    let retrievedObj = localStorage.getItem( 'testObj' );
+    let retrievedObj = sessionStorage.getItem( 'testObj' );
     console.log( 'retrievedObj', JSON.parse( retrievedObj ));
+    */
+    let testObj;
+    (function(){
+      testObj = sessionStorage.getItem( 'testObj');
+      testObj = testObj ? JSON.parse(testObj) : {};
+
+      cnt = 0;
+      for( i in testObj ) {
+        cnt++;
+      }
+      console.log( cnt );
+    })();
+
+
+    // testObj.three = 3;
+    // console.log( testObj );
+
+    let refreshObj = function(){
+      sessionStorage.setItem( 'testObj', JSON.stringify( testObj ) );
+    }
+
   </script>
 </head>
 <body>
