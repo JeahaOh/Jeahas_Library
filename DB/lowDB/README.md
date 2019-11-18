@@ -15,4 +15,6 @@ db.json은 {} 비어있는 객체가 생성된다.
 
 ## browser에서 lowDB 설치
 lowDB.html  
-페이지를 크롬에서 실행, LocalStorage 확인해 보면 node에서와 같은 빈 객체가 생성 됨.
+페이지를 크롬에서 실행, LocalStorage 확인해 보면 node에서와 같은 빈 객체가 생성 됨. 
+
+# 기본 데이터 설정

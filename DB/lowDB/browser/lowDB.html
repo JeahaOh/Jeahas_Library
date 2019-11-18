@@ -18,6 +18,9 @@
     var adapter = new LocalStorage('db')
     //  lowDB에 연결, db라는 변수로 그 데이터를 제어하겠다.
     var db = low(adapter)
+    
+    // Set some defaults (required if your JSON file is empty)
+    db.defaults({ posts: [], user: {}, count: 0 }).write()
   </script>
 </head>
 <body>
