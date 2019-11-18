@@ -32,3 +32,12 @@ db.defaults({ posts: [], user: [], count: 0 }).write()
 //   description: 'js is wierd..',
 //   user: 1
 // }).write();
+
+//  READ
+// console.log( db.get('posts').value() );
+console.log(
+  db.get('posts')
+  //  원하는 데이터만 가져오고 싶을 때
+  .find({title: 'lowDB is...'})
+  .value()
+);
