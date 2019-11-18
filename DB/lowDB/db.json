@@ -1,12 +1,6 @@
 {
   "posts": [
     {
-      "id": 1,
-      "title": "lowDB is...",
-      "description": "lowDB is awsome",
-      "user": 1
-    },
-    {
       "id": 2,
       "title": "Javascript is",
       "description": "js is wierd..",

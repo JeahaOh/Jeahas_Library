@@ -53,3 +53,8 @@ db.get('posts')
 //   .find({id: 2})
 //   .value()
 // );
+
+//  Delete
+db.get('posts')
+.remove( {id: 1} )
+.write();
