@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <style>
+    td {
+      width: 60px;
+      height: 60px;
+      text-align: center;
+      font-size: 20px;
+      font-family: 바탕;
+      border: 2px solid dimgrey;
+      border-radius: 8px;
+      text-align: center;
+    }
+    .clndr_btn {
+      cursor: pointer;
+    }
+    
+  </style>
+  <title> Calendar </title>
+</head>
+
+<body>
+  <table id="calendar">
+    <tr>
+      <td onclick="prevCalendar()" class="clndr_btn">
+        &lt;
+      </td>
+      <td colspan="5" id="calendarYM">yyyy년 m월</td>
+      <td onclick="nextCalendar()" class="clndr_btn">
+        &gt;
+      </td>
+    </tr>
+    <tr>
+      <td>일</td>
+      <td>월</td>
+      <td>화</td>
+      <td>수</td>
+      <td>목</td>
+      <td>금</td>
+      <td>토</td>
+    </tr>
+
+
+  </table>
+</body>
+
+<script language="javascript" type="text/javascript">
+  // 화면을 보는 컴퓨터를 기준으로 오늘 날짜
+  let offsetDate = new Date();
+  // console.log( offsetDate );
+  // console.log( offsetDate.getFullYear() );
+  // console.log( offsetDate.getMonth() );
+  // console.log( offsetDate.getDate() );
+  
+  // offsetDate 에 Date객체를 넣어줌
+  function prevCalendar() {
+    offsetDate = new Date(offsetDate.getFullYear(), offsetDate.getMonth() - 1, offsetDate.getDate());
+    buildCalendar();
+  }
+
+  function nextCalendar() {
+    offsetDate = new Date(offsetDate.getFullYear(), offsetDate.getMonth() + 1, offsetDate.getDate());
+    buildCalendar();
+  }
+
+  function buildCalendar() {
+    console.log( offsetDate );
+    // 기준 달의 첫째 날
+    let nMonth = new Date(offsetDate.getFullYear(), offsetDate.getMonth(), 1);
+    // 기준 달의 마지막 날
+    let lastDate = new Date(offsetDate.getFullYear(), offsetDate.getMonth() + 1, 0);
+    // 달력을 만들 테이블
+    let tblCalendar = document.getElementById("calendar");
+    // yyyy년 m월 출력할 곳
+    let tblCalendarYM = document.getElementById("calendarYM");
+    // yyyy년 m월 출력
+    tblCalendarYM.innerHTML = offsetDate.getFullYear() + "년 " + (offsetDate.getMonth() + 1) + "월";
+    
+    // 기존 테이블에 뿌려진 줄, 칸 삭제
+    while( tblCalendar.rows.length > 2 ) {
+      tblCalendar.deleteRow( tblCalendar.rows.length - 1 );
+    }
+
+    let row = null;
+    row = tblCalendar.insertRow();
+
+    let cnt = 0;
+    // 1일이 시작되는 칸을 맞추어 줌
+    for (var i = 0; i < nMonth.getDay(); i++) {
+      cell = row.insertCell();
+      cnt++;
+    }
+
+    for (var i = 1; i <= lastDate.getDate(); i++) {
+      cell = row.insertCell();
+      cell.innerHTML = i;
+      cnt++;
+      // 1주일이 7일 이므로 줄 바꿈
+      if (cnt % 7 == 0)
+        row = calendar.insertRow();
+    }
+  }
+  buildCalendar();
+</script>
+
+</html>
