@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="ko">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -19,13 +18,23 @@
     .clndr_btn {
       cursor: pointer;
     }
-    
+    .sunday {
+      color: red;
+      font-weight: bold;
+    }
+    .saturday {
+      color: blue;
+      font-weight: bold;
+    }
   </style>
   <title> Calendar </title>
 </head>
 
 <body>
+  
+  
   <table id="calendar">
+    
     <tr>
       <td onclick="prevCalendar()" class="clndr_btn">
         &lt;
@@ -35,18 +44,20 @@
         &gt;
       </td>
     </tr>
+
     <tr>
-      <td>일</td>
+      <td class="sunday">일</td>
       <td>월</td>
       <td>화</td>
       <td>수</td>
       <td>목</td>
       <td>금</td>
-      <td>토</td>
+      <td class="saturday">토</td>
     </tr>
 
-
   </table>
+
+
 </body>
 
 <script language="javascript" type="text/javascript">
@@ -69,11 +80,15 @@
   }
 
   function buildCalendar() {
-    console.log( offsetDate );
+    // console.log( offsetDate );
     // 기준 달의 첫째 날
     let nMonth = new Date(offsetDate.getFullYear(), offsetDate.getMonth(), 1);
+    // console.log( nMonth );
+
     // 기준 달의 마지막 날
     let lastDate = new Date(offsetDate.getFullYear(), offsetDate.getMonth() + 1, 0);
+    // console.log( lastDate );
+
     // 달력을 만들 테이블
     let tblCalendar = document.getElementById("calendar");
     // yyyy년 m월 출력할 곳
@@ -99,6 +114,15 @@
     for (var i = 1; i <= lastDate.getDate(); i++) {
       cell = row.insertCell();
       cell.innerHTML = i;
+
+      if( cnt % 7 == 0 ) {
+        // console.log( cnt + ' : sunday' );
+        cell.classList.add( 'sunday' );
+      } else if( cnt % 7 == 6 ) {
+        // console.log( cnt + ' : saturday ' );
+        cell.classList.add( 'saturday' );
+      }
+
       cnt++;
       // 1주일이 7일 이므로 줄 바꿈
       if (cnt % 7 == 0)
