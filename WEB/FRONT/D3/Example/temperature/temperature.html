@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" class="svg g">
+	<head>
+		<meta charset="utf-8">
+	    <title>UK Temperature History</title>
+	    <link rel="stylesheet" href="css/reset.css">
+	    <link rel="stylesheet" href="css/style.css">
+	    <script src="js/modernizr.js"></script>
+	</head>
+
+	<body>
+		<div id="chart">
+			<svg>
+			</svg>
+		</div>
+		<div id="widgets">
+			<div id="header">
+				<h1>UK Temperature History</h1>
+				<p>Explore the temperature in the United Kingdom since 1910 by scrolling the page <span class="emphasis">up</span> and <span class="emphasis">down</span>. Visit years marked in <span style="color: indianred;">red</span> or <span style="color: steelblue;">blue</span> that have significant weather events. You can also sort by <span class="emphasis">year</span>, <span class="emphasis">maximum</span>, <span class="emphasis">minimum</span> or <span class="emphasis">mean</span> temperature</p>
+			</div>
+			<div id="menu">
+			</div>
+			<div id="info">
+			</div>
+			<!-- <div id="footer">
+	      <div id="social">
+	        <a href="https://twitter.com/animateddata" class="twitter-follow-button" data-show-count="false">Follow @animateddata</a>
+	        <a href="https://twitter.com/share" class="twitter-share-button" data-lang="en" data-url="http://charts.animateddata.co.uk/uktemperaturelines" data-text="UK temperature graphs ">Tweet</a>
+	      </div>
+				<p>Chart development by <a href="http://animateddata.co.uk">Peter Cook</a>. Contains public sector information licensed under the <a href="http://www.nationalarchives.gov.uk/doc/open-government-licence/">Open Government Licence v1.0</a> (<a href="http://www.metoffice.gov.uk/climate/uk/datasets/#">view data source</a>).</p>
+			</div> -->
+		</div>
+
+		<script src="js/jquery-3.3.1.min.js"></script>
+		<script src="../../d3/d3.js"></script>
+		<!-- <!-- <script src="../../d3/d3.min.js"></script> -->
+		<script src="js/underscore-min.js"></script>
+    <script type="text/javascript">
+      Modernizr.load({
+        test: Modernizr.svg,
+        yep: 'js/temperature.js',
+				// nope: ['js/jquery-1.10.2.min.js', 'js/fallback.js']
+				nope: ['js/jquery-3.3.1.min.js', 'js/fallback.js']
+      });
+    </script>
+
+	  <!-- Twitter -->
+	  <!-- <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script> -->
+	  <!-- <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script> -->
+	</body>
+</html>
