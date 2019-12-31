@@ -6,17 +6,23 @@ const depth_data = [
   {label: "UNIT_19-12-21 16", data : [-80.99, -81.31, -81.05, -81.17, -79.51, -80.38, -80.49, -80.42, -79.22, -81.40, -80.30, -80.25, -80.86, -80.11, -80.17, -80.48, -80.08, -80.61, -80.66, -80.31, -79.71, -80.46, -82.44, -82.96, -82.73, -82.82, -83.31, -82.97, -82.96, -83.07, -82.56, -83.23, -82.28, -82.62, -82.52, -82.19, -82.32, -82.42, -82.55, -82.36, -82.32, -82.74, -81.34, -83.61, -81.28, -82.71, -82.13, -83.01, -82.13, -83.09, -80.19, -82.52, -82.34, -81.34, -80.94, -80.18, -80.25, -80.28, -80.67, -81.55, -81.05, -80.98, -80.95, -82.38, -83.14, -82.96, -80.99, -81.47, -83.2, -82.66, -82.15, -81.06, -81.64, -81.16, -82.97, -82.37, -82.05, -82.13, -82.51, -83.49, -82.83, -81.56, -81.42, -82.59, -82.8, -81.12, -80.81, -81.18, -81.89], },
 ];
 let depthDataChart, depthDatasets, depthDataChartImg, depthDataLableLength, depthDataEmptyLabels;
-const BACKGROUND_COLOR = "rgba(89, 164, 199, 0.1)"
+const BACKGROUND_COLOR = "rgba(89, 164, 199, 0."
 const STROKE_COLOR = "rgba(78, 112, 157, 0.9)";
+
 const drawDepthDataChart = function( depthData ) {
   // console.log( depthData );
   depthDatasets = [];
   depthDataEmptyLabels = [];
   let cnt = 0;
   while( depthData[cnt] ) {
+    // console.log( cnt );
+    let aValue = 5 - cnt;
+    
+    depthData[cnt].backgroundColor = BACKGROUND_COLOR + aValue + ')';
 
-    depthData[cnt].backgroundColor = BACKGROUND_COLOR;
-    depthData[cnt].strokeColor = STROKE_COLOR;
+    depthData[cnt].borderColor = STROKE_COLOR;
+
+    
     depthDatasets[cnt] = depthData[cnt];
 
     if( cnt == 0 ) depthDataLableLength = depthData[cnt].data.length;
