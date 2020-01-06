@@ -5,6 +5,21 @@ const depth_data = [
   {label: "UNIT_19-12-20 16", data : [-81.06, -81.25, -80.99, -80.55, -80.98, -81.11, -80.74, -81.07, -81.38, -80.46, -80.88, -81.17, -80.99, -81.22, -81.49, -81.22, -81.15, -80.49, -80.45, -80.46, -80.97, -81.53, -80.25, -81.22, -80.93, -80.08, -80.81, -80.45, -81.35, -80.31, -79.85, -80.46, -80.15, -82.93, -82.85, -82.88, -82.96, -82.52, -82.19, -82.14, -82.34, -83.03, -82.15, -82.55, -81.85, -82.05, -81.62, -83.17, -81.45, -82.73, -81.51, -81.91, -82.57, -80.71, -81.34, -80.84, -80.82, -80.44, -80.28, -80.92, -81.62, -81.05, -81.39, -80.78, -81.38, -81.08, -81.44, -81.57, -83.11, -81.76, -81.63, -80.89, -82.59, -80.82, -80.62, -82.39, -81.64, -81.06, -82.33, -82.05, -82.51, -82.08, -82.13, -82.73, -83.49, -82.33, -82.96, -82.41, -81.76, -80.57, -80.7, -81.12, -80.88, -80.41, -80.44, -80.28, -82.78, -81.66, -81.89], },
   {label: "UNIT_19-12-21 16", data : [-80.99, -81.31, -81.05, -81.17, -79.51, -80.38, -80.49, -80.42, -79.22, -81.40, -80.30, -80.25, -80.86, -80.11, -80.17, -80.48, -80.08, -80.61, -80.66, -80.31, -79.71, -80.46, -82.44, -82.96, -82.73, -82.82, -83.31, -82.97, -82.96, -83.07, -82.56, -83.23, -82.28, -82.62, -82.52, -82.19, -82.32, -82.42, -82.55, -82.36, -82.32, -82.74, -81.34, -83.61, -81.28, -82.71, -82.13, -83.01, -82.13, -83.09, -80.19, -82.52, -82.34, -81.34, -80.94, -80.18, -80.25, -80.28, -80.67, -81.55, -81.05, -80.98, -80.95, -82.38, -83.14, -82.96, -80.99, -81.47, -83.2, -82.66, -82.15, -81.06, -81.64, -81.16, -82.97, -82.37, -82.05, -82.13, -82.51, -83.49, -82.83, -81.56, -81.42, -82.59, -82.8, -81.12, -80.81, -81.18, -81.89], },
 ];
+Chart.pluginService.register({
+  beforeDraw: function (chart, easing) {
+    if (chart.config.options.chartArea && chart.config.options.chartArea.backgroundColor) {
+      var helpers = Chart.helpers;
+      var ctx = chart.chart.ctx;
+      var chartArea = chart.chartArea;
+
+      ctx.save();
+      ctx.fillStyle = chart.config.options.chartArea.backgroundColor;
+      ctx.fillRect(chartArea.left, chartArea.top, chartArea.right - chartArea.left, chartArea.bottom - chartArea.top);
+      ctx.restore();
+    }
+  }
+});
+
 let depthDataChart, depthDatasets, depthDataChartImg, depthDataLableLength, depthDataEmptyLabels;
 const BACKGROUND_COLOR = "rgba(89, 164, 199, 0."
 const STROKE_COLOR = "rgba(78, 112, 157, 0.9)";
@@ -48,12 +63,38 @@ const drawDepthDataChart = function( depthData ) {
     data: data,
     options: {
       responsive: true,
+      chartArea: {
+        backgroundColor: 'rgba(0, 0, 0, 1)'
+      },
       animation: {
         onComplete: function(animation){
           // console.log( this.toBase64Image() );
           document.querySelector('#savegraph').setAttribute('href', this.toBase64Image());
         }
-      }
+      },
+      scales: {
+        yAxes: [{
+          ticks:{
+            // min : 0,
+            // stepSize : 1,
+            fontColor : "#000",
+            fontSize : 25
+          },
+          gridLines:{
+            color: "#FFF",
+            lineWidth:1,
+            // zeroLineColor :"#000",
+            // zeroLineWidth : 2
+          },
+          // stacked: true
+        }],
+        xAxes: [{
+          gridLines:{
+            color: "rgba(200, 200, 200, 0.8)",
+            lineWidth:0.5
+          }
+        }]
+      },
     }
   });
 };
