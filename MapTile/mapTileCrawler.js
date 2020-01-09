@@ -25,4 +25,3 @@ const url = 'http://gall.dcinside.com/board/view/?id=hit&no=13779';
 
 download(url, dir + 'filename.html', null)
 
-console.log(  );
