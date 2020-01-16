@@ -5,24 +5,58 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <style>
-    body {
-      display: flex;
+    .loader_outer_container {
+      /* display: flex; */
       height: 100vh;
       justify-content: center;
       align-items: center;
-      background: #b3e5fc;
+      /* background: #b3e5fc; */
+      background: #252e3f;
+      opacity: 0.7;
+    }
+    .loader_mid_container {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 350px;
+      height: 300px;
+      font-size: 13px;
+      color: #FFFFFF;
+      text-align: center;
     }
 
+    #loader_title {
+      font-size: 20px;
+    
+    }
+
+    .loader_inner_container {
+      display: inline-block;
+    }
+
+    .progress_cont {
+      display: inline-block;
+    }
+    
+    .progress_cont div {
+      display: inline-block;
+    }
+
+    
+
+    
+
     .loader {
-      width: 10em;
-      height: 10em;
+      width: 200px;
+      height: 200px;
       display: flex;
       flex-wrap: wrap;
     }
     .loader .square {
       width: 25%;
       height: 25%;
-      background: #ff5252;
+      background: #4295b6;
       animation: zoom 1.4s ease-in-out infinite;
     }
     .loader .square:nth-child(13) {
@@ -62,30 +96,43 @@
   <title>Loading Tile</title>
 </head>
 <body>
-  <h1>Something is on Loading</h1>
-  <div class="loader">
-    <div class="square"></div>
-    <div class="square"></div>
-    <div class="square"></div>
-    <div class="square"></div>
-    <div class="square"></div>
-    <div class="square"></div>
-    <div class="square"></div>
-    <div class="square"></div>
-    <div class="square"></div>
-    <div class="square"></div>
-    <div class="square"></div>
-    <div class="square"></div>
-    <div class="square"></div>
-    <div class="square"></div>
-    <div class="square"></div>
-    <div class="square"></div>
+  <div class="loader_outer_container">
+    <div class="loader_mid_container">
+      <h1 id="loader_title">Something is on Loading</h1>
+      <div class="loader_inner_container">
+        <div class="loader">
+          <div class="square"></div>
+          <div class="square"></div>
+          <div class="square"></div>
+          <div class="square"></div>
+          <div class="square"></div>
+          <div class="square"></div>
+          <div class="square"></div>
+          <div class="square"></div>
+          <div class="square"></div>
+          <div class="square"></div>
+          <div class="square"></div>
+          <div class="square"></div>
+          <div class="square"></div>
+          <div class="square"></div>
+          <div class="square"></div>
+          <div class="square"></div>
+        </div>
+      </div>
+      <p class="progress_cont">
+        총&ensp;<span id="loader_sum">10</span>개의 데이터
+        <br>
+        전송 :&ensp;<span id="loader_process">5</span>
+        성공 :&ensp;<span id="loader_success">4</span>
+        실패 :&ensp;<span id="loader_fail">1</span>
+      </p>
+    </div>
   </div>
 </body>
 <script>
   window.onload = function(){
     const load_bar = document.getElementById('loading');
-    load_bar.style.display="block";
   };
+  
 </script>
 </html>
