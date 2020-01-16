@@ -1,10 +1,15 @@
 <!DOCTYPE html>
 <html lang="kr">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <style>
+  <style type="text/css">
+    #loader_section {
+      z-index: 10;
+    }
+
     .loader_outer_container {
       /* display: flex; */
       height: 100vh;
@@ -14,6 +19,7 @@
       background: #252e3f;
       opacity: 0.7;
     }
+
     .loader_mid_container {
       position: absolute;
       top: 50%;
@@ -28,24 +34,19 @@
 
     #loader_title {
       font-size: 20px;
-    
     }
 
     .loader_inner_container {
-      display: inline-block;
+      display: inline-block !important;
     }
 
     .progress_cont {
-      display: inline-block;
+      display: inline-block !important;
     }
-    
+
     .progress_cont div {
-      display: inline-block;
+      display: inline-block !important;
     }
-
-    
-
-    
 
     .loader {
       width: 200px;
@@ -53,30 +54,47 @@
       display: flex;
       flex-wrap: wrap;
     }
+
     .loader .square {
       width: 25%;
       height: 25%;
       background: #4295b6;
       animation: zoom 1.4s ease-in-out infinite;
     }
+
     .loader .square:nth-child(13) {
       animation-delay: 0s;
     }
-    .loader .square:nth-child(9), .loader .square:nth-child(14) {
+
+    .loader .square:nth-child(9),
+    .loader .square:nth-child(14) {
       animation-delay: 0.1s;
     }
-    .loader .square:nth-child(5), .loader .square:nth-child(10), .loader .square:nth-child(15) {
+
+    .loader .square:nth-child(5),
+    .loader .square:nth-child(10),
+    .loader .square:nth-child(15) {
       animation-delay: 0.2s;
     }
-    .loader .square:nth-child(1), .loader .square:nth-child(6), .loader .square:nth-child(11), .loader .square:nth-child(16) {
+
+    .loader .square:nth-child(1),
+    .loader .square:nth-child(6),
+    .loader .square:nth-child(11),
+    .loader .square:nth-child(16) {
       animation-delay: 0.3s;
     }
-    .loader .square:nth-child(2), .loader .square:nth-child(7), .loader .square:nth-child(12) {
+
+    .loader .square:nth-child(2),
+    .loader .square:nth-child(7),
+    .loader .square:nth-child(12) {
       animation-delay: 0.4s;
     }
-    .loader .square:nth-child(3), .loader .square:nth-child(8) {
+
+    .loader .square:nth-child(3),
+    .loader .square:nth-child(8) {
       animation-delay: 0.4s;
     }
+
     .loader .square:nth-child(4) {
       animation-delay: 0.5s;
     }
@@ -85,54 +103,57 @@
       35% {
         transform: scale(0);
       }
+
       0%,
       70%,
       to {
         transform: scale(1);
       }
     }
-
   </style>
   <title>Loading Tile</title>
 </head>
+
 <body>
-  <div class="loader_outer_container">
-    <div class="loader_mid_container">
-      <h1 id="loader_title">Something is on Loading</h1>
-      <div class="loader_inner_container">
-        <div class="loader">
-          <div class="square"></div>
-          <div class="square"></div>
-          <div class="square"></div>
-          <div class="square"></div>
-          <div class="square"></div>
-          <div class="square"></div>
-          <div class="square"></div>
-          <div class="square"></div>
-          <div class="square"></div>
-          <div class="square"></div>
-          <div class="square"></div>
-          <div class="square"></div>
-          <div class="square"></div>
-          <div class="square"></div>
-          <div class="square"></div>
-          <div class="square"></div>
+  <section id="loader_section">
+    <div class="loader_outer_container">
+      <div class="loader_mid_container">
+        <h1 id="loader_title">Something is on Loading</h1>
+        <div class="loader_inner_container">
+          <div class="loader">
+            <div class="square"></div>
+            <div class="square"></div>
+            <div class="square"></div>
+            <div class="square"></div>
+            <div class="square"></div>
+            <div class="square"></div>
+            <div class="square"></div>
+            <div class="square"></div>
+            <div class="square"></div>
+            <div class="square"></div>
+            <div class="square"></div>
+            <div class="square"></div>
+            <div class="square"></div>
+            <div class="square"></div>
+            <div class="square"></div>
+            <div class="square"></div>
+          </div>
         </div>
+        <br><br>
+        <p class="progress_cont">
+          총&ensp;<span id="loader_sum">10</span>개의 데이터
+          <br>
+          전송 :&ensp;<span id="loader_process">5</span>&ensp;&ensp;
+          성공 :&ensp;<span id="loader_success">4</span>&ensp;&ensp;
+          실패 :&ensp;<span id="loader_fail">1</span>
+        </p>
       </div>
-      <p class="progress_cont">
-        총&ensp;<span id="loader_sum">10</span>개의 데이터
-        <br>
-        전송 :&ensp;<span id="loader_process">5</span>
-        성공 :&ensp;<span id="loader_success">4</span>
-        실패 :&ensp;<span id="loader_fail">1</span>
-      </p>
     </div>
-  </div>
+  </section>
 </body>
 <script>
-  window.onload = function(){
-    const load_bar = document.getElementById('loading');
-  };
+  const loaderSection = document.getElementById('loader_section');
   
 </script>
+
 </html>

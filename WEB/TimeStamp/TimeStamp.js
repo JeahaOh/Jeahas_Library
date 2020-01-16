@@ -79,5 +79,16 @@ const TimeStamp = {
   //  Unix time : 1970 -> 지금까지의 초 10자리의 숫자임.
   getUnixTime : function() {
     return Math.floor(new Date().getTime() / 1000)
-  }
+  },
+  //  millisecond 값을 인자로 받는다.
+  timeDelay = function( gap ){
+    var then, now; 
+    then = new Date().getTime(); 
+    now = then; 
+    while( (now - then ) < gap ) { 
+      // 현재시간을 읽어 함수를 불러들인 시간과의 차를 이용하여 처리 
+      now = new Date().getTime();
+    }
+    console.log( now - then );
+  } 
 }
