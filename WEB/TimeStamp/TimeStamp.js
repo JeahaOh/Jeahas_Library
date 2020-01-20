@@ -80,7 +80,10 @@ const TimeStamp = {
   getUnixTime : function() {
     return Math.floor(new Date().getTime() / 1000)
   },
-  //  millisecond 값을 인자로 받는다.
+  /* 
+   * millisecond 값을 인자로 받아서 다음 코드 실행 시간을 늦춘다.
+   * AJAX 요청시 서버 부하를 막기 위해 사용한다.
+   */
   timeDelay = function( gap ){
     var then, now; 
     then = new Date().getTime(); 
