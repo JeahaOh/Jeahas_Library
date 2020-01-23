@@ -45,7 +45,7 @@
   <script>
     //  기본 맵 설정. -->
     let source = new ol.source.OSM({
-      url: 'http://localhost:3000/tiles/{z}/{x}/{y}.png',
+      url: window.location.protocol + 'tiles/{z}/{x}/{y}.png',
       crossOrigin: 'anonymous',
       wrapX: false
     });
