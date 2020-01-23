@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+
+</body>
+<script>
+  // 곧바로 현재 페이지 주소 출력
+  document.writeln(location.href);
+  // 변수에 넣어서 출력
+  var s = location.href;
+  document.writeln(s);
+
+  //  querystring
+  function getQueryStringObject() {
+    var a = window.location.search.substr(1).split('&');
+    if (a == "") return {};
+    var b = {};
+    for (var i = 0; i < a.length; ++i) {
+      var p = a[i].split('=', 2);
+      if (p.length == 1)
+        b[p[0]] = "";
+      else
+        b[p[0]] = decodeURIComponent(p[1].replace(/\+/g, " "));
+    }
+    return b;
+  }
+
+  var qs = getQueryStringObject();
+  var x = qs.x;
+  var y = qs.y;
+  var l = qs.level;
+  //  querystring
+
+
+  console.log(window.location.href); // 현재 페이지의 href (URL) 반환
+  console.log(window.location.hostname); // 웹 호스트의 도메인 네임 반환
+  console.log(window.location.pathname); // 현재 페이지의 경로와 파일 이름 반환
+  console.log(window.location.protocol); // 사용하는 웹 프로토콜 반환 (http:// 혹은 https://)
+  console.log(window.location.assign); // 새 document 로드
+</script>
+
+</html>

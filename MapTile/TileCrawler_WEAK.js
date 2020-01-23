@@ -34,6 +34,7 @@ console.log( 'destDir : ' + destDir + '\n\n' );
 
 const imgDownload = async function (url, dest, filename ) {
   url = url + filename;
+  console.log( 'REQUEST TO ' +  url );
   let res;
   try {
     res = await AXIOS({
@@ -42,7 +43,7 @@ const imgDownload = async function (url, dest, filename ) {
       responseType: 'stream'
     });
   } catch ( e ) {
-    console.log( '\t!! ' + filename + '\tREQUEST ' + e.response.status + ' !!' );
+    console.log( '\t!! ' + filename + '\tREQUEST ' + e.response.status + ' !!\n\n' );
   }
 
   if( typeof(res) !=='undefined' && res.status === 200 ) {
@@ -95,7 +96,7 @@ const loop = async function() {
           console.log( filename );
         })
         .catch( (filename) => {
-          console.log( '\t!! SOMETHING CRASHED !! ' + filename + '\n' );
+          console.log( '\t!! SOMETHING CRASHED !! ' + filename + '\n\n' );
         });
       } 
     }
