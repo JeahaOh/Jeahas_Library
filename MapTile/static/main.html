@@ -1,12 +1,70 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="kor">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Document</title>
+  <!-- The line below is only needed for old environments like Internet Explorer and Android 4.x -->
+  <script type="text/javascript">
+    /* Disable minification (remove `.min` from URL path) for more info */
+    (function(undefined) {}).call('object' === typeof window && window || 'object' === typeof self && self || 'object' === typeof global && global || {});
+  </script>
+
+  <link rel="stylesheet" href="./ol.css">
+
+  <script type="text/javascript" src="./ol.js"></script>
+ 
+  <title>  MAP  </title>
 </head>
-<body>
+
+<body style="background-color: black; color: white;">
+  <div id="map" class="map" style="width: 100%; height: 3500px;"></div>
   
+  <script>
+
+//  기본 맵 설정. -->
+let raster = new ol.layer.Tile({
+  source: new ol.source.OSM({
+    url: 'http://localhost:3000/tiles/{z}/{x}/{y}.png'
+  })
+});
+
+let source = new ol.source.Vector({wrapX: false});
+let vector = new ol.layer.Vector({ source: source });
+
+let map = new ol.Map({
+  layers: [
+    raster,
+    vector
+  ],
+  target: 'map',
+  view: new ol.View({
+    center: ol.proj.fromLonLat([131.5, 37.4]),
+    zoom: 13
+  })
+});
+//  <-- 기본 맵 설정.
+/*
+window.onerror = function(msg, url, line){
+    console.log("MESSAGE : " + msg);
+    console.log("URL : " + url);
+    console.log("LINE NO. " + line);
+    let text = ":::::::::::\t" + new Date + "\t:::::::::::\n" + 
+               "MESSAGE : " + msg + "\nURL : " + url + "\nLINE NO. : " + line;
+    // $.ajax({
+    //   url:"https://hooks.slack.com/services/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",
+    //   data:"payload=" + JSON.stringify({
+    //     "text": text
+    //   }),
+    //   type: "POST",
+    //   dataType: "json",
+    //   processData: false,
+    // })
+  }
+*/
+  </script>
+
 </body>
 </html>
+

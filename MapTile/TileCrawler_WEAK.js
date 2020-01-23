@@ -32,10 +32,6 @@ console.log( 'y start : ' + yStart );
 console.log( 'y end : ' + yEnd );
 console.log( 'destDir : ' + destDir + '\n\n' );
 
-
-
-
-
 const imgDownload = async function (url, dest, filename ) {
   url = url + filename;
   let res;
@@ -68,28 +64,42 @@ const imgDownload = async function (url, dest, filename ) {
   }
 }
 
-z = 6;
-x = 58;
-yStart = 22;
-yEnd = 26
+z = 13
+// x = 3517;
+
+//   1691
+xStart = 7320;
+xEnd = 7360;
+
+yStart = 2944;
+yEnd = 3388;
 
 const loop = async function() {
-  for( let y = yStart; y <= yEnd; y++ ) {
-    let filename = '' + z + '\\' + x + '\\' + y +'.png';
-    if(!FS.existsSync(destDir + filename) ) {
-      console.log( filename );
-    // console.log( dest );
-    // !FS.existsSync(dest) && FS.mkdirSync(dest);
+  for( x = xStart; x <= xEnd; x++ ) {
+   
+    for( let y = yStart; y <= yEnd; y++ ) {
+      let subDir = z + '\\' + x;
+      let filename = subDir + '\\' + y +'.png';
+      if(!FS.existsSync(destDir + filename) ) {
+        // console.log( FS.existsSync(destDir + filename),  destDir + filename );
+        // console.log( subDir );
+  
+        if( !FS.existsSync( destDir + subDir) ) {
+          // console.log( destDir + subDir );
+          FS.mkdirSync(destDir + subDir, { recursive: true }, (err) => { console.log( err.message ); });
+        }
+  
+        imgDownload( originUrl, destDir, filename )
+        .then( (filename) => {
+          // console.log( '\tFile Saving Complete : ' + filename );
+          console.log( filename );
+        })
+        .catch( (filename) => {
+          console.log( '\t!! SOMETHING CRASHED !! ' + filename + '\n' );
+        });
+      } 
+    }
 
-      imgDownload( originUrl, destDir, filename )
-      .then( (filename) => {
-        // console.log( '\tFile Saving Complete : ' + filename );
-        console.log( filename.replace('.png', '').trim() );
-      })
-      .catch( (filename) => {
-        console.log( '\t!! SOMETHING CRASHED !! ' + filename + '\n' );
-      });
-    } 
   }
 }
 loop();
