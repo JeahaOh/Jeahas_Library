@@ -1,13 +1,11 @@
 <!DOCTYPE html>
 <html lang="kor">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <!-- The line below is only needed for old environments like Internet Explorer and Android 4.x -->
   <script type="text/javascript">
-    /* Disable minification (remove `.min` from URL path) for more info */
     (function (undefined) {}).call('object' === typeof window && window || 'object' === typeof self && self ||
       'object' === typeof global && global || {});
   </script>
@@ -31,6 +29,7 @@
       background: rgba(255, 0, 0, 0.8);
       width: 0;
       transition: width 250ms;
+      z-index: 2;
     }
   </style>
 
@@ -39,8 +38,8 @@
 
 <body style="background-color: black; color: white;">
   <div class="wrapper">
-    <div id="map" class="map" style="width: 100%; height: 3500px;"></div>
     <div id="progress"></div>
+    <div id="map" class="map" style="width: 100%; height: 1900px;"></div>
   </div>
   <script>
     //  기본 맵 설정. -->
@@ -52,13 +51,20 @@
     let raster = new ol.layer.Tile({
       source: source
     });
-
     let map = new ol.Map({
       layers: [ raster ],
       target: 'map',
       view: new ol.View({
         center: ol.proj.fromLonLat([131.5, 37.4]),
-        zoom: 13
+        zoom: 13,
+        minZoon: 6,
+        maxZoom: 19,
+        //  지도의 서/남/동/북단 제한
+        extent : [
+          13675643.367576879,
+          3547969.058509155,
+          14966405.581669092,
+          4750357.653414815]
       })
     });
     //  <-- 기본 맵 설정.

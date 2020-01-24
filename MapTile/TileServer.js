@@ -1,3 +1,4 @@
+//  ----------------> Server Variable ----------------
 /**
  * 시작시 3번째 인자로 들어오는 값.
  * 서버로 작동시 내부망인지 아닌지 확인하기 위함.
@@ -6,47 +7,41 @@
 let isLocal = process.argv[2];
 if( typeof(isLocal) === 'undefined' ) isLocal = "false";
 switch(isLocal.toLowerCase().trim()){
-   case "t": case "local": case "l": case "-l": isLocal = true; break;
-   case "f": case "public": case "p": isLocal = false; break;
-  default: Boolean(isLocal);
+  case "true": case "t": case "local": case "l": case "-l": isLocal = true; break;
+  default: isLocal = false;
 }
-
 /**
  * 시작시 4번째 인자로 들어오는 값.
  * PORT 번호를 정한다.
  * 지정해 주지 않는다면 3000번 포트로 자동 지정 된다.
  */
 let PORT = process.argv[3];
-// console.log( 'parseInt(PORT) : ' + (parseInt(PORT)) + ' ' + PORT );
 PORT = parseInt(PORT);
 if(typeof(PORT) !== 'number') PORT = 3000;
-// console.log( "(typeof(PORT) === 'number') : " + (typeof(PORT) !== 'number') + ' ' + PORT );
-// console.log( '(isNaN(PORT)) : ' + (isNaN(PORT)) + ' ' + PORT );
 if( isNaN(PORT)) PORT = 3000;
 
 const express = require('express');
-const app = express();
-//  CORS 허용을 위한 Middleware
-const cors = require('cors');
 //  응답으로 보내주는 tiles를 Gzip과 Cached로 보내어 Server의 부하를 막기 위한 설정.
 const staticGzip = require('express-static-gzip');
+//  CORS 허용을 위한 Middleware
+const cors = require('cors');
+const app = express();
+//  <---------------- Server Variable ----------------
+
+//  -----------------> Scraper Variable ----------------
 //  서버 운영체제 종류에 따라 파일 경로 식별자가 달라지므로 사용.
 const os = require('os');
 const idtfr = ( os.type().toLowerCase().indexOf('windows') < 0 ) ? '/' : '\\';
-//  <---------------- Server
-
-//  -----------------> Scraper
-//  내부망에서 사용할 경우 필요 없는 변수이므로.
+//  아래 변수들은 내부망에서 사용할 경우 필요 없는 변수이므로 Local이라면 할당하지 않는다.
 const FS = isLocal ? null : require('fs');
 const PATH = isLocal ? null : require('path');
 const AXIOS = isLocal ? null : require('axios');
 
 const destDir = isLocal ? null : __dirname + idtfr + 'tiles' + idtfr;
 const originUrl = isLocal ? null : 'http://xdworld.vworld.kr:8080/2d/Base/service/';
-//  <----------------- Scraper
+//  <---------------- Scraper Variable ----------------
 
-// ----> Middlewares
-
+// ----------------> Middlewares ----------------
 //  CORS Setting
 app.use(cors({
   //  특정 도메인
@@ -60,9 +55,7 @@ app.use(cors({
   //  Configures the Access-Control-Max-Age CORS header
   "maxAge" : 3600
 }));
-//  CORS Setting
-
-app.use( '/tiles', express.static( __dirname + '/tiles') );
+//  Response File Compression.
 app.use( '/tiles', staticGzip( __dirname + '/tiles', {
     enableBrotli: true,
     maxAge: 86400000,
@@ -81,17 +74,19 @@ app.use( '/tiles', staticGzip( __dirname + '/tiles', {
     },
   })
 );
-
+//  Static Files
 app.use( '/', express.static( __dirname + '/static') );
-// <---- Middlewares
+app.use( '/tiles', express.static( __dirname + '/tiles') );
 
+// <---------------- Middlewares ----------------
 
+// ----------------- Scraper ---------------->
 const imgDownload = isLocal ? null : async function (url, dest, filename ) {
-  console.log( 'START IMG SCRAPE' );
   url = url + filename;
+  // console.log( 'REQ TO : ' + url );
   let res;
   try {
-    console.log( '---> INTO TRY' );
+    console.log( 'REQ TO ORIGIN --->\n' );
     res = await AXIOS({
       url,
       method: 'GET',
@@ -100,17 +95,17 @@ const imgDownload = isLocal ? null : async function (url, dest, filename ) {
   } catch ( e ) {
     console.log( '\t!! ' + filename + '\tREQUEST ' + e.response.status + ' !!' );
   } finally {
-    console.log( '<--- EXIT TRY' );
+    console.log( '\nRES FROM ORIGIN <---' );
   }
 
   if( typeof(res) !=='undefined' && res.status === 200 ) {
-    console.log( 'res --> ' + res.status );
+    console.log( 'res.status --> ' + res.status + '\n' );
     let path = PATH.resolve( dest, filename )
     let writer = FS.createWriteStream( path );
-    
     res.data.pipe( writer );
 
     return new Promise( (resolve, reject) => {
+      console.log( ' TO THEN OR CATCH ');
       writer.on('finish', resolve(filename));
       writer.on('error', reject(filename));
     });
@@ -122,13 +117,12 @@ const imgDownload = isLocal ? null : async function (url, dest, filename ) {
 }
 
 !isLocal && app.get('/tiles/:z/:x/:y', (req, res) => {
-  let params = req.url.replace('/tiles/', '').replace('.png', '').trim().split('/');
-  let z = params[0], x = params[1], y = params[2];
+  let z = req.params.z, x = req.params.x, y = req.params.y;
   // console.log( '\nreq.url : ' + params + '\n' );
-  console.log( '\n\n\tz : ' + z + '\n\tx : ' + x + '\n\ty : ' + y );
+  console.log( '\n\n\tz : ' + z + '\tx : ' + x + '\ty : ' + y );
   let subDir = z + idtfr + x;
   // console.log( 'subDir : ' + subDir );
-  let filename = subDir + idtfr + y +'.png';
+  let filename = subDir + idtfr + y //+ '.png';
   // console.log( 'filename : ' + filename );
 
   try {
@@ -146,36 +140,34 @@ const imgDownload = isLocal ? null : async function (url, dest, filename ) {
 
       imgDownload( originUrl, destDir, filename )
       .then( (filename) => {
-        // console.log( '\tFile Saving Complete : ' + filename );
+        console.log( '\tFile Saving Complete : ' + filename );
         // console.log( filename );
       })
-      .catch( (filename) => {
-        console.log( '\t!! SOMETHING CRASHED !! ' + filename + '\n' );
+      .catch( (err) => {
+        console.log( '\t!! SOMETHING CRASHED !! ' + err + '\n' );
       });
     }
   } catch ( err ) {
-    console.log( err );
+    console.log( 'err: ' + err );
   } finally {
-    setTimeout( () => {
-      // console.log( 'finally' );
-      // console.log( res );
-      // console.log( destDir + filename );
-      if( FS.existsSync(destDir + filename) ) res.sendFile( destDir + filename );
-      else res.sendStatus(404); res.end();
-  
-      // res.send();
-      res.end();
-    }, 2000);
+    if( FS.existsSync(destDir + filename) ) res.sendFile( destDir + filename );
+    else res.sendStatus(404); res.end();
   }
 });
+//  <----------------- Scraper ----------------
 
 
-app.listen( PORT, function() {
-  console.log("\u001b[2J\u001b[0;0H");
-  console.log( '=================== Map Tile Scrape And Servicer Start ===================');
-  console.log( 'Service At ' + ((os.type() == 'Darwin') ? 'Mac OS' : os.type()) );
-  console.log( 'Service On ' + ( isLocal ? 'Local' : 'Public' ) );
-  console.log( 'Service Listen : ' + PORT );
-  console.log( 'Service Root Dir : ' +  __dirname );
-  console.log( '==========================================================================');
-} );
+let status = "\u001b[2J\u001b[0;0H";
+status += '============================ TileServer ON AIR ===========================\n';
+status += 'Service At ' + ((os.type() == 'Darwin') ? 'Mac OS' : os.type()) + '\n';
+status += 'Service On ' + ( isLocal ? 'Local' : 'Public' ) + '\n';
+status += 'Service Listen : ' + PORT + '\n';
+status += 'Service Root Dir : ' + __dirname + '\n';
+status += '==========================================================================\n';
+
+const CronJob = require('cron').CronJob;
+// CronJob(작동 타이밍, 실행할 함수, 종료 시 실행할 함수, 자동 시작 여부, TimeZone);
+const job = new CronJob('0 0/10 * * * *', () => console.log( status + new Date() ), null, true, 'Asia/Seoul');
+
+app.listen( PORT, () => console.log( status + new Date() ) );
+
