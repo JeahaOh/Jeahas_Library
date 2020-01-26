@@ -16,14 +16,10 @@ Perspective 저장하기
 [화면 구성] - [Window] - [Perspective] - [Save Perspective As]
 
 ## fomatter 설정 import
-- fomat 설정 xml 파일 준비
-- [Java | JavaScript] - [Code Style] - [Fomatter]
-- import
+- Formatter And Text Editor Setup으로 이동.
 
 ## 한 라인 최대 문자 입력 가이드라인 보이기.
-- [Window] - [Preference] - [General] - [Editor] - [Text Editors tab]
-  - Show print margin
-  - print margin column : 원하는 글자수.
+- Formatter And Text Editor Setup으로 이동.
 
 ## javascript code assist(자동완성) 기능 설정
 - [preferences] - [JavaScript] - [Content Assist] - [Auto-Activation 활성화]
