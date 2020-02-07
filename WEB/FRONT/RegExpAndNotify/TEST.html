@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reg Exp And Notify Example</title>
+  <script src="./../jquery-3.3.1.min.js"></script>
+  
+</head>
+<body>
+  <label for="only_text">일반 문자</label>
+  <input type="text" name="only_text" id="only_text" class="filtering" data-filter_at="specialChar, onlyNum">
+  <br>
+  <label for="text_num">일반 문자와 숫자</label>
+  <input type="text" name="text_num" id="text_num" class="filtering" data-filter_at="text_num">
+  <br>
+  <label for="lsn_text">간단한 특수문자</label>
+  <input type="text" name="lsn_text" id="lsn_text" class="filtering" data-filter_at="lsn_text">
+  <br>
+
+<script>
+
+/**
+ * @JEAHA
+ * 정규표현식 등의 유효성 검사를 위한 JS 모음.
+ */
+
+//	모든 html 테그 삭제 <style>,<script>.
+const htmlTag = /[<][^>]*[>]/gi;
+//	style 태그와 그 안의 모든 내용.
+const styleTag = "<style[^>]*>(.*?)<\/style>";
+//	script 태그와 그 안의 모든 내용.
+const scriptTag = "<script[^>]*>(.*?)<\/script>";
+//	모든 특수문자.
+const specialChar = /[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/gi;
+//	공백, ., -를 제외한 특수문자 검출.
+const someSpecialChar = /[\{\}\[\]\/?,;:|\)*~`!^\-+<>@\#$%&\\\=\(\'\"]/gi;
+
+//	입력 받은 문자열의 HTML 태그를 삭제한다.
+const replaceHTML = function( str ) {
+	return str.replace( htmlTag, '' ).trim();
+};
+
+//	입력 받은 문자열의 style 태그와 내용을 삭제한다.
+const rplcStyleTag = function( str ) {
+	return str.replace( styleTag, '' ).trim();
+} 
+
+//	입력 받은 문자열의 script 태그와 내용을 삭제한다.
+const rplcScriptTag = function( str ) {
+	return str.replace( scriptTag, '' ).trim();
+} 
+
+//	입력 받은 문자열의 특수문자를 제거한다. 2번째 인자가 있을 경우 그 문자열로 대체한다.
+const rplcSpclChar = function( str, alt ) {
+  if( str.match(specialChar).length > 0 ) console.log("Special Char")
+	if( alt != null && typeof str === 'string' ) return str.replace( specialChar, alt ).trim();
+	else return str.replace( specialChar, '' ).trim();
+}
+
+//	입력 받은 문자열에서 일부 특수문자를 제거한다. 2번째 인자가 있을 경우 그 문자열로 대체한다.
+const rplcSpclCharLsn = function( str, alt ) {
+	if( alt != null && typeof str === 'string' ) return str.replace( someSpecialChar, alt ).trim();
+	else return str.replace( someSpecialChar, '' ).trim();
+}
+
+/**
+ * @JEAHA
+ * 받은 좌표가 lat lon 쌍의 좌표인지 확인
+ * 4326 체계 좌표가 맞다면 true, 아니면 false.
+ * @param {*} str 
+ */
+const isCoord = function( str ) {
+	let result = str.match(/(\d{1,3})(\.)(\d{2,12})/g);
+	if(result != null) return result.length % 2 == 0;
+	else return false;
+}
+
+/**
+ * @JEAHA
+ * 받은 문자열이 WKT 형식인지 유효성 검사를 한다.
+ * @param {} str 
+ */
+const isFeature = function( str ) {
+	str = str.toUpperCase()
+	let valid = true;
+	valid = str.startsWith("POINT(") ? true : (str.startsWith("LINESTRING(") ? true : (str.startsWith("LINESTRING(") ? true : false));
+	
+	valid = valid ? str.endsWith(")") : valid;
+
+	let openCnt = str.match(/\(/g);
+	let closeCnt = str.match(/\)/g);
+
+	valid = ( openCnt != null && closeCnt != null ) ? openCnt.length == closeCnt.length : valid;
+	
+	return valid ? isCoord(str) : valid;
+}
+
+  $('.filtering').keyup(function(evt) {
+    let filterAt = evt.target.dataset.filter_at;
+    let tgtVal = evt.target.value;
+
+    if( filterAt.indexOf("specialChar") > 0) tgtVal = rplcSpclChar(tgtVal);
+    console.log( filterAt );
+    console.log( tgtVal );
+
+    evt.target.value = tgtVal
+  });
+</script>
+</body>
+</html>
