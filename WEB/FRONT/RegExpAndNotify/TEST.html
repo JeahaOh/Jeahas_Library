@@ -5,17 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Reg Exp And Notify Example</title>
   <script src="./../jquery-3.3.1.min.js"></script>
-  
+  <script src="./notify.js"></script>
 </head>
 <body>
   <label for="only_text">일반 문자</label>
-  <input type="text" name="only_text" id="only_text" class="filtering" data-filter_at="specialChar, onlyNum">
+  <input type="text" name="only_text" id="only_text" class="filtering" data-filter_at="onlyText">
+  <br>
+  <label for="lsn_text">간단한 특수문자</label>
+  <input type="text" name="lsn_text" id="lsn_text" class="filtering" data-filter_at="spclCharLsn">
   <br>
   <label for="text_num">일반 문자와 숫자</label>
   <input type="text" name="text_num" id="text_num" class="filtering" data-filter_at="text_num">
-  <br>
-  <label for="lsn_text">간단한 특수문자</label>
-  <input type="text" name="lsn_text" id="lsn_text" class="filtering" data-filter_at="lsn_text">
   <br>
 
 <script>
@@ -27,41 +27,50 @@
 
 //	모든 html 테그 삭제 <style>,<script>.
 const htmlTag = /[<][^>]*[>]/gi;
-//	style 태그와 그 안의 모든 내용.
-const styleTag = "<style[^>]*>(.*?)<\/style>";
-//	script 태그와 그 안의 모든 내용.
-const scriptTag = "<script[^>]*>(.*?)<\/script>";
+// //	style 태그와 그 안의 모든 내용.
+// const styleTag = "<style[^>]*>(.*?)<\/style>";
+// //	script 태그와 그 안의 모든 내용.
+// const scriptTag = "<script[^>]*>(.*?)<\/script>";
 //	모든 특수문자.
-const specialChar = /[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/gi;
+const specialChar     = /[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/g;
+
 //	공백, ., -를 제외한 특수문자 검출.
-const someSpecialChar = /[\{\}\[\]\/?,;:|\)*~`!^\-+<>@\#$%&\\\=\(\'\"]/gi;
+const someSpecialChar = /[\{\}\[\]\/?;:|\)*~`!^\-+<>@\#$%&\\\=\(\'\"]/g;
 
 //	입력 받은 문자열의 HTML 태그를 삭제한다.
 const replaceHTML = function( str ) {
 	return str.replace( htmlTag, '' ).trim();
 };
 
-//	입력 받은 문자열의 style 태그와 내용을 삭제한다.
-const rplcStyleTag = function( str ) {
-	return str.replace( styleTag, '' ).trim();
-} 
+// //	입력 받은 문자열의 style 태그와 내용을 삭제한다.
+// const rplcStyleTag = function( str ) {
+// 	return str.replace( styleTag, '' ).trim();
+// } 
 
-//	입력 받은 문자열의 script 태그와 내용을 삭제한다.
-const rplcScriptTag = function( str ) {
-	return str.replace( scriptTag, '' ).trim();
-} 
+// //	입력 받은 문자열의 script 태그와 내용을 삭제한다.
+// const rplcScriptTag = function( str ) {
+// 	return str.replace( scriptTag, '' ).trim();
+// } 
 
 //	입력 받은 문자열의 특수문자를 제거한다. 2번째 인자가 있을 경우 그 문자열로 대체한다.
 const rplcSpclChar = function( str, alt ) {
-  if( str.match(specialChar).length > 0 ) console.log("Special Char")
-	if( alt != null && typeof str === 'string' ) return str.replace( specialChar, alt ).trim();
-	else return str.replace( specialChar, '' ).trim();
+  if( str.match(specialChar) != null && str.match(specialChar).length > 0 ){
+    $.notify("Special Character is not allowed.", {position: "bottom right"});
+  } 
+  if( alt != null && typeof str === 'string' ) return str.replace( specialChar, alt );
+  else return str.replace( specialChar, '' );
 }
 
 //	입력 받은 문자열에서 일부 특수문자를 제거한다. 2번째 인자가 있을 경우 그 문자열로 대체한다.
 const rplcSpclCharLsn = function( str, alt ) {
-	if( alt != null && typeof str === 'string' ) return str.replace( someSpecialChar, alt ).trim();
-	else return str.replace( someSpecialChar, '' ).trim();
+  if( str.match(someSpecialChar) != null && str.match(someSpecialChar).length > 0 ) {
+    console.log( str.match(someSpecialChar) );
+    console.log( str.match(someSpecialChar).length );
+    $.notify("Special Character is not allowed.", {position: "bottom right"});
+    if( alt != null && typeof str === 'string' ) return str.replace( someSpecialChar, alt );
+    else return str.replace( someSpecialChar, '' );
+  }
+  return str;
 }
 
 /**
@@ -96,16 +105,12 @@ const isFeature = function( str ) {
 	return valid ? isCoord(str) : valid;
 }
 
-  $('.filtering').keyup(function(evt) {
-    let filterAt = evt.target.dataset.filter_at;
-    let tgtVal = evt.target.value;
+$('.filtering').on('change', function(evt) {
+  let filterAt = evt.target.dataset.filter_at;
 
-    if( filterAt.indexOf("specialChar") > 0) tgtVal = rplcSpclChar(tgtVal);
-    console.log( filterAt );
-    console.log( tgtVal );
-
-    evt.target.value = tgtVal
-  });
+  if( filterAt.indexOf("onlyText") >= 0) evt.target.value = rplcSpclChar(evt.target.value, '_');
+  if( filterAt.indexOf("spclCharLsn") >= 0) evt.target.value = rplcSpclCharLsn(evt.target.value);
+});
 </script>
 </body>
 </html>
