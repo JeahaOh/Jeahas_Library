@@ -100,7 +100,9 @@ const isFeature = function( str ) {
     let filterAt = evt.target.dataset.filter_at;
     let tgtVal = evt.target.value;
 
-    if( filterAt.indexOf("specialChar") > 0) tgtVal = rplcSpclChar(tgtVal);
+    if( filterAt.indexOf("specialChar") > 0) {
+
+    } tgtVal = rplcSpclChar(tgtVal);
     console.log( filterAt );
     console.log( tgtVal );
 
