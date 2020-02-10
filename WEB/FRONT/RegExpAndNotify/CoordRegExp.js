@@ -10,9 +10,9 @@ const htmlTag = /[<][^>]*[>]/gi;
 const specialChar     = /[\{\}\[\]\/?.,;:|\)*~`!^\-+<>@\#$%&\\\=\(\'\"]/g;
 const notAllowSpclCharNoti = "Special Character is not allowed."
 
-//	공백, ., -를 제외한 특수문자 검출.
-const someSpecialChar = /[\{\}\[\]\/?;:|\)*~`!^\-+<>@\#$%&\\\=\(\'\"]/g;
-const someSpecialCharNoti = "Allowed Special Characters are , And _";
+//	[ ' ', ',', '(', ')']를 제외한 특수문자 검출.
+const someSpecialChar = /[\{\}\[\]\/?;:|*~`!^\-+<>@\#$%&\\\=\'\"]/g;
+const someSpecialCharNoti = "Allowed Special Characters are ',', '(', ')'";
 
 //	입력 받은 문자열의 HTML 태그를 삭제한다.
 const replaceHTML = function( str ) {
