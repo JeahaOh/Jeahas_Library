@@ -136,3 +136,31 @@ $('.filtering').on('blur', function(evt) {
   //  유효하지 않으면 무한 포커스?
   //  if( !reFocus ) evt.target.focus();
 });
+
+/**
+ * @Jeaha
+ * input tag에서 필터링이 필요 경우 onchange="filtering(this)" 를 걸어준다.
+ * 필터링 조건을 dateset에 다음과 같이 명시 해 준다. data-filter_at="spclCharLsn"
+ * filter_at의 값 :
+ *   - onlyText    : 특수문자 없이 그냥 문자열
+ *   - spclCharLsn : 몇개의 특수문자만 허용한 문자열.
+ *   - lat4326 || lon4326 : 4326 형식의 좌표계.
+ * @EX
+ * <input type="number" onchange="filtering(this)" data-filter_at="lon4326" />
+ * <input type="text" onchange="filtering(this)" data-filter_at="spclCharLsn" />
+ * @param {html input} target 
+ */
+/*
+const filtering = function( target ) {
+  let filterAt = target.dataset.filter_at;
+  // let reFocus = false;
+  if( filterAt.indexOf("onlyText") >= 0) target.value = rplcSpclChar(target.value, '_');
+  if( filterAt.indexOf("spclCharLsn") >= 0) target.value = rplcSpclCharLsn(target.value, '_');
+  if( filterAt.indexOf("lat4326") >= 0 ) reFocus = isLat( target.value );
+  if( filterAt.indexOf("lon4326") >= 0 ) reFocus = isLon( target.value );
+
+  //  입력값이 유효하지 않을 경우 포커스를 다시 준다?
+  //  유효하지 않으면 무한 포커스?
+  //  if( !reFocus ) evt.target.focus();
+};
+*/
