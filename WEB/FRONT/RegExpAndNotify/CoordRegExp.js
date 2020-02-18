@@ -136,3 +136,10 @@ $('.filtering').on('blur', function(evt) {
   //  유효하지 않으면 무한 포커스?
   //  if( !reFocus ) evt.target.focus();
 });
+
+/**
+ * 도분초일 경우
+ * 도 1-3
+ * 분 2
+ * 초 2
+ */
