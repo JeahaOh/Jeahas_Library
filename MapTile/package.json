@@ -9,11 +9,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "axios": "^0.19.2",
     "cors": "^2.8.5",
     "cron": "^1.8.2",
     "express": "^4.17.1",
     "express-static-gzip": "^2.0.6",
-    "os": "^0.1.1"
+    "os": "^0.1.1",
+    "pm2": "^4.2.3"
   }
 }

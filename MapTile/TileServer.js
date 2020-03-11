@@ -8,6 +8,7 @@ let isLocal = process.argv[2];
 if( typeof(isLocal) === 'undefined' ) isLocal = "false";
 switch(isLocal.toLowerCase().trim()){
   case "true": case "t": case "local": case "l": case "-l": isLocal = true; break;
+  case "h" : console.log( '2 : local -> true, flase\n3 : port : default -> 3000'); return false;
   default: isLocal = false;
 }
 /**
@@ -167,7 +168,7 @@ status += '=====================================================================
 
 const CronJob = require('cron').CronJob;
 // CronJob(작동 타이밍, 실행할 함수, 종료 시 실행할 함수, 자동 시작 여부, TimeZone);
-const job = new CronJob('0 0/10 * * * *', () => console.log( status + new Date() ), null, true, 'Asia/Seoul');
+const job = new CronJob('0 0/1 * * * *', () => console.log( status + new Date() ), null, true, 'Asia/Seoul');
 
 app.listen( PORT, () => console.log( status + new Date() ) );
 
