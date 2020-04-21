@@ -27,3 +27,6 @@
 
 ## RIP Tutorial
 `https://riptutorial.com/ko/home`
+
+## Windows PM2 설치시 권한 설정
+`https://docs.microsoft.com/ko-kr/powershell/module/microsoft.powershell.core/about/about_execution_policies?view=powershell-7`
