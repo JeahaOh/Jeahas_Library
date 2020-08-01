@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Array 2 Single Sheet</title>
+
+  <script src="../include/jquery-3.4.1.min.js"></script>
+  <script src="../include/axios-0.19.2.full.min.js"></script>
+  <script src="../include/moment.2.27.0.js"></script>
+  <script src="../include/moment.2.27.0.ko.js"></script>
+  <script src="../include/xlsx.full.min.js"></script>
+  <script src="../include/FileSaver-2.0.2.full.js"></script>
+  <script src="./xlsxExportHandler.js"></script>
+
+  <script>
+    //  Array.forEach 선언
+    if (!Array.prototype.forEach) {
+      Array.prototype.forEach = function (fn, scope) {
+        for (var i = 0, len = this.length; i < len; ++i) {
+          fn.call(scope || this, this[i], i, this);
+        }
+      }
+    }
+    //  Array.forEach
+
+    const getDataByAxios4xlsx = async function (url, method) {
+      method = method ? method : 'GET';
+
+      const result = {
+        data: undefined,
+        isSuccess: false
+      };
+
+      const data = await axios({
+        url: url,
+        method: method
+      }).then(function (res) {
+        //console.log(res);
+
+        //  데이터가 배열이 아니라면 실패.
+        if (!Array.isArray(res.data) || res.data.length === 0) {
+          return result;
+        }
+
+        result.data = res.data;
+        result.isSuccess = true;
+        console.info('AXIOS RESULT : ', result);
+
+        return result;
+      }).catch(function (err) {
+        console.error('getDataByAxios4xlsx status : ', err.response.status);
+        result.status = err.response.status;
+
+        return result;
+      });
+
+      return result;
+    }
+
+    const getDataAsXlsx = async function () {
+      const URL = '/example/sample_1.json';
+      const METHOD = 'GET';
+      const FILENAME = 'PEOPLE_' + moment().format('YYYY_MM_DD') + '.xlsx';
+      const SHEETNAME = 'PEOPLE';
+      const datas = [];
+
+      const resData = await getDataByAxios4xlsx(URL, METHOD)
+        .then(function (res) {
+          if (!res.isSuccess) {
+            console.error("getDataAsXlsx FAIL!!");
+            throw new Error("getDataAsXlsx FAIL");
+          }
+          //console.log(res);
+          return res.data;
+        }).catch(function (err) {
+          console.error('getDataAsXlsx ON ERROR : ', err);
+          return err;
+        });
+
+      await resData.forEach(function (row, idx) {
+        //console.log(row);
+
+        // 원하는 데이터만, 원하는 이름으로 가져옴.
+        datas.push({
+          '번호': row.index,
+          '이름': row.name.first + ' ' + row.name.last,
+          '나이': row.age,
+          '회사': row.company
+        });
+      });
+      console.log(datas);
+
+      //  
+      exportExcel(datas, SHEETNAME, FILENAME);
+
+    }
+  </script>
+</head>
+
+<body>
+
+  <button onClick="getDataAsXlsx();">download excel</button>
+</body>
+
+</html>
