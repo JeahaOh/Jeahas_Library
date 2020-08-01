@@ -7,18 +7,6 @@
  * <script type="text/javascript" src="${pageContext.request.contextPath}/js/outer/xlsxExportHandler.js"></script>
  */
 function exportExcel(data, sheetName, excelFileName) {
-  //	엑셀 데이터를 압축하기 위한 함수.
-  function s2ab(s) {
-    //console.log( s );
-    // convert s to arrayBuffer
-    var buf = new ArrayBuffer(s.length);
-    // create uint8array as viewer
-    var view = new Uint8Array(buf);
-    //convert to octet
-    for (var i = 0; i < s.length; i++) view[i] = s.charCodeAt(i) & 0xFF;
-    //console.log( 'buf : ', buf);
-    return buf;
-  }
   console.group('exportExcel');
   //	입력 데이터에 대한 유효성 검사
   console.group('Validation');
@@ -55,9 +43,18 @@ function exportExcel(data, sheetName, excelFileName) {
   //console.groupEnd('exportExcel');
 }
 
-
-const xlsxExportHandler = {
-  MAKE_SHEET: function (data) {
-    return XLSX.utils.json_to_sheet(data);
-  }
+/**
+ * String to ArrayBuffer
+ * @param {*} s 
+ */
+function s2ab(s) {
+  //console.log( s );
+  // convert s to arrayBuffer
+  var buf = new ArrayBuffer(s.length);
+  // create uint8array as viewer
+  var view = new Uint8Array(buf);
+  //convert to octet
+  for (var i = 0; i < s.length; i++) view[i] = s.charCodeAt(i) & 0xFF;
+  //console.log( 'buf : ', buf);
+  return buf;
 }
