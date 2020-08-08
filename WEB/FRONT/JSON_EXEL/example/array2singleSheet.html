@@ -5,18 +5,20 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Array 2 Single Sheet</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/6.26.0/polyfill.min.js"></script>
 
-  <script src="../include/jquery-3.4.1.min.js"></script>
-  <script src="../include/notify.min.js"></script>
+  <script src="../include/jquery-3.4.1.min.js" type="text/babel"></script>
+  <script src="../include/notify.min.js" type="text/babel"></script>
   <script src="../include/axios-0.19.2.full.min.js"></script>
   <script src="../include/moment.2.27.0.js"></script>
   <script src="../include/moment.2.27.0.ko.js"></script>
   <script src="../include/xlsx.full.min.js"></script>
   <script src="../include/FileSaver-2.0.2.full.js"></script>
-  <script src="./xlsxExportHandler.js"></script>
+  <script src="./xlsxExportHandler.js" type="text/babel" data-presets="es2015,stage-2"></script>
   <link rel="stylesheet" href="./style.css">
 
-  <script>
+  <script type="text/babel" data-presets="es2015,stage-2">
     const DOWNLOAD_XLSX = async function () {
       try {
         $('#loadingwrap').show();
@@ -67,6 +69,7 @@
           //  테스트용. 로컬 속도가 너무 빨라서 시간 지연을 줌.
           await delay(3000);
           const file = await SHEETS2XLSX(SHEETS, FILENAME);
+
           saveAs(new Blob([s2ab(file)], {
             type: "application/octet-stream"
           }), FILENAME + '_' + moment().format('YYYY_MM_DD') + '.xlsx');

@@ -10,7 +10,7 @@
 //  Array.forEach 함수가 없을 경우 대비.
 if (!Array.prototype.forEach) {
   Array.prototype.forEach = function (fn, scope) {
-    for (var i = 0, len = this.length; i < len; ++i) {
+    for (let i = 0, len = this.length; i < len; ++i) {
       fn.call(scope || this, this[i], i, this);
     }
   }
@@ -22,17 +22,119 @@ if (!Array.prototype.forEach) {
  * @param {*} String
  */
 function s2ab(s) {
-  //console.log( s );
-  // convert s to arrayBuffer
-  var buf = new ArrayBuffer(s.length);
-  // create uint8array as viewer
-  var view = new Uint8Array(buf);
-  //convert to octet
-  for (var i = 0; i < s.length; i++) view[i] = s.charCodeAt(i) & 0xFF;
-  //console.log( 'buf : ', buf);
-  return buf;
+  try {
+    //console.log( s );
+    // convert s to arrayBuffer
+    const buf = new ArrayBuffer(s.length);
+    // create uint8array as viewer
+    const view = new Uint8Array(buf);
+    //convert to octet
+    for (let i = 0; i < s.length; i++) view[i] = s.charCodeAt(i) & 0xFF;
+    //console.log('buf : ', buf);
+    $('.modalbody').notify('파일 변환 성공', 'info');
+    return buf;
+  } catch (e) {
+    console.error(e.message);
+  }
+
 }
 
+
+//test delay
+const delay = function (ms) {
+  //return new Promise((resolve) => setTimeout(resolve, ms));
+  return new Promise(function (resolve) {
+    setTimeout(resolve, ms);
+  });
+}
+/**
+ * URL과 METHOD를 받아 동기 식으로 데이터를 불러온다.
+ * 성공 여부와 데이터 배열을 담고있는 객체를 리턴한다.
+ */
+const getDataByAxios = async function (url, method) {
+  method = method ? method : 'GET';
+  $('.modalbody').notify('데이터 가져오기 시작', 'info');
+  //  테스트용. 로컬 속도가 너무 빨라서 시간 지연을 줌.
+  await delay(3000);
+
+  const result = {
+    data: undefined,
+    isSuccess: false
+  };
+
+  const data = await axios({
+    url: url,
+    method: method
+  }).then(function (res) {
+    //console.log(res);
+
+    //  데이터가 배열이 아니라면 실패.
+    if (!Array.isArray(res.data) || res.data.length === 0) {
+      return result;
+    }
+
+    result.data = res.data;
+    result.isSuccess = true;
+    console.info('AXIOS RESULT : ', result);
+    $('.modalbody').notify(result.data.length + '개의 데이터 가져오기 성공', 'info');
+
+    return result;
+  }).catch(function (err) {
+    //  요청에 실패했을 경우.
+    console.error('getDataByAxios status : ', err.response.status);
+    result.status = err.response.status;
+
+    return result;
+  });
+
+  //  테스트용. 로컬 속도가 너무 빨라서 시간 지연을 줌.
+  await delay(3000);
+
+  return result;
+}
+//  getDataByAxios
+
+/**
+ * getDataByAxios를 에러 처리를 위해 한번 더 감싸는 함수.
+ * axios로 데이터를 가져온 뒤,
+ * 성공했을 경우 데이터를 반환한다.
+ */
+const requestWrapper = async function (URL, METHOD) {
+  console.group('requestWrapper');
+  URL = URL.trim();
+  METHOD = METHOD.trim();
+  const isURLValid = typeof URL == 'string' && URL.length > 1;
+  const isMethodValid = typeof METHOD == 'string' && METHOD.length > 1;
+
+  if (!isURLValid || !isMethodValid) {
+    console.error("Parameter 값이 유효하지 않음.");
+    console.error(URL, isURLValid);
+    console.error(METHOD, isMethodValid);
+    console.groupEnd('requestWrapper');
+    return;
+  }
+
+  const resData = await getDataByAxios(URL, METHOD)
+    .then(function (res) {
+      //  응답은 성공적으로 받았지만, 응답 안에 데이터가 없을 경우.
+      if (!res.isSuccess) {
+        console.error("requestWrapper FAIL!!");
+        console.groupEnd('requestWrapper');
+        throw new Error("requestWrapper FAIL");
+      }
+      //   성공했다면 응답 받은 데이터의 배열만 리턴한다.
+      //console.log(res);
+      return res.data;
+    }).catch(function (err) {
+      //  요청이 실패했을 경우.
+      console.groupEnd('requestWrapper');
+      console.error('requestWrapper ON ERROR : ', err);
+      return err;
+    });
+
+  console.groupEnd('requestWrapper');
+  return resData;
+}
 
 /**
  * 대상 <table/>의 id 값과 이름을 받아 sheet를 리턴한다.
@@ -83,7 +185,7 @@ const json2Sheet = async function (JSON_DATA, SHEETNAME) {
   console.group('json2Sheet');
   SHEETNAME = SHEETNAME.trim();
   const isSheetNameValid = typeof SHEETNAME == 'string' && SHEETNAME.length > 1;
-  const isDataValidArray = Array.isArray(JSON_DATA);
+  let isDataValidArray = Array.isArray(JSON_DATA);
 
   if (isDataValidArray) {
     JSON_DATA.forEach(function (data, idx) {
@@ -153,6 +255,7 @@ const SHEETS2XLSX = async function (SHEETS) {
       bookType: 'xlsx',
       type: 'binary'
     });
+    //console.info(wbout);
 
     return wbout;
   } catch (e) {
@@ -162,97 +265,3 @@ const SHEETS2XLSX = async function (SHEETS) {
   }
 }
 //SHEETS2XLSX
-
-//test delay
-const delay = function (ms) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
-
-/**
- * URL과 METHOD를 받아 동기 식으로 데이터를 불러온다.
- * 성공 여부와 데이터 배열을 담고있는 객체를 리턴한다.
- */
-const getDataByAxios = async function (url, method) {
-  method = method ? method : 'GET';
-  $('.modalbody').notify('데이터 가져오기 시작', 'info');
-  //  테스트용. 로컬 속도가 너무 빨라서 시간 지연을 줌.
-  await delay(3000);
-
-  const result = {
-    data: undefined,
-    isSuccess: false
-  };
-
-  const data = await axios({
-    url: url,
-    method: method
-  }).then(function (res) {
-    //console.log(res);
-
-    //  데이터가 배열이 아니라면 실패.
-    if (!Array.isArray(res.data) || res.data.length === 0) {
-      return result;
-    }
-
-    result.data = res.data;
-    result.isSuccess = true;
-    console.info('AXIOS RESULT : ', result);
-    $('.modalbody').notify('데이터 가져오기 성공', 'info');
-
-    return result;
-  }).catch(function (err) {
-    //  요청에 실패했을 경우.
-    console.error('getDataByAxios status : ', err.response.status);
-    result.status = err.response.status;
-
-    return result;
-  });
-
-  //  테스트용. 로컬 속도가 너무 빨라서 시간 지연을 줌.
-  await delay(3000);
-
-  return result;
-}
-//  getDataByAxios
-
-/**
- * getDataByAxios를 에러 처리를 위해 한번 더 감싸는 함수.
- * axios로 데이터를 가져온 뒤,
- * 성공했을 경우 데이터를 반환한다.
- */
-const requestWrapper = async function (URL, METHOD) {
-  console.group('requestWrapper');
-  URL = URL.trim();
-  METHOD = METHOD.trim();
-  const isURLValid = typeof URL == 'string' && URL.length > 1;
-  const isMethodValid = typeof METHOD == 'string' && METHOD.length > 1;
-
-  if (!isURLValid || !isMethodValid) {
-    console.error("Parameter 값이 유효하지 않음.");
-    console.error(URL, isURLValid);
-    console.error(METHOD, isMethodValid);
-    console.groupEnd('requestWrapper');
-    return;
-  }
-
-  const resData = await getDataByAxios(URL, METHOD)
-    .then(function (res) {
-      //  응답은 성공적으로 받았지만, 응답 안에 데이터가 없을 경우.
-      if (!res.isSuccess) {
-        console.error("requestWrapper FAIL!!");
-        console.groupEnd('requestWrapper');
-        throw new Error("requestWrapper FAIL");
-      }
-      //   성공했다면 응답 받은 데이터의 배열만 리턴한다.
-      //console.log(res);
-      return res.data;
-    }).catch(function (err) {
-      //  요청이 실패했을 경우.
-      console.groupEnd('requestWrapper');
-      console.error('requestWrapper ON ERROR : ', err);
-      return err;
-    });
-
-  console.groupEnd('requestWrapper');
-  return resData;
-}
