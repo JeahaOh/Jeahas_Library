@@ -1,0 +1,142 @@
+table,
+th,
+td {
+  border: 1px solid black;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-top: 3rem;
+}
+
+th {
+  height: 40px;
+}
+
+tr:hover {
+  background-color: #f5f5f5;
+}
+
+tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+td {
+  text-align: left;
+}
+
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 12590;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgb(0, 0, 0);
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.modal-content {
+  background-color: white;
+  margin: 15% auto;
+}
+
+.modal-content>h1 {
+  display: block;
+  background: #315088;
+  width: 100%;
+  height: 50px;
+  overflow: hidden;
+  color: white;
+  padding: 0 4px;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.modalclose {
+  position: absolute;
+  top: 6px;
+  right: 4px;
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  font-size: 0;
+  background: url(../images/icon_modalclose.png) no-repeat 50% #4586fb;
+}
+
+.modalclose:hover {
+  background-color: #8db2f5;
+}
+
+.modal-content>h1 span {
+  padding-top: 12px;
+  display: block;
+  width: 100%;
+  height: 44px;
+  font-size: 1.8rem;
+  font-weight: 500;
+  color: white;
+  box-sizing: border-box;
+  border-bottom: 2px solid #4f8fff;
+}
+
+.modalbody {
+  width: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+.modalbody>h2 {
+  display: block;
+  width: 100%;
+  color: #697386;
+  font-size: 2.0rem;
+  padding: 0 0 4px 10px;
+  font-weight: 400;
+  box-sizing: border-box;
+  background: url(../images/h2.gif) no-repeat 0 6px;
+}
+
+.modalbody>h2 .subtxt {
+  color: #7688a7;
+  font-size: 1.6rem;
+}
+
+.modalbody>h3 {
+  display: block;
+  width: 100%;
+  color: #2f343c;
+  font-size: 1.8rem;
+  padding: 0 0 4px 26px;
+  font-weight: 400;
+  box-sizing: border-box;
+  background: url(../images/h3.gif) no-repeat 10px 8px;
+}
+
+.modalbody>h3 .subtxt {
+  color: #7688a7;
+  font-size: 1.4rem;
+}
+
+.modalbody>h4 {
+  display: block;
+  width: 100%;
+  color: #2f343c;
+  font-size: 1.6rem;
+  padding: 0 0 2px 30px;
+  font-weight: 700;
+  box-sizing: border-box;
+}
+
+.modalbody>h4 .subtxt {
+  color: #7688a7;
+  font-size: 1.4rem;
+}
+
+.tc {
+  text-align: center;
+}

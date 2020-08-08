@@ -7,101 +7,93 @@
   <title>Array 2 Single Sheet</title>
 
   <script src="../include/jquery-3.4.1.min.js"></script>
+  <script src="../include/notify.min.js"></script>
   <script src="../include/axios-0.19.2.full.min.js"></script>
   <script src="../include/moment.2.27.0.js"></script>
   <script src="../include/moment.2.27.0.ko.js"></script>
   <script src="../include/xlsx.full.min.js"></script>
   <script src="../include/FileSaver-2.0.2.full.js"></script>
   <script src="./xlsxExportHandler.js"></script>
+  <link rel="stylesheet" href="./style.css">
 
   <script>
-    //  Array.forEach 선언
-    if (!Array.prototype.forEach) {
-      Array.prototype.forEach = function (fn, scope) {
-        for (var i = 0, len = this.length; i < len; ++i) {
-          fn.call(scope || this, this[i], i, this);
+    const DOWNLOAD_XLSX = async function () {
+      try {
+        $('#loadingwrap').show();
+        console.group('DOWNLOAD_XLSX');
+        const SHEETS = [];
+
+        // custom step 1. Excel 파일의 이름을 선언 해줌.
+        const FILENAME = 'PEOPLE';
+
+        //  custom step 2. URL, method  페이지마다 다르게 지정 해 준다.
+        const URL = '/example/sample_1.json';
+        const METHOD = 'GET';
+        const resData = await requestWrapper(URL, METHOD);
+        console.log(resData);
+
+        const jsonArr = [];
+        await resData.forEach(function (row, idx) {
+          //console.log(row);
+          console.log((resData.length + '개 중 ' + (idx + 1) + '번째 데이터 변환중'));
+          $('.modalbody').notify((resData.length + '개 중 ' + (idx + 1) + '번째 데이터 변환중'), 'info');
+
+          /**
+           * custom step 3. 응답 받은 배열에서
+           * 원하는 데이터만, 원하는 이름으로 꺼내
+           * 새로운 객체로 만든 뒤,
+           * 새로운 배열에 담아준다.
+           */
+          jsonArr.push({
+            '번호': row.index,
+            '이름': row.name.first + ' ' + row.name.last,
+            '나이': row.age,
+            '회사': row.company
+          });
+        });
+
+        /**
+         * custom step 3. Excel 파일 내에 넣어줄 Sheet를 SHEETS에 넣어줌.
+         * - Sheet를 만들어 줄 데이터의 타입에 따라 다른 함수를 사용함.
+         *   - awiat 키워드를 붙일 것.
+         *   - HTML table       : tableAsSheet( TABLE_ID, SHEET_NAME);
+         *   - 서버에서 JSON 요청   : json2Sheet( [{},{},...], SHEET_NAME)
+         * - 만약 넣어줄 Sheet가 여러개 라면 여러번 널어주면 됨..
+         */
+        SHEETS.push(await json2Sheet(jsonArr, 'PEOPLE'));
+
+        try {
+          console.log('SHEETS', SHEETS);
+          //  테스트용. 로컬 속도가 너무 빨라서 시간 지연을 줌.
+          await delay(3000);
+          const file = await SHEETS2XLSX(SHEETS, FILENAME);
+          saveAs(new Blob([s2ab(file)], {
+            type: "application/octet-stream"
+          }), FILENAME + '_' + moment().format('YYYY_MM_DD') + '.xlsx');
+        } catch (e) {
+          console.error(e.message);
+        } finally {
+          console.groupEnd('DOWNLOAD_XLSX');
         }
+      } catch (e) {
+        console.error(e.message);
+      } finally {
+        $('#loadingwrap').hide();
       }
-    }
-    //  Array.forEach
-
-    const getDataByAxios4xlsx = async function (url, method) {
-      method = method ? method : 'GET';
-
-      const result = {
-        data: undefined,
-        isSuccess: false
-      };
-
-      const data = await axios({
-        url: url,
-        method: method
-      }).then(function (res) {
-        //console.log(res);
-
-        //  데이터가 배열이 아니라면 실패.
-        if (!Array.isArray(res.data) || res.data.length === 0) {
-          return result;
-        }
-
-        result.data = res.data;
-        result.isSuccess = true;
-        console.info('AXIOS RESULT : ', result);
-
-        return result;
-      }).catch(function (err) {
-        console.error('getDataByAxios4xlsx status : ', err.response.status);
-        result.status = err.response.status;
-
-        return result;
-      });
-
-      return result;
-    }
-
-    const getDataAsXlsx = async function () {
-      const URL = '/example/sample_1.json';
-      const METHOD = 'GET';
-      const FILENAME = 'PEOPLE_' + moment().format('YYYY_MM_DD') + '.xlsx';
-      const SHEETNAME = 'PEOPLE';
-      const datas = [];
-
-      const resData = await getDataByAxios4xlsx(URL, METHOD)
-        .then(function (res) {
-          if (!res.isSuccess) {
-            console.error("getDataAsXlsx FAIL!!");
-            throw new Error("getDataAsXlsx FAIL");
-          }
-          //console.log(res);
-          return res.data;
-        }).catch(function (err) {
-          console.error('getDataAsXlsx ON ERROR : ', err);
-          return err;
-        });
-
-      await resData.forEach(function (row, idx) {
-        //console.log(row);
-
-        // 원하는 데이터만, 원하는 이름으로 가져옴.
-        datas.push({
-          '번호': row.index,
-          '이름': row.name.first + ' ' + row.name.last,
-          '나이': row.age,
-          '회사': row.company
-        });
-      });
-      console.log(datas);
-
-      //  
-      exportExcel(datas, SHEETNAME, FILENAME);
-
     }
   </script>
 </head>
 
 <body>
 
-  <button onClick="getDataAsXlsx();">download excel</button>
+  <button onClick="DOWNLOAD_XLSX();">download excel</button>
+  <div id="loadingwrap" class="modal">
+    <div class="modal-content" style="width:450px;">
+      <div class="modalbody tc">
+        <img src="../images/character.gif" alt="">
+      </div>
+    </div>
+  </div>
 </body>
 
 </html>
