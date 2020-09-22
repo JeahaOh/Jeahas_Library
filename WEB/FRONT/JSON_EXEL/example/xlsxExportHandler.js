@@ -31,7 +31,6 @@ function s2ab(s) {
     //convert to octet
     for (let i = 0; i < s.length; i++) view[i] = s.charCodeAt(i) & 0xFF;
     //console.log('buf : ', buf);
-    $('.modalbody').notify('파일 변환 성공', 'info');
     return buf;
   } catch (e) {
     console.error(e.message);
@@ -51,8 +50,8 @@ const delay = function (ms) {
  * URL과 METHOD를 받아 동기 식으로 데이터를 불러온다.
  * 성공 여부와 데이터 배열을 담고있는 객체를 리턴한다.
  */
-const getDataByAxios = async function (url, method) {
-  method = method ? method : 'GET';
+const getDataByAxios = async function (URL, METHOD, PARAMS) {
+  METHOD = METHOD ? METHOD : 'POST';
   $('.modalbody').notify('데이터 가져오기 시작', 'info');
   //  테스트용. 로컬 속도가 너무 빨라서 시간 지연을 줌.
   await delay(3000);
@@ -63,13 +62,20 @@ const getDataByAxios = async function (url, method) {
   };
 
   const data = await axios({
-    url: url,
-    method: method
+    url: URL,
+    method: METHOD,
+    params : PARAMS
   }).then(function (res) {
     //console.log(res);
+    //console.log( typeof res.data );
 
-    //  데이터가 배열이 아니라면 실패.
-    if (!Array.isArray(res.data) || res.data.length === 0) {
+    //  데이터가 빈 배열이거나 빈 객체라면 실패
+    const isResultArray = Array.isArray(res.data) && res.data.length === 0;
+    const isResultObject = typeof res.data == 'object' && Object.keys(res.data).length > 0;
+    const isValidResult = isResultArray || isResultObject;
+
+    if ( !isValidResult ) {
+      !isTest && alert("조회된 데이터가 없습니다.");
       return result;
     }
 
@@ -99,12 +105,13 @@ const getDataByAxios = async function (url, method) {
  * axios로 데이터를 가져온 뒤,
  * 성공했을 경우 데이터를 반환한다.
  */
-const requestWrapper = async function (URL, METHOD) {
+const requestWrapper = async function (URL, METHOD, PARAMS) {
   console.group('requestWrapper');
   URL = URL.trim();
-  METHOD = METHOD.trim();
-  const isURLValid = typeof URL == 'string' && URL.length > 1;
-  const isMethodValid = typeof METHOD == 'string' && METHOD.length > 1;
+  METHOD = METHOD.toUpperCase().trim();
+
+  const isURLValid = typeof URL == 'string' && URL.length > 0;
+  const isMethodValid = typeof METHOD == 'string' && (METHOD == 'GET' || METHOD == 'POST');
 
   if (!isURLValid || !isMethodValid) {
     console.error("Parameter 값이 유효하지 않음.");
@@ -114,16 +121,17 @@ const requestWrapper = async function (URL, METHOD) {
     return;
   }
 
-  const resData = await getDataByAxios(URL, METHOD)
+  const resData = await getDataByAxios(URL, METHOD, PARAMS)
     .then(function (res) {
       //  응답은 성공적으로 받았지만, 응답 안에 데이터가 없을 경우.
       if (!res.isSuccess) {
-        console.error("requestWrapper FAIL!!");
+        console.error("requestWrapper FAIL!! response isSuccess is false!!");
         console.groupEnd('requestWrapper');
         throw new Error("requestWrapper FAIL");
       }
       //   성공했다면 응답 받은 데이터의 배열만 리턴한다.
       //console.log(res);
+      console.info( 'response data length : ', res.data.length );
       return res.data;
     }).catch(function (err) {
       //  요청이 실패했을 경우.
@@ -137,6 +145,35 @@ const requestWrapper = async function (URL, METHOD) {
 }
 
 /**
+ * XLSX을 만들 대상 JSON ARRAY를 받아,
+ * 각 COLUMN 별 WIDTH를 계산하여 담은 ARRAY를 반환한다.
+ * @param {*} json 
+ */
+const jsonSheetWidthMaker = async function(json) {
+  //  우선 KEY 값의 길이 + 10인 WIDTH를 만든다.
+  try {
+    let widthArr = Object.keys(json[0]).map(key => {
+      return { width: key.length + 10 }
+    });
+  
+    //  KEY 값으로 만든 WIDTH 보다 VALUE 값이 길다면,
+    //  VALUE 값의 길이에 맞는 WIDTH 를 만든다.
+    for (let i = 0; i < json.length; i++) {
+      let value = Object.values(json[i]);
+      
+      for (let j = 0; j < value.length; j++) {
+        if (value[j] !== null && value[j].length > widthArr[j].width) {
+          widthArr[j].width = (value[j].length + 10);
+        }
+      }
+    }
+    return widthArr
+  } catch ( e ) {
+    isTest && console.error( e );
+  }
+}
+
+/**
  * 대상 <table/>의 id 값과 이름을 받아 sheet를 리턴한다.
  * @param {STRING} TABLE_ID   : html table id
  * @param {STRING} SHEETNAME  : sheet name
@@ -144,7 +181,7 @@ const requestWrapper = async function (URL, METHOD) {
 const table2Sheet = async function (TABLE_ID, SHEETNAME) {
   console.group('table2Sheet');
   TABLE_ID = TABLE_ID.trim();
-  SHEETNAME = SHEETNAME.trim();
+  SHEETNAME = SHEETNAME.replace('/', ',').trim();
   const isTableIDValid = typeof TABLE_ID == 'string' && TABLE_ID.length > 1;
   const isSheetNameValid = typeof SHEETNAME == 'string' && SHEETNAME.length > 1;
 
@@ -183,7 +220,7 @@ const table2Sheet = async function (TABLE_ID, SHEETNAME) {
  */
 const json2Sheet = async function (JSON_DATA, SHEETNAME) {
   console.group('json2Sheet');
-  SHEETNAME = SHEETNAME.trim();
+  SHEETNAME = SHEETNAME.replace('/', ',').trim();
   const isSheetNameValid = typeof SHEETNAME == 'string' && SHEETNAME.length > 1;
   let isDataValidArray = Array.isArray(JSON_DATA);
 
@@ -205,7 +242,14 @@ const json2Sheet = async function (JSON_DATA, SHEETNAME) {
 
   try {
     $('.modalbody').notify('Spread Sheet 생성중', 'info');
+    let widths = await jsonSheetWidthMaker(JSON_DATA);
+    console.info('sheets widths : ', widths);
+
     const sheetData = await XLSX.utils.json_to_sheet(JSON_DATA);
+    if(widths != null && typeof widths != 'undefined') {
+      sheetData["!cols"] = widths;
+    }
+
 
     const sheet = {
       data: sheetData,
@@ -230,7 +274,7 @@ const json2Sheet = async function (JSON_DATA, SHEETNAME) {
  */
 const SHEETS2XLSX = async function (SHEETS) {
   console.group('SHEETS2XLSX');
-  $('.modalbody').notify('XLSX 파일 생성중', 'info');
+
   //  테스트용. 로컬 속도가 너무 빨라서 시간 지연을 줌.
   await delay(3000);
   const isSheetsArray = Array.isArray(SHEETS);
