@@ -38,7 +38,6 @@
         await resData.forEach(function (row, idx) {
           //console.log(row);
           console.log((resData.length + '개 중 ' + (idx + 1) + '번째 데이터 변환중'));
-          $('.modalbody').notify((resData.length + '개 중 ' + (idx + 1) + '번째 데이터 변환중'), 'info');
 
           /**
            * custom step 3. 응답 받은 배열에서
@@ -62,7 +61,7 @@
          *   - 서버에서 JSON 요청   : json2Sheet( [{},{},...], SHEET_NAME)
          * - 만약 넣어줄 Sheet가 여러개 라면 여러번 널어주면 됨..
          */
-        SHEETS.push(await json2Sheet(jsonArr, 'PEOPLE'));
+        SHEETS.push(await json2Sheet(jsonArr, FILENAME));
 
         try {
           console.log('SHEETS', SHEETS);
